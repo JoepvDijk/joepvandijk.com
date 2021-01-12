@@ -1,0 +1,51 @@
+* {
+    font-family: 'Nunito', sans-serif;
+}
+
+body {
+    background-image: linear-gradient(130deg, #4acb75, #50b098, #4a8a95);
+    background-repeat: no-repeat;
+    background-attachment: fixed;       /*Zorgt dat de achtergrond altijd het hele scherm blijft bedekken*/
+    color: white;
+  }
+
+.profilePicture img {
+    margin-top: 20px;
+    width: 140px;
+    border-radius: 50%;
+    box-shadow: gray 00px 0px 10px; 
+}
+
+.profileName p {
+    margin-top: 5px;
+    margin-bottom: 20px;
+    font-size: 22px;
+}
+
+.content {                              /*Zet alle content in het midden van het scherm*/
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.links {                                 /*Zet alle linkjes onder elkaar*/
+    display: flex;
+    flex-direction: column;
+}
+
+.links a {
+    text-align: center;
+    margin: 10px;                         /*Ruimte tussen de links*/
+    padding: 15px 13vw 15px 13vw;         /*Pas de padding aan om hoogte en breedte van het klikbare gedeelte en dus de hoogte/breedte van de border te veranderen*/           
+    text-decoration: none;                /*Geen lijn onder de linkjes*/
+    color: white;
+    transition: 0.3s;                     /*stel de tijd van de transition naar a:hover in*/
+    font-size: 17px;
+    border-radius: 20px;                  /*Rondheid van de hoeken van de border. 0 geeft ook een leuke feel, hier twijfel ik nog tussen*/
+    border: 2px solid white;            /*Eigenschappen van de border*/
+}
+
+a:hover {                                  /*Verandert de linkjes als je eroverheen hovert met de muis*/
+    background-color: white;
+    color: black;
+}
