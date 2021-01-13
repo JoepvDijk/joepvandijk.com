@@ -49,3 +49,39 @@ a:hover {                                  /*Verandert de linkjes als je eroverh
     background-color: white;
     color: black;
 }
+
+
+
+
+
+
+.css-selector {
+    background: linear-gradient(314deg, #3ec6e4, #3c8eee, #7658ec, #c474e8, #eeae63, #73d264, #63ee93, #67abe3, #6a67e3, #a667e3);
+    background-size: 2000% 2000%;
+
+    -webkit-animation: AnimationName 32s ease infinite;
+    -moz-animation: AnimationName 32s ease infinite;
+    -o-animation: AnimationName 32s ease infinite;
+    animation: AnimationName 32s ease infinite;
+}
+
+@-webkit-keyframes AnimationName {
+    0%{background-position:0% 50%}
+    50%{background-position:100% 50%}
+    100%{background-position:0% 50%}
+}
+@-moz-keyframes AnimationName {
+    0%{background-position:0% 50%}
+    50%{background-position:100% 50%}
+    100%{background-position:0% 50%}
+}
+@-o-keyframes AnimationName {
+    0%{background-position:0% 50%}
+    50%{background-position:100% 50%}
+    100%{background-position:0% 50%}
+}
+@keyframes AnimationName {
+    0%{background-position:0% 50%}
+    50%{background-position:100% 50%}
+    100%{background-position:0% 50%}
+}
