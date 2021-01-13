@@ -45,20 +45,38 @@ body {
     border: 2px solid white;            /*Eigenschappen van de border*/
 }
 
-a:hover {                                  /*Verandert de linkjes als je eroverheen hovert met de muis*/
+.links a:hover {                                  /*Verandert de linkjes als je eroverheen hovert met de muis*/
     background-color: white;
     color: black;
 }
 
+.icons{
+    display: flex;
+}
+.icons svg{
+    width: 50px;
+    fill: white;
+}
+.icons a{
+    margin: 25px 2vw 0 2vw;
+}
 
+
+/* MEDIA QUARIES */
 @media (max-width: 700px) {                    /*Dit wordt actief wanneer de max-width van je scherm de aangegeven waarde heeft*/
     .links a{
         padding: 11px 24vw 11px 24vw;         /*Pas de padding aan om hoogte en breedte van het klikbare gedeelte en dus de hoogte/breedte van de border te veranderen*/
     }
+    .icons svg{
+        width: 38px;
+    }
+    .icons a{
+        margin: 25px 3vw 0 3vw;
+    }
 }
 
 
-
+/* BUTTION ANIMATION */
 .linksAnimated a{
     animation: animatie 1.5s;  /* Hier roep je de animatie op wanneer je over een object hovert. Je kunt er ook een tijd aan geven */
 }
@@ -75,7 +93,6 @@ a:hover {                                  /*Verandert de linkjes als je eroverh
         color: white;
     }
 }
-
 
 .links :nth-child(1){                   /*Hier zet je bij het eerste child van links een delay op de animatie, hierdoor zullen ze omstebeurd animeren ipv tegelijk*/
     animation-delay: 2000ms;
@@ -97,8 +114,8 @@ a:hover {                                  /*Verandert de linkjes als je eroverh
 
 
 
-
-.css-selector {                          /*De gradiant background animatie*/
+/*BACKGROUND ANIMATION*/
+.css-selector {                          
     background: linear-gradient(314deg, #3ec6e4, #3c8eee, #7658ec, #c474e8, #eeae63, #73d264, #63ee93, #67abe3, #6a67e3, #a667e3);
     background-size: 2000% 2000%;
 
