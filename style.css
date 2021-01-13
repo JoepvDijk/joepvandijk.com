@@ -53,9 +53,48 @@ a:hover {                                  /*Verandert de linkjes als je eroverh
 
 @media (max-width: 700px) {                    /*Dit wordt actief wanneer de max-width van je scherm de aangegeven waarde heeft*/
     .links a{
-        padding: 10px 25vw 10px 25vw;         /*Pas de padding aan om hoogte en breedte van het klikbare gedeelte en dus de hoogte/breedte van de border te veranderen*/
+        padding: 11px 24vw 11px 24vw;         /*Pas de padding aan om hoogte en breedte van het klikbare gedeelte en dus de hoogte/breedte van de border te veranderen*/
     }
 }
+
+
+
+.linksAnimated a{
+    animation: animatie 1.5s;  /* Hier roep je de animatie op wanneer je over een object hovert. Je kunt er ook een tijd aan geven */
+}
+
+@keyframes animatie {  /* Hier maak je een animatie, je maakt de stappen met 0-100% en zet daarachter wat er veranderd. Er word automatisch een vloeiende animatie van gemaakt */
+    0% {
+        color: white;
+    }
+    50%{
+        background-color: white;
+        color: black;
+    }
+    100%{
+        color: white;
+    }
+}
+
+
+.links :nth-child(1){                   /*Hier zet je bij het eerste child van links een delay op de animatie, hierdoor zullen ze omstebeurd animeren ipv tegelijk*/
+    animation-delay: 2000ms;
+}
+.links :nth-child(2){
+    animation-delay: 2750ms;
+}
+.links :nth-child(3){
+    animation-delay: 3500ms;
+}
+.links :nth-child(4){
+    animation-delay: 4250ms;
+}
+.links :nth-child(5){
+    animation-delay: 5000ms;
+}
+
+
+
 
 
 
@@ -89,3 +128,4 @@ a:hover {                                  /*Verandert de linkjes als je eroverh
     50%{background-position:100% 50%}
     100%{background-position:0% 50%}
 }
+
