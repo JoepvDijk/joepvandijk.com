@@ -45,7 +45,7 @@ body {
     border: 2px solid white;            /*Eigenschappen van de border*/
 }
 
-.links a:hover {                                  /*Verandert de linkjes als je eroverheen hovert met de muis*/
+.links a:hover {                           /*Verandert de linkjes als je eroverheen hovert met de muis*/
     background-color: white;
     color: black;
 }
