@@ -1,0 +1,96 @@
+body {
+    margin: 0;
+}
+
+header {
+    height: 100vh;
+    background-image: url(images/moon.JPG);
+    background-position: center;
+    background-size: cover;
+    
+    
+}
+
+nav {
+    display: flex;
+    justify-content: center;
+    padding: 50px 0 0 0 ;
+    position: fixed;
+    width: 100%;
+}
+
+li {
+    list-style: none;
+    
+}
+
+.moontext {
+    padding: 250px 0 0 0;
+    display: flex;
+    justify-content: center;
+    
+    
+}
+
+p {
+    color: white;
+    width: 500px;
+    
+}
+
+.background {
+    background-color: black;
+    height: 100vh;
+}
+
+
+a {
+    text-decoration: none;
+    text-transform: uppercase;
+    font-size: 15px;
+    margin: 25px;
+    color: white;
+    transition: font-size 1s, color 1s; /*Dit zorgt ervoor dat de tekst weer soepel terug gaat naar zijn originele staat wanneer je niet meer hovert ipv in één klap*/
+    
+}
+
+
+a:hover {                 /*Zorgt ervoor dat de tekst groter en zwart word wanneer je eroverheen hovert*/
+    color: black;
+    font-size: 30px;
+    transition: 1s;      /*Dit zorgt ervoor dat dit soepel gebeurd en niet in één klap*/
+}
+
+p:hover {
+   animation: animatie 2s infinite;  /* Hier roep je de animatie op wanneer je over een object hovert. Je kunt er ook een tijd aan geven */
+}
+
+@keyframes animatie {  /* Hier maak je een animatie, je maakt de stappen met 0-100% en zet daarachter wat er veranderd. Er word automatisch een vloeiende animatie van gemaakt */
+    0% {
+        color: red; 
+        font-size: 20px;
+        transform: rotate(0deg);
+    }
+    25% {
+        color: blue; 
+        font-size: 15px;
+        transform: rotate(10deg);
+    }
+    50% {
+        color: orange; 
+        font-size: 10px;
+        transform: rotate(-10deg);
+    }
+    75% {
+        color: green;
+        font-size: 15px;
+        transform: rotate(10deg);
+    }
+    100%{
+        color: yellow;
+        font-size: 20px;
+        transform: rotate(0deg);
+    }
+}
+
+

@@ -1,0 +1,46 @@
+
+
+
+
+.mySlides1, .mySlides2, .mySlides3 {
+    display: none           /*zorgt ervoor dat de slides niet zichtbaar zijn. Met javascript laat je de slides weer zien*/
+}
+
+/* Slideshow container */
+.slideshow-container {
+  max-width: 350px;
+  position: relative;
+  margin: auto;
+}
+.slideshow-container img {
+    width: 100%;
+    vertical-align: middle;
+}
+
+/* Next & previous buttons */
+.prev, .next {
+  cursor: pointer;
+  position: absolute;
+  top: 50%;                   /*Zorgt dat het knopje 50% vanaf de bovenkant staat, het midden dus*/
+  width: auto;
+  padding: 16px;
+  margin-top: -22px;
+  color: white;
+  font-weight: bold;
+  font-size: 18px;
+  transition: 0.6s ease;
+  border-radius: 0 3px 3px 0;
+  user-select: none;
+}
+
+/* Position the "next button" to the right */
+.next {
+  right: 0;
+  border-radius: 3px 0 0 3px;
+}
+
+/* On hover, add a grey background color */
+.prev:hover, .next:hover {
+  background-color: #f1f1f1;
+  color: black;
+}

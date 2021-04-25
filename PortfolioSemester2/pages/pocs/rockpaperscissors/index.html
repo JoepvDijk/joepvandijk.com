@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rock Paper Scissors</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="script.js" defer></script>         <!-- defer betekent dat de Javascript pas geladen word nadat de html geladen is -->
+</head>
+<body>
+
+
+<div class="selections">
+    <button class="selection" data-selection="rock">✊</button>           <!-- Dit zijn de buttons waarmee je een actie kiest-->
+    <button class="selection" data-selection="rock">✋</button>           <!-- html kan sommige emoticons renderen op je webpagina waardoor je geen img hoef te gebruiken -->
+    <button class="selection" data-selection="rock">✌</button>            <!-- Door de data selection weten we welke button we aangeklikt hebben voor de javascript -->
+</div>
+
+<div class="results">                               <!-- Hierin komt de informatie van de resultaten -->
+    <div>
+        You
+        <span class="result-score" data-your-score>0</span>         <!-- Hier komen de resultaten van de potjes in -->
+    </div>
+    <div data-final-column>
+        Computer
+        <span class="result-score" data-computer-score>0</span>          <!-- Hier komen de resultaten van de potjes in -->
+    </div>
+    <!-- <div class="result-selection winner">✊</div>     Hier zet je al testresultaten neer die uiteindelijk worden verandert door de Javascript 
+    <div class="result-selection">✌</div> -->
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+</body>
+</html>

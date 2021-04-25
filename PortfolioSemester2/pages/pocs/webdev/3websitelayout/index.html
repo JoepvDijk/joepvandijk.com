@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Joep's Page</title>
+    <style>
+        body {
+            background: rgb(58, 58, 58);
+            color: white;
+            font-family: Helvetica Neue, Helvetica, Arial;
+            margin: 0;
+            padding: 0; /* Margin en padding zorgt er hier voor dat je geen ruimtes tussen je divs en de randen van je scherm hebt */
+        }               /* Dalijk word uitgelegd hoe margin en padding precies werken */
+        div {
+            background: blue; /* Hierdoor krijgen alle divs een blauwe achtergrond */
+        }
+        
+        header {
+            background: black;
+            margin: 20px; /* Margin zorgt ervoor dat er ruimte omheen komt */
+        }                 /* Nu zie je dat er boven, onder, links en rechts van de header een ruimte van 20px is */
+        section {
+            background: orange;
+            padding: 20px; /* Padding zorgt ervoor dat die ruimte in de box komt ipv eromheen */
+        }                  /* Nu zie je dat de section 20px groter is aan de bovenkant, onderkant, links en rechts */
+        footer {
+            background: black;
+            margin: 5px 600px;/* Je kunt meerdere waardes invullen bij padding/margin. Bij 1 waarde word deze aan alle kanten gebruikt */
+        }                     /* Bij twee waardes staat de 1e waarde voor boven en onderen en de 2e voor links en rechts */
+                              /* Bij vier waardes gaat het kloksgewijs, 1e waarde boven, 2e rechts, 3e onderen en 4e links */
+        p {
+            background: black;
+            padding: 20px 30px 15px 300px; /* Hier zie je 4 waardes. Je kunt ipv px nog vele andere units gebruiken */
+        }                                  /* Een voorbeeld hiervan is %, hiermee pak je bijv 20% van het scherm als ruimte*/
+        .kip {                  /* .kip is de classnaam kip die je meegegeven hebt aan de divs. Hiermee selecteer je dus alle elementen die een classnaam kip hebben. */
+            background: red;
+            display: inline-block; /* Inline-block zorgt ervoor dat de divs niet onder elkaar maar naast elkaar komen te staan */
+            width: 100px;          /* Met width en height kun je een hoogte en breedte aan de divs geven */
+            height: 40px;          /* Je kunt ook display: flex; bij de section zetten als je gebruik wilt maken van flexbox */
+
+        }
+    </style>
+
+</head>
+
+<body>
+
+<h1>Let's build a layout!</h1>
+
+<div>A</div> <!-- div staat voor divider, het is simpel gezegd een blokje met content -->
+<br>         <!-- Hier zie je dat de div het hele scherm van links naar rechts in beslag neemt aan de achtergrond kleur -->
+<div>B</div>
+<div>C</div>
+<div>D</div>
+
+<div class="kip">A</div>      <!-- Door class="kip" geven we een classnaam genaamd kip mee aan het element. Deze kun je laterna specifiek targeten in de Css -->
+<div class="kip">B</div>
+<div class="kip">C</div>
+<div class="kip">D</div>
+    
+    <header></header>   <!-- Omdat de code makkelijker te overzien zijn er sementic tags -->
+    <nav></nav>         <!-- header, navigation, section en footer zijn sementic tags -->
+    <section></section> <!-- Deze zijn precies hetzelfde als een div maar overzichtelijker omdat de naam zegt wat het betekent -->
+    <footer></footer> 
+
+    <header>header</header>
+    <section>first-section</section>
+    <section>second-section</section>
+    <footer>footer</footer>
+    <p>Hieronder zie je een voorbeeld van een website layout en welke tags er gebruikt zijn</p>
+
+    <img src="images/Voorbeeldlayout.png" alt="Voorbeeld Layout"> <!-- Met img roep je een afbeelding op -->
+    <!-- Zorg ervoor dat bij src de pad naar de afbeelding staat, als deze in een map staat moet dit erbij staan -->
+    <!-- Achter alt komt de tekst die weergegeven word als de afbeelding niet goed zou laden op de website -->
+
+
+</body>
+
+</html>

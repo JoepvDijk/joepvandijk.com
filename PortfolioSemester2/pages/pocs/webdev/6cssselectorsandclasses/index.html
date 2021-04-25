@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Home</title>
+    <style>
+        li {
+            display: inline-block;
+            background-color: rgb(204, 166, 42);
+            border-radius: 10px;          /* Hierdoor maak je de border ronder. Je ziet de achtergrond kleur nu met rondere hoeken */
+            padding: 3px;
+            margin-left: 20px;
+        }
+
+        .section-box {                   /* Door de . kies je alle classes genaamd section-box */
+            display: flex;
+        }
+
+        .section-box.first div {         /* Hiermee kies je alle divs waar de classnaam section-box en first bij hoort */
+            background: rgb(189, 49, 49);          /* Alleen de de divs in de eerste section krijgen dus een grijze achtergrond */
+            padding: 60px;
+            /*width: 100%;
+            margin: 1px;*/
+        }
+        .section-box.second div {  /* Hiermee kies je alle divs waar de classnaam section-box en second bij hoort*/
+            background: rgb(93, 93, 171);    /* Alleen de de divs in de tweede section krijgen dus een blauwe achtergrond */
+            padding: 40px;
+            /*width: 100%;
+            margin: 1px;*/        /* Je ziet dat deze code hetzelfde is als hierboven, DRY = don't repeat yourself */
+        }                         /* Dit kunnen we oplossen door dezelfde code bij de classnaam section-box div te zetten */
+    
+        .section-box div {        /* Hierdoor kun je makkelijk alle divs veranderen waar de classnaam section-box bijhoort */
+            width: 100%;          /* En kan je toch de verschillende kleuren kiezen door de classnaam first en second te gebruiken*/
+            margin: 1px;          /* Zo kun je snel alle divs die bij .section-box horen aanpassen ipv overal de afmetingen te veranderen */
+        }
+
+        #kip {                    /* Hiermee kiezen we de tag met id=kip */
+            font-size: 150%;
+        }
+        .third,h2 {                   /* Door de comma selecteer je meerdere dingen tegelijk */
+            background: rgb(235, 227, 128);  /* Nu krijgt alles met de classnaam third en alle h2's een gele achtergrond */
+            padding: 20px;
+        }
+        p{
+            font-size: 40px;
+            padding: 50px;
+            display: flex;
+            justify-content: center;
+            background: rgb(0, 255, 229);
+        }
+        /* Er worden ook automatisch classes aangemaakt, dit zijn pseudo classes. Bijv. first-child en last-child */
+        /* Bijv. in de ul zitten vier li's. De ul is in dit geval de parent container. */
+        /* De eerste home button is in dit geval first-child en directions last-child. Zo kun je deze ook nog apart bewerken in css */
+
+        li:first-child {
+            margin-left: 0;/* Hierdoor heb je wel nog alle margins tussen de li's maar staat de eerste (first-child) wel helemaal links */
+        }
+        a:active {                      /* Hiermee selecteer je de a of link die op dat moment active is.*/
+            background-color: rgb(12, 106, 31); /* Nu zie je dat de background van een link geel word terwijl je er op klikt */
+        }
+        a {
+            text-decoration: none;      /* Zorgt ervoor dat het lijntje onder alle links verdwijnt */
+            color: white;
+            font-size: 20px;
+        }
+        a:hover {                       /* Word actief wanneer je muis over een link zweeft of hovert */
+            text-decoration: underline; /* Er komt nu een lijntje onder een linkje als je muis erboven zweeft */
+        }
+
+        li:hover {
+            background-color: red;   /* Als je met je muis over een list item zweeft krijgt deze een rode achtergond */
+        }
+        .first div:hover{
+            background-color: chartreuse;
+            color: red;
+        }
+        .second div:hover{
+            background-color: pink;
+            color: blue;
+        }
+        ul{
+            background: black;
+            padding: 15px;
+            margin: 0;
+        }
+        body{
+            margin: 0;
+        }
+
+
+
+    </style>
+</head>
+
+<body>
+
+    <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="contact.html">Contact</a></li>
+        <li><a href="locations.html">Locations</a></li>
+        <li><a href="directions.html">Directions</a></li>
+    </ul>
+
+    <section class ="first section-box">  <!-- Door een class aan te maken kun je css specifieker toepassen  -->
+        <div>Section a</div>              <!-- Zo kan je deze section class een style geven en de andere section een andere style -->
+        <div>Section b</div>              <!-- Door een spatie te gebruiken maak je een tweede class aan in dezelfde tag -->
+        <div>Section c</div>              <!-- Dit kan handig zijn als je alle bepaalde dingen wel hetzelfde wilt maar niet alles-->
+    </section>
+
+    <section id=kip class="second section-box"> <!-- Je kunt tags ook een id geven en deze kiezen in je stylesheet -->
+        <div>Section d</div>                    <!-- Het word alleen niet vaak gebruikt omdat classes dit doen -->
+        <div>Section e</div>                    <!-- Ook mag je deze id dan maar 1 keer gebruiken en niet vaker -->
+    </section>
+
+    <section class="third section-box">
+        <div>f Lorem ipsum dolor sit amet, consectetur adipisicing elit. Suscipit, nam.</div>
+        <div>g Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, ab!</div>
+    </section>
+
+    <p>Welkom op deze mooie site.</p>
+</body>
+</html>

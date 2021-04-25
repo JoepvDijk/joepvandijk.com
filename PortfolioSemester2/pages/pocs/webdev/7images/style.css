@@ -1,0 +1,107 @@
+body {
+    color: white;                            /* Zorgt ervoor dat alle tekst in de body wit is */
+    font-family: Helvetica, Arial, sans-serif; /* Zorgt ervoor dat in de hele body de Helvetica font word gebruikt */
+    margin: 0;
+    padding: 0;   /* Deze padding/margin zorgt ervoor dat de hele body goed aansluit op de linker en bovenkant van het scherm */                          
+}               
+   
+nav ul {                          /* Je wilt niet alle ul's selecteren als je die in je nav wilt bewerken dus nav ul ipv ul */
+    /* background: black;         /* Geeft de unordered list container een zwarte achtergrond. Is weg ivm achtergrondfoto */
+    margin: 0;
+    padding: 0;                   /* Deze padding/margin zorgt ervoor dat de unordered list container goed aansluit */
+}
+
+nav ul li {
+    display: inline-block;        /* Zorgt ervoor dat de list items naast elkaar komen te staan */
+    padding: 60px 20px 0px 20px;  /* Zorgt ervoor dat de list items mooi van elkaar afstaan */
+}
+
+nav ul li a {
+    color: white;              /* Zorgt ervoor dat de linkjes waar je op klikt een witte tekst hebben */
+    text-decoration: none;       /* Zorgt ervoor dat de linkjes waar je op klikt geen underline hebben */
+    text-transform: uppercase;   /* Verandert de tekst naar hoofdletters, doe dit in css omdat je in html schrijft maar niet designed */
+}
+
+a:hover {                       /* Word actief wanneer je muis over een link zweeft of hovert */
+    text-decoration: underline; /* Er komt nu een lijntje onder een linkje als je muis erboven zweeft */
+}
+
+
+header .logo a {             /* Selecteert de link die in de list item met classnaam logo zit die in de header zit */
+
+    display: inline-block;   /* Hij staat automatisch op display inline waardoor je geen width of height aan kan geven.  */
+                             /* Daarom veranderen we hem naar display inline-block */
+    
+    text-indent: -9999999px; /* Zorgt ervoor dat de tekst die we net hebben gemaakt (voor blinde mensen) verplaatst word uit het zicht */
+                             /* Hiervoor moet het ook in inline-block staan anders werkt het niet*/
+
+    /* Maak je afbeeldingen dubbel de grote die jij wilt gaan gebruiken en halveer ze dan. Dit is omdat niet elk beeld dezelfde */
+    /* Pixel-resolutie heeft. Als er betere beelden komen met meer pixels zullen je afbeeldingen uitgerekt en niet mooi worden */
+
+     /* Je hebt background-color -image -repeat etc. Dus als je meerdere keren backgrounds gebruikt */
+     /* Maak je gebruik van de specificatie erachter */
+
+    background-image: url("images/logo.png"); /* background-image zorgt ervoor dat de achtergrond een afbeelding wordt */
+    background-size: 300px;  /* Het logo is groter dan dat je wilt laten zien op de website. Dus geven we hem de goede grootte */
+    width: 300px;
+    height: 190px;                 /* Als je de hoogte/breedte/size verandert zie je dat je logo gaat herhalen. Dit willen we niet */
+    background-repeat: no-repeat;  /* Dus gebruiken we background-repeat no-repeat */
+
+                        /* We willen dat het logo iets hoger komt zodat het midden op één lijn zit met de andere linkjes */
+                        /* Hiervoor moeten we eerst zorgen dat deze verandert kan worden RELATIEF gezien van de andere linkjes */
+    position: relative; /* Om deze apart te kunnen veranderen gebruiken we position relative */
+    top: -55px;         /* Hierdoor kunnen we zeggen dat de bovenkant 55px hoger start dan de andere linkjes */
+                        /* Je hebt dus je linkje verandert, relatief aan de andere linkjes */
+
+}
+
+
+
+header {
+    background-color: black;/*Hier komt een afbeelding over maar je kunt dit laten staan zodat mensen met traag internet de layout zien */
+    text-align: center;       /* Zorgt ervoor dat alle text in de header naar het midden wordt gezet */
+    height: 400px;            /* Maakt de header lekker groot zodat je een mooie grote foto kunt laten zien */
+    padding: 20px;
+    background-image: url("images/banner.jpg"); /* Geeft de hele header een afbeelding als achtergrond */
+                                                /*Deze moet wel nog de goede afmetingen krijgen*/
+    background-size: 100%;/*met 100% zal je afbeelding altijd de totale header bedekken, maar je ziet dat de afbeelding bovenaan begint */
+    background-position: center;                /* Met background-position center word de afbeelding vanuit het midden getoond. */
+    
+}
+
+.feautures {
+    color: black;
+    display: flex;                /* Zorgt ervoor dat op de section met klassnaam feautures flexbox kan worden gebruikt */ 
+    flex-direction: row;          /* Zet de divs in de section container in een row */ 
+    text-align: center;           /* Zet alles in .feautures in het midden. De afbeeldingen staan nu dus mooi gecenterd */
+}
+
+.feautures figure { 
+    
+    width: 100%;                     /* Zorgt ervoor dat de divs eerlijk over het beeld verdeeld worden */
+    /*margin: 20px 100px 20px 100px; /* Zet de divs wat verder uit elkaar en van de andere content af. */
+    text-align: center;            /* Zet de figures in het midden. De afbeeldingen staan nu dus mooi gecenterd */
+                               /* Text-align center kan bij deze of de .feautures, ik moet even navragen wat het beste is */
+    text-transform: uppercase; /* Verandert de tekst naar hoofdletters, doe dit in css omdat je in html schrijft maar niet designed */
+}
+
+.feautures figure img {
+    width: 200px;
+    border-radius: 50%; /* Zorgt ervoor dat je afbeelding een cirkel wordt. Bijv. 10px ipv 50% geeft de afbeelding wat rondere hoeken */
+    box-shadow: gray 00px 0px 10px; /* Hiermee geef je een schaduw aan je box*/
+    /* box-shadow heeft 4 waardes nodig, eerst de kleur, dan lengte horizontaal, dan lengte verticaal, dan hoeveel blur */
+    border: 2px solid white;        /* Dit zorgt voor een dik wit randje van 2px  */
+                                      /* Deze dingetjes zijn heel subtiel maar geven wel meteen een beter effect */
+}
+
+
+footer {
+    background-color: black;     
+    color: gray;         
+    font-size: 15px;                  /* Verandert de grootte van je tekst */
+    padding: 20px;
+    text-align: center;
+}
+
+
+

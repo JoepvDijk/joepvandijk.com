@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Homepage</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<!-- Een responsive design betekent dat je design er goed uitziet op elk formaat scherm, bijv. telefoon en desktop. -->
+<!-- Je kunt een design voor desktop apparaten maken en dit dan zo aanpassen dat de content nog goed blijft staan -->
+<!-- wanneer je deze opent op je telefoon. Tegenwoordig gebruiken veel meer mensen hun telefoon om websites te bekijken -->
+<!-- dus steeds meer mensen maken eerst een design voor de telefoon en passen deze daarna aan voor de desktop versie -->
+<body>
+    <header>
+        <nav>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="menu.html">Menu</a></li>
+                <li class = "mobile"><a href="locations.html">Locations</a></li> <!-- De class mobile en desktop word aangemaakt zodat -->             
+                <li class = "mobile"><a href="contact.html">Contact</a></li> <!-- deze aangeroepen kunnen worden met de media query's -->
+                <li class="logo"><a href="index.html">Artisan Bakery Logo</a></li> 
+                <li class = "desktop"><a href="locations.html">Locations</a></li>                
+                <li class = "desktop"><a href="contact.html">Contact</a></li>
+
+            <!-- Door de class mobile en desktop te maken kun je ervoor zorgen dat de bovenste mobile class word weergegeven -->
+            <!-- Dit doe je door middel van media query's die actief worden bij een bepaalde schermbreedte -->
+            <!-- Zo kun je de mobile class laten zien als het scherm klein is en de desktop class wanneer je scherm groot is -->
+
+            <!-- Je zou ook een hele nieuwe navigatie kunnen maken die verschijnd -->
+            <!-- voor mobile of een voor desktop maar dan kopieer/plak je iets meer code -->
+            </ul>                                 
+        </nav>
+    </header>
+    <section class="feautures">
+        <figure> 
+            <img srcset="" src="images/breads.jpg" alt="amazing fresh baked bread">
+            <figcaption>Fresh Baked Bread</figcaption>
+        </figure>
+
+        <figure>
+            <img src="images/coffee.jpg" alt="fresh brewed coffee">
+            <figcaption>Home Roasted Coffee</figcaption>
+        </figure>
+
+        <figure>
+            <img src="images/goods.jpg" alt="home goods">
+            <figcaption>Goods Market</figcaption>
+        </figure>
+    </section>
+    <footer>
+        123 Main Street Edwardsville, IL • 555-555-555 • us@me.com
+    </footer>
+
+
+
+
+
+
+</body>
+
+</html>

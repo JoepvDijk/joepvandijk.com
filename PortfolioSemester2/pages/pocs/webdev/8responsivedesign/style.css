@@ -1,0 +1,180 @@
+body {
+    color: white;                          
+    font-family: Helvetica, Arial, sans-serif; 
+    margin: 0;
+    padding: 0;                             
+}               
+nav ul {                       
+    margin: 0;
+    padding: 0;               
+}
+nav ul li {
+    display: inline-block;       
+    padding: 60px 20px 0px 20px; 
+}
+nav ul li a {
+    color: white;             
+    text-decoration: none;      
+    text-transform: uppercase;   
+}
+header .logo a {         
+    display: inline-block; 
+    text-indent: -9999999px; 
+    background-image: url("images/logo.png");
+    background-size: 300px;  
+    width: 300px;
+    height: 190px;              
+    background-repeat: no-repeat;  
+    position: relative; 
+    top: -55px;     
+}
+a:hover {                       
+    text-decoration: underline; 
+}
+header {
+    background-color: black;
+    text-align: center;       
+    height: 400px;         
+    padding: 20px;
+    background-image: url("images/banner.jpg"); 
+    background-size: 100%;
+    background-position: center;           
+} 
+
+
+
+.feautures {
+    color: black;
+    
+    display: flex;              
+    flex-direction: row;        
+    text-align: center;       
+    flex-wrap: wrap;  /* Dit zorgt ervoor dat je website responsive word. Als je scherm nu kleiner word zullen de afbeeldingen */
+                      /* automatisch zichzelf onder elkaar zetten, maar niet netjes in het midden*/ 
+    justify-content: center;      /* Zet alle children in het midden van de container */
+                                  /* Dus alle figures in de feautures section worden nu mooi gecentered */
+  /* Nu heb je dus je website al responsive gemaakt zonder media query's te gebruiken, door een slim design is dit dus niet altijd nodig! */
+}
+.feautures figure {
+    
+    /* width: 100%; /* Als je deze nu houd worden de figures onder elkaar gezet en krijgen ze ieder een eigen rij met daarop 100% */
+                    /* Dit werkt dus niet goed met de flex-wrap en om ze nu gecentered te krijgen gebruiken we justify-content center */ 
+    text-transform: uppercase;
+}
+.feautures figure img {
+    width: 200px;
+    border-radius: 50%;
+    box-shadow: gray 00px 0px 10px; 
+    border: 2px solid white;  
+}
+footer {
+    background-color: black;     
+    color: gray;         
+    font-size: 15px;        
+    padding: 20px;
+    text-align: center;
+    margin-top: 25vh;
+}
+
+
+
+
+
+@media screen and (max-width: 800px) { /* Dit is een media query. Als dat wat tussen de ( ) staat true is word alles wat  */
+    .feautures {                       /* tussen de { } staat actief. Je kunt meerdere conditions gebruiken in één query  */
+        background: pink;            /* door bijv. (min-width 400px) and (max-width 800px) tegebruiken */
+                                       /* max-width 800px betekend dat dit actief is wanneer je scherm tot en met 800px breed is. */
+                                       /* Dus bij een breedte van 800px of lager zal deze code actief worden */
+    }
+}
+
+/* Onder de 550px worden beide query's actief. Als je deze twee om zou draaien zou de achtergrond alleen maar roze blijven */
+/* omdat de laatste code de vorige overschrijft. Doordat de code nu zo staat zal onder de 800px breedte de achtergrond roze worden */
+/* en onder de 550px breedte de achtergrond rood worden omdat dan onderstaande code actief word. */
+/* Als de query's omgedraaid waren zou het scherm altijd roze worden omdat je altijd onder de 800px zit */
+/* Om dit op te lossen kun je meerdere conditions gebruiken (min-width) and (max-widht) in dezelfde query */
+
+/* Je begint dus met een groot scherm en als deze kleiner word word de query geactiveerd. Dit is wanneer je vanuit desktop */
+/* naar mobiel toe werkt. Als je vanuit telefoon naar desktop werkt kan je min-widht gebruiken omdat je dan */
+/* met een klein scherm begint en de code actief word als een minimale breedte overschreden is. Dus het scherm groter word */
+
+@media screen and (max-width: 550px) {
+    .feautures {
+        background: red;
+    }
+}
+
+
+
+/* Je kijkt op je website naar de breedte waarop je design niet meer mooi is. Als je op pagina inspecteren klikt kun je zien hoeveel */
+/* pixels hoog en breed je scherm is rechts bovenin. Je ziet dat de navigatie verschuifd zodra de website 820px breedte bereikt */
+
+/* Je kunt grote stukken code in een media query onderaan je normale code zetten of je zet voor iedere tag die code in kleinere */
+/* query's onder de bijbehorende tag in de normale code. */
+
+header .mobile { 
+    display: none; /* Hierdoor worden de linkjes met de class mobile ontzichtbaar, deze kun je vervolgens oproepen door media query's. */
+}
+
+@media screen and (max-width: 820px) { /* Deze code word actief bij een breedte onder de 820px */
+    header .mobile {               
+        display: inline-block;  /* Dit zorgt ervoor dat de mobile class content weer zichtbaar word en in inline-block word gezet */
+    }
+
+    header .desktop {    /* Dit zorgt ervoor dat de desktop class nu niet meer zichtbaar is */
+        display: none;
+    }
+
+    header {
+        height: 280px; /* Dit zorgt ervoor dat de background hoogte verandert waardoor je geen herhalingen ziet als het scherm klein is */
+
+        background-position: 0 0; /* Je zou de background position nog kunnen aanpassen als deze er niet goed uit zou zien op mobile */
+        /* In de normale code staat background position centered. Als je hier nu 20px 20px aangeeft */
+        /* zal de eerste waarde voor de horizontale as zijn en de tweede waarde voor de verticale as*/
+    }
+
+    /*
+    .feautures {  /* Omdat we slim gebruik maken van de flex-wrap zijn de afbeeldingen in figures al responsive dus is dit niet nodig
+         display: block;  Hierdoor worden de afbeeldingen onder elkaar gezet wanneer het scherm kleiner word dan 820px    
+    } */
+
+
+                /* Omdat telefoons ook 4g gebruiken en je je website zo geoptimaliseerd mogelijk wilt maken kan je er soms voor kiezen om kleinere */
+                /* afbeeldingen te laten zien bij een kleiner scherm. Dit doe je anders voor design afbeeldingen en content afbeeldingen (met img tag) */
+    header {    /* Zo optimaliseer je foto's die gebruikt worden als design */
+
+        background-position: 0 0; /* Je zou de background position nog kunnen aanpassen als deze er niet goed uit zou zien op mobile */
+        /* In de normale code staat background position centered. Als je hier nu 20px 20px aangeeft */
+        /* zal de eerste waarde voor de horizontale as zijn en de tweede waarde voor de verticale as*/
+
+        background-image: url("images/bannersmall.jpg"); /* Hiermee word een andere afbeelding weergegeven */
+        /* Omdat het origineel een erg grote foto was zou dit niet optimaal zijn voor telefoon gebruikers op een slechtere verbinding */
+        /* Daarom kan je een kleinere versie van je foto inladen wanneer het scherm een klein formaat heeft */
+    }
+
+    /* Voor content images (die met een img tag) moet je in je html wat tags gaan toevoegen */
+    /* Wanneer je dezelfde afbeelding wilt laten zien maar dan een kleinere versie ervan gebruik je de srcset attribute */
+    /* Deze gebruik je door            <img src="images/breads.jpg" alt=amazing fresh baked bread">                     */
+    /* te veranderen naar              <img srcset="" src="images/breads.jpg" alt="amazing fresh baked bread">          */
+
+
+    /* Wanneer je een afbeelding wilt veranderen qua grootte of vorm. Je wilt er bijv een vierkant van maken ipv een cirkel */
+    /* zetten we deze in de <picure> </picture> tag */
+
+    /* Deze manieren moet je nog onder de knie krijgen en gaan we een andere keer verder op in */
+
+
+
+
+
+
+
+
+}
+
+
+
+
+
+
+

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Joep's Page</title>
+    <style>   /* Je roept css op met <style>, alles wat tussen deze tags staat word dan css. Hierdoor moet ik nu ook /* gebruiken
+                 om een comment te maken en niet <!----> maar dit word niet vaak gebruikt, wij gaan vooral gebruikmaken van <link> om een stylsheet op te roepen */
+
+        h1 {                /* in CSS werk je met een selector, hiermee kies je wat je gaat veranderen, bijvoorbeeld alle h1's */
+            color: red;   /* Daarna kies je een property, bijv. de kleur. Daarna geef je deze een value, bijv. rood */
+        }
+        h2 {
+            color: rgb(19, 184, 162); /* Door over red te zweven met je muis kun je alle rgb kleuren kiezen (of zelf invullen) */
+            background: black;        /* Je kunt meerdere properties bij een tag zetten. */
+        }
+        body {
+            background: rgb(46, 46, 46); /* Dit verandert de achtergrondkleur van de gehele de body */
+            color: white;                /* Hierdoor word alle tekst wit.*/
+
+            font-family: helvetica Neue, Helvetica, Arial, sans-serif; /* Met font-family kies je meerdere fonts die de gebruiker
+                            gaat zien, als er een niet geïnstalleerd is op de gebruikers computer krijgt hij de volgende te zien
+                            later word er uitgelegd hoe je ervoor zorgt dat jouw font altijd beschikbaar is voor de gebruiker */
+        }
+        button {
+            background: grey;
+            border: none;    /* Dit zorgt ervoor dat de border om de button weg gaat */
+            color: white;
+        }
+            
+
+    </style>  <!-- Met <link> kunnen we een stylesheet aanroepen, dus een andere file waarin we al onze css code zetten waardoor
+                   we op al onze webpages makkelijk dezelfde stylesheet kunnen gebruiken -->
+    
+</head>
+
+<body>
+    
+    <h1>Mijn pagina</h1>
+    <h2>Over mij</h2>
+    <p>Mijn naam is Joep van Dijk en ik ben 20 jaar oud.</p>
+    <button>Klik hier voor meer informatie</button>
+    
+</body>
+
+</html>

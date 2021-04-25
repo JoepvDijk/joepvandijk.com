@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Homepage</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<!-- Je kunt afbeeldingen op twee manieren gebruiken. Door een img tag te gebruiken. Dit doe je als je afbeelding deel is vand de content -->
+<!-- De andere manier is om met css een afbeelding als achtergrond te gebruiken. Dit is geen content maar design -->
+
+
+<body>
+    
+    <header>
+        <nav>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="menu.html">Menu</a></li>
+                <li class="logo"><a href="index.html">Artisan Bakery Logo</a></li> <!-- Door een link te maken naar de homepage kun je -->
+                <li><a href="locations.html">Locations</a></li>                    <!-- naar de homepage door op het logo te klikken. -->
+                <li><a href="contact.html">Contact</a></li> <!-- Ook zetten we hierachter neer wat het is. Hierdoor maken we het sementic -->
+            </ul>                                 <!-- en kunnen blinde mensen die een screenreader gebruiken duidelijk zien wat dit is -->
+        </nav>
+        
+    </header>
+
+    <section class="feautures">
+
+        <figure> <!--Een figure tag gebruik je wanneer je een afbeelding hebt waar een caption/kleine tekst bij hoort, maakt het sementic -->
+            <img src="images/breads.jpg" alt="amazing fresh baked bread"> <!-- Met img roep je een afbeelding op -->
+    <!-- Zorg ervoor dat bij src de pad naar de afbeelding staat, als deze in een map staat moet dit erbij staan -->
+    <!-- Achter alt komt de tekst die weergegeven word als de afbeelding niet goed zou laden op de website -->
+    <!-- Deze afbeelding is 400x400px omdat ik hem wil laten zien als 200x200px, zorg ervoor dat je afbeeldingen dubbel de grootte zijn -->
+    <!-- Een alt tag zorgt ervoor dat de slechtziende met een screenreader weten wat hier staat maar ook zodat je website beter -->
+    <!-- op de google search engine te vinden is door de woorden die je hier invoerd -->
+            <figcaption>Fresh Baked Bread</figcaption> <!-- Hierin komt de caption die bij je afbeelding hoort (in een figure tag) -->
+        </figure>
+
+        <figure>
+            <img src="images/coffee.jpg" alt="fresh brewed coffee">
+            <figcaption>Home Roasted Coffee</figcaption>
+        </figure>
+
+        <figure>
+            <img src="images/goods.jpg" alt="home goods">
+            <figcaption>Goods Market</figcaption>
+        </figure>
+
+    </section>
+
+    <footer>
+        123 Main Street Edwardsville, IL • 555-555-555 • us@me.com
+    </footer>
+
+
+
+
+
+
+</body>
+
+</html>

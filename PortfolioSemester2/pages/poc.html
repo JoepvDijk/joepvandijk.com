@@ -1,0 +1,976 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Joep Poc's</title>
+    <link rel="shortcut icon" type="image/png" href="../images/favicon.png">
+    <link rel="stylesheet" href="stylepages.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@700&display=swap" rel="stylesheet"> <!-- Dit is een Embed link naar een font van googlefonts. 
+        word deze font beschikbaar voor alle mensen die gebruik maken van mijn site -->
+        <script
+  src="https://code.jquery.com/jquery-3.5.1.min.js"
+  integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0="
+  crossorigin="anonymous"></script>        <!-- Dit is script van een externe bron waardoor mijn website gebruik kan maken van jquery -->
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.9.0/slick.min.js"></script> <!-- voor slick -->
+  <link rel="stylesheet" href="slick.css">                  <!-- link naar de stylesheet van slick -->
+  <link rel="stylesheet" href="slicktheme.css">          
+</head>
+
+<body>
+
+
+
+    <div class="homebutton">
+        <a href="../index.html">Home</a>
+    </div>
+    <div class="topbutton">
+        <a href="#voorwoord">Back to Top</a>
+    </div>
+    <div class="gitbutton">
+        <a href="https://git.fhict.nl/I437759/semester-2-media"target="_blank">Gitlab</a>
+    </div>
+    
+
+
+
+
+
+
+    <div class="padding">
+
+
+
+
+        <div id="voorwoord">
+            <h1>Voorwoord Poc's Development</h1>
+            <p>Om de leeruitkomst Development aan te tonen moeten er Proof of Concepts gemaakt worden. Dit zijn vaak kleinere stukjes code waarin iets gestest word. Dit kan bijvoorbeeld een Poc zijn van een slideshow. Je test en toont hier aan dat je dit onder de knie hebt voordat je dit in je portfolio of iets groters gebruikt.</p>
+            <p>Klik <a href="https://git.fhict.nl/I437759/semester-2-media" target="_blank">Hier</a> voor een link naar mijn Gitlab repository.</p>
+        </div>
+
+        <div class="list kleinetussenruimte">
+            <h1>Inhoud Poc's</h1>
+            <ul>
+                <li><a href="#helloworld">Hello World</a></li>
+                <li><a href="#infographic">Steen Papier Schaar</a></li>
+                <li><a href="#tekstanimaties">Tekst Animaties</a></li>
+                <li><a href="#modals">Modals</a></li>
+                <li><a href="#slideshow">Slideshow</a></li>
+                <li><a href="#webdev">Website Artisan Bakery</a></li>
+                <li><a href="#html">Basics Html</a></li>
+                <li><a href="#css">Basics Css</a></li>
+                <li><a href="#layout">Website Layout</a></li>
+                <li><a href="#flexbox">Flexbox</a></li>
+                <li><a href="#pages">Multiple Pages</a></li>
+                <li><a href="#cssadvanced">Css Advanced</a></li>
+                <li><a href="#images">Images</a></li>
+                <li><a href="#responsive">Responsive Design</a></li>
+                <li><a href="#zelfportret">Zelfportret Selfieweek</a></li>
+                <li><a href="#portfolio">Portfolio Website</a></li>
+            </ul> 
+        </div>
+
+
+
+
+
+
+
+        <!-- HELLO WORLD -->
+        <div id="helloworld">
+            <div class="kleinetussenruimte textenfoto">
+                <div>
+                    <h1>POC Hello World</h1>
+                    <p>Een Hello World opdracht is een simpele opdracht waarmee mensen rustig in het begin van een nieuwe programmeertaal kunnen stappen. Op Canvas staan voorbeelden over hoe je een Hello World Poc zou kunnen maken. Omdat ik nog geen ervaring had met Javascript begon ik ook makkelijk en probeerde een pop up tevoorschijn te laten komen met de text: "Hello World".</p>
+                    <p>Klik Hieronder voor een link naar mijn Hello World Poc. </p>
+                    <a class="button projectred" href="pocs/helloworld/index.html" target="_blank">Project Link</a>
+                </div>
+                <div>
+                    <img src="../images/helloworld.jpg" alt="Hello World Poc">
+                </div>
+            </div>
+            <div class="kleinetussenruimte">
+                <div>
+                    <h2>Uitleg code Hello World</h2>
+                    <p>Dit is nog een simpele code die weinig uitleg nodig heeft. Ik liep hier ook nog nergens tegenaan omdat dit snel te vinden was. Klik hieronder voor de uitleg van de code.</p>
+    
+                    <!-- Modal knop -->
+                    <button class="button myBtn"><span>Hello World Poc Code</span></button>
+                    <!--De Modal-->
+                    <div class="modal myModal">
+                        <!-- Modal content -->
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <span class="close">&times;</span>
+                                <h2>Hello World Poc Code</h2>
+                            </div>
+    
+                            <div class="modal-body">
+                                <iframe src="../documents/helloworld.pdf" width="100%" height="100%"></iframe>
+                            </div>
+                        </div>
+                    </div>
+                    <a class="button gitblue" href="https://git.fhict.nl/I437759/semester-2-media/-/tree/master/POC's/Canvas%20oefeningen/Hello%20world"target="_blank">Gitlab Code</a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="tussenruimte">
+            <div>
+                <h2>Reflectie</h2>
+                <p>Ik had nog nooit eerder met Javascript gewerkt. Dit was een hele simpele code maar ik heb wel geleerd hoe ik een Javascript file kan aanroepen in de Html. Ook weet ik nu hoe je een pop up box kunt laten verschijnen met een bericht.</p>
+            </div>
+        </div>
+        
+
+        
+
+
+
+
+
+
+
+        <!-- TEKST ANIMATIES -->
+        <div id="tekstanimaties">
+            <div class="kleinetussenruimte textenfoto">
+                <div>
+                    <h1>POC Tekst Animaties</h1>
+                    <p>Je kunt in CSS animaties maken voor elementen. Dit kun je doen door gebruikt te maken van @keyframes. Deze animaties kun je oproepen of gewoon af laten spelen. Het leek mij heel nuttig om meer over animaties te leren omdat je hier je website heel gaaf mee kan maken. </p>
+                    <p>Klik hieronder voor een link naar mijn Tekst Animaties Poc. </p>
+                    <a class="button projectred" href="pocs/tekstanimaties/index.html" target="_blank">Project Link</a>
+                </div>
+                <div>
+                    <img src="../images/tekstanimaties.jpg" alt="Tekst Animaties Poc">
+                </div>
+            </div>
+            <div class="kleinetussenruimte">
+                <div>
+                    <h2>Uitleg code Tekst Animaties</h2>
+                    <p>Voor deze code had ik geen Javascript nodig. Ook is het best simpel als je eenmaal weet hoe het werkt. Uiteindelijk kun je animaties zo complex maken als je zelf wilt natuurlijk. Ik heb <a href="https://www.w3schools.com/css/css3_animations.asp"target="_blank">deze site</a> gebruikt voor de basics van animaties en hoe je @keyframes gebruikt. Ook heb ik op <a href="https://www.w3schools.com/css/css3_animations.asp"target="_blank">deze site</a> gekeken voor inspiratie. Klik hieronder voor de uitleg van de code.</p>
+                    <p>Ik heb deze poc ook gebuikt in mijn selfieweek project voor het animeren van de kleuren op mijn gezicht.</p>
+    
+                    <!-- Modal knop -->
+                    <button class="button myBtn"><span>Tekst Animatie Poc Code</span></button>
+                    <!--De Modal-->
+                    <div class="modal myModal">
+                        <!-- Modal content -->
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <span class="close">&times;</span>
+                                <h2>Tekst Animatie Poc Code</h2>
+                            </div>
+    
+                            <div class="modal-body">
+                                <iframe src="../documents/tekstanimaties.pdf" width="100%" height="100%"></iframe>
+                            </div>
+                        </div>
+                    </div>
+                    <a class="button gitblue" href="https://git.fhict.nl/I437759/semester-2-media/-/tree/master/POC's/Poc%20tekst%20animaties"target="_blank">Gitlab Code</a>
+                </div>
+            </div>
+        </div>
+        <div class="kleinetussenruimte">
+            <div>
+                <h2>Gebruikte bronnen</h2>
+                <p>Voor deze opdrachten heb ik gebruik gemaakt van een paar bronnen, deze links heb ik hieronder neergezet.</p>
+                <p><a href="https://www.w3schools.com/css/css3_animations.asp"target="_blank">w3schools: Css animations</a></p>
+                <p><a href="https://www.mockplus.com/blog/post/css-animation-examples"target="_blank">Mockplus: Css animation examples</a></p>
+                <p><a href="https://www.w3schools.com/cssref/css3_pr_animation.asp"target="_blank">w3schools: Css animation property</a></p>
+            </div>
+        </div>
+        <div class="tussenruimte">
+            <div>
+                <h2>Reflectie</h2>
+                <p>Voor deze Poc heb ik animaties gebruikt. Ik weet nu hoe simpele animaties werken, hoe je deze bewerkt en hoe je deze oproept. Ik heb dus leuke nieuwe Css regels geleerd die ik kan toepassen op mijn website.</p>
+                <p>Voor de volgende keer lijkt het me interessant om complexere animaties te maken en deze goed te combineren met mijn website voor een gave look.</p>
+            </div>
+        </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+
+        <!-- MODALS -->
+        <div id="modals">
+            <div class="kleinetussenruimte textenfoto">
+                <div>
+                    <h1>POC Modals</h1>
+                    <p>Een modal is een soort window die opent wanneer je ergens op klikt. De achtergrond word meestal vervaagd en je kunt in je modal een tekst of bestand plaatsen. Ik heb deze Poc gemaakt omdat ik graag mijn pdf bestanden wil laten zien in een modal. Dit is dus heel handig voor mijn portfolio site.</p>
+                    <p>Klik hieronder voor een link naar mijn Modals Poc. </p>
+                    <a class="button projectred" href="pocs/modals/index.html" target="_blank">Project Link</a>
+                </div>
+                <div>
+                    <img src="../images/modals.jpg" alt="Modals Poc">
+                </div>
+            </div>
+            <div class="kleinetussenruimte">
+                <div>
+                    <h2>Uitleg code Modals</h2>
+                    <p>Deze code was al iets lastiger en er kwam meer Javascript aan te pas. Ik heb <a href="https://www.w3schools.com/howto/howto_css_modals.asp"target="_blank">deze site</a> gebruikt om de modal te maken en ik heb <a href="https://www.w3docs.com/snippets/html/how-to-embed-pdf-in-html.html"target="_blank">deze site</a> gebruikt om een PDF te embeden in de modal. Klik hieronder voor de uitleg van de code.</p>
+    
+                    <!-- Modal knop -->
+                    <button class="button myBtn"><span>Modals Poc Code</span></button>
+                    <!--De Modal-->
+                    <div class="modal myModal">
+                        <!-- Modal content -->
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <span class="close">&times;</span>
+                                <h2>Modals Poc Code</h2>
+                            </div>
+    
+                            <div class="modal-body">
+                                <iframe src="../documents/modals.pdf" width="100%" height="100%"></iframe>
+                            </div>
+                        </div>
+                    </div>
+                    <a class="button gitblue" href="https://git.fhict.nl/I437759/semester-2-media/-/tree/master/POC's/Poc%20modals"target="_blank">Gitlab Code</a>
+                </div>
+            </div>
+        </div>
+        <div class="kleinetussenruimte">
+            <div>
+                <h2>Gebruikte bronnen</h2>
+                <p>Voor deze opdrachten heb ik gebruik gemaakt van een paar bronnen, deze links heb ik hieronder neergezet.</p>
+                <p><a href="https://www.youtube.com/watch?v=gLWIYk0Sd38"target="_blank">Youtube video: Create a Simple Modal Popup</a></p>
+                <p><a href="https://sabe.io/tutorials/how-to-create-modal-popup-box"target="_blank">Sabe.io: How to create a modal popup box</a></p>
+                <p><a href="https://www.w3schools.com/howto/howto_css_modals.asp"target="_blank">w3schools: How to create a modal box</a></p>
+                <p><a href="https://www.w3docs.com/snippets/html/how-to-embed-pdf-in-html.html"target="_blank">w3docs: How to embed pfd in html</a></p>
+            </div>
+        </div>
+        <div class="tussenruimte">
+            <div>
+                <h2>Reflectie</h2>
+                <p>Voor deze modal poc moest ik rekening houden met 3 verschillende codes. Ik wist het meeste van de Html al, behalve hoe je een kruisje kon maken. Ik heb nu geleerd hoe basic animaties in css werken en een paar nieuwe codes voor Javascript. Nu weet ik hoe je elementen uit de html haalt en deze in een variabele zet. Ik weet nu ook hoe de onclick werkt en hoe je hiermee een functie kunt uitvoeren.</p>
+                <p>Ook moet je extra functies toevoegen als je meerdere modals op dezelfde pagina wilt. Deze code heb ik bij de poc gezet waar ik meerdere poc's gecombineerd heb.</p>
+                <p>Voor de volgende keer zou ik sneller verschillende bronnen gebruiken omdat ik hier lang mee bezig was terwijl het achteraf relatief simpel was. Ik kan nu modals gebruiken om documenten te laten zien in mijn portfolio, dit helpt mij enorm.</p>
+            </div>
+        </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        <!-- Slideshow -->
+        <div id="slideshow">
+            <div class="kleinetussenruimte textenfoto">
+                <div>
+                    <h1>POC Slideshow</h1>
+                    <p>Ik heb veel iteraties gemaakt voor veel projecten dit semester. Het lijkt me erg handig om deze te kunnen laten zien door middel van een afbeelding slider. Hierdoor kan ik mijn proces duidelijk laten zien. Voor deze slider heb ik gebruik gemaakt van Html, Css en Javascript.</p>
+                    <p>Klik hieronder voor een link naar mijn Slideshow Poc. </p>
+                    <a class="button projectred" href="pocs/slideshow/index.html" target="_blank">Project Link</a>
+                </div>
+                <div>
+                    <img src="../images/slideshow.jpg" alt="Slideshow Poc">
+                </div>
+            </div>
+            <div class="kleinetussenruimte">
+                <div>
+                    <h2>Uitleg code Slideshow</h2>
+                    <p>Voor deze code moest ik gebuik maken van iets complexere Javascript en ook met cijfers werken. Ik moest ervoor zorgen dat iedere slide een nummer kreeg en dat deze zichtbaar werd wanneer er op de volgende of vorige knop geklikt word. Door op de knop de klikken moest dit nummer dus veranderen. Ik heb <a href="https://www.w3schools.com/howto/howto_js_slideshow.asp"target="_blank">deze site</a> gebruikt voor deze poc. In eerste instantie lukte het mij om één slider te maken maar zodra je er nog een toevoegde werkte het niet goed meer. Vervolgens is het me gelukt om twee sliders op dezelfde page te krijgen.</p>
+                    <p>Ook moest ik voor deze code gebruikt maken van Arrays.</p>
+    
+                    <!-- Modal knop -->
+                    <button class="button myBtn"><span>Slideshow Poc Code</span></button>
+                    <!--De Modal-->
+                    <div class="modal myModal">
+                        <!-- Modal content -->
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <span class="close">&times;</span>
+                                <h2>Slideshow Poc Code</h2>
+                            </div>
+    
+                            <div class="modal-body">
+                                <iframe src="../documents/slideshow.pdf" width="100%" height="100%"></iframe>
+                            </div>
+                        </div>
+                    </div>
+                    <a class="button gitblue" href="https://git.fhict.nl/I437759/semester-2-media/-/tree/master/POC's/Poc%20slideshow"target="_blank">Gitlab Code</a>
+                </div>
+            </div>
+        </div>
+        <div class="kleinetussenruimte">
+            <div>
+                <h2>Gebruikte bronnen</h2>
+                <p>Voor deze opdrachten heb ik gebruik gemaakt van een paar bronnen, deze links heb ik hieronder neergezet.</p>
+                <p><a href="https://www.w3schools.com/howto/howto_js_slideshow.asp"target="_blank">w3schools: Slideshow/Carousel</a></p>
+                <p><a href="https://www.youtube.com/watch?v=4YQ4svkETS0"target="_blank">Youtube: Javascript Slideshow</a></p>
+            </div>
+        </div>
+        <div class="tussenruimte">
+            <div>
+                <h2>Reflectie</h2>
+                <p>Voor deze Poc heb ik een slideshow/carousel gemaakt. Deze code was al meer complex dan de vorige en ik heb hier veel van geleerd. Het lukte me om de eerste slider te maken maar toen ik meerdere sliders op één pagina wou maken werkte het niet meer goed. Ik heb hier lang mee gestruggeld en uiteindelijk lukte het me om meerdere slideshows op dezelfde pagina te krijgen. Ik heb nieuwe functies in Javascript geleerd en ook dat je in Html een functie kan oproepen door een onclick. Ook weet ik nu hoe ik met een array moet werken. </p>
+                <p>Voor de volgende keer wil ik mijn code meer universeler maken. Dus dat ik deze vaak kan gebruiken op meerdere plekken. Nu moet je voor elke slider een apart (1,0), (1,1), (1,2) etc. voor maken en aparte functies. Het zou uiteindelijk fijner zijn als dit niet hoeft en je simpelweg dezelfde code per slider kunt gebruiken.</p>
+            </div>
+        </div>
+
+
+
+
+
+
+
+
+
+
+
+
+        <!-- Web Dev Tutorial -->
+        <div id="webdev">
+            <div class="kleinetussenruimte textenfoto">
+                <div>
+                    <h1>Website Artisan Bakery</h1>
+                    <p>Omdat ik nog weinig wist van Html en Css ben ik begonnen met online video tutorials. In deze video's worden codes uitgelegd en na iedere video heb ik een eigen versie gemaakt met de nieuw geleerde code. Hierdoor begreep ik deze meteen en kon ik er goeie comments bij zetten om uit te leggen hoe ze precies werken. </p>
+                    <p>Omdat ik na iedere video nieuwe dingen heb uitgetest, heb ik meerdere poc's uiteindelijk samengevoegd. Je kunt ze hieronder vinden en het proces zien. Op het einde is het me gelukt om een mooie test website te maken van een bakkerij die ook nog responsive is waardoor je deze ook op je telefoon kunt bekijken.</p>
+                    <p>Dit is dus één groter project die bestaat uit 8 poc's. Hieronder zie je het eindresultaat. Daaronder zal ik één voor één iedere poc uitleggen met een linkje naar het resultaat van die poc.</p>
+                    <p>Klik hieronder voor een link naar Artisans Bakery Website. </p>
+                    <a class="button projectred" href="pocs/webdev/8responsivedesign/index.html" target="_blank">Project Link</a>
+                </div>
+                <div>
+                    <img src="../images/artisan.jpg" alt="Artisan Bakery">
+                </div>
+            </div>
+    
+            <div id="html" class="kleinetussenruimte">
+                <div>
+                    <h1>1. Basics Html</h1>
+                    <p>Om te beginnen keek ik video's over de basics van Html. Alle nuttige codes en info heb ik verzameld en één test file mee gemaakt. Hierin test ik de basic html tags die veel gebruikt worden voor het maken van sites zoals: Headers, Paragraphs, Buttons en Lists. Klik op de onderstaande oranje knop om de code te zien. </p>
+                    <p>Klik hieronder voor een link naar de Basics Html page, de uitleg van de code en de gitlab repository. </p>
+                    <a class="button projectred" href="pocs/webdev/1basicshtml/index.html" target="_blank">Project Link</a>
+    
+                    <!-- Modal knop -->
+                    <button class="button myBtn"><span>Basics Html Code</span></button>
+                    <!--De Modal-->
+                    <div class="modal myModal">
+                        <!-- Modal content -->
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <span class="close">&times;</span>
+                                <h2>Basics Html Code</h2>
+                            </div>
+    
+                            <div class="modal-body">
+                                <iframe src="../documents/basicshtml.pdf" width="100%" height="100%"></iframe>
+                            </div>
+                        </div>
+                    </div>
+                    <a class="button gitblue" href="https://git.fhict.nl/I437759/semester-2-media/-/tree/master/POC's/Web%20dev%20tutorial/1.%20Basics%20html"target="_blank">Gitlab Code</a>
+                </div>
+            </div>
+            <div class="kleinetussenruimte">
+                <div>
+                    <h2>Gebruikte bronnen</h2>
+                    <p>Voor deze opdrachten heb ik gebruik gemaakt van een bron, deze link heb ik hieronder neergezet.</p>
+                    <p><a href="https://www.w3schools.com/html/html_basic.asp"target="_blank">w3schools: Html Basics</a></p>
+                </div>
+            </div>
+
+            <div id="css" class="kleinetussenruimte">
+                <div>
+                    <h1>2. Basics Css</h1>
+                    <p>Ook is het belangrijk om de basics van Css onder de knie te krijgen. Je moet weten dat je vaak een selector kiest zoals een header. Daarna kies je een property zoals de kleur en uiteindelijk geef je deze een value, bijvoorbeeld blauw. Ik heb de code in de Html gezet omdat dit nog weinig code was. Hierdoor kon ik alles in één afbeelding krijgen. Later in mijn codes ging ik gebruik maken van de link tag om een stylesheet op te roepen.</p>
+                    <p>Klik hieronder voor een link naar de Basics Css page, de uitleg van de code en de gitlab repository. </p>
+                    <a class="button projectred" href="pocs/webdev/2basicscss/index.html" target="_blank">Project Link</a>
+    
+                    <!-- Modal knop -->
+                    <button class="button myBtn"><span>Basics Css Code</span></button>
+                    <!--De Modal-->
+                    <div class="modal myModal">
+                        <!-- Modal content -->
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <span class="close">&times;</span>
+                                <h2>Basics Css Code</h2>
+                            </div>
+    
+                            <div class="modal-body">
+                                <iframe src="../documents/basicscss.pdf" width="100%" height="100%"></iframe>
+                            </div>
+                        </div>
+                    </div>
+                    <a class="button gitblue" href="https://git.fhict.nl/I437759/semester-2-media/-/tree/master/POC's/Web%20dev%20tutorial/2.%20Basics%20css"target="_blank">Gitlab Code</a>
+                </div>
+            </div>
+
+            <div id="layout" class="kleinetussenruimte textenfoto">
+                <div>
+                    <h1>3. Website Lay Out</h1>
+                    <p>Het is belangrijk om te weten hoe een website in elkaar zit als je er zelf een wilt maken. Een bestaat uit veel onderdelen zoals een header met daarin verschillende divs. Sections met daarin ook divs en een footer. Hier deed ik dus onderzoek naar een website layout en heb hier uiteindelijk zelf mee gespeeld. Het is me gelukt om deze verschillende onderdelen simpel na te maken. Ook heb ik een afbeelding toegevoegd met de duidelijke onderdelen in een website.</p>
+                    <p>Klik hieronder voor een link naar de Website Layout page, de uitleg van de code en de gitlab repository. </p>
+                    <a class="button projectred" href="pocs/webdev/3websitelayout/index.html" target="_blank">Project Link</a>
+    
+                    <!-- Modal knop -->
+                    <button class="button myBtn"><span>Website Layout Code</span></button>
+                    <!--De Modal-->
+                    <div class="modal myModal">
+                        <!-- Modal content -->
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <span class="close">&times;</span>
+                                <h2>Website Layout Code</h2>
+                            </div>
+    
+                            <div class="modal-body">
+                                <iframe src="../documents/websitelayout.pdf" width="100%" height="100%"></iframe>
+                            </div>
+                        </div>
+                    </div>
+                    <a class="button gitblue" href="https://git.fhict.nl/I437759/semester-2-media/-/tree/master/POC's/Web%20dev%20tutorial/3.%20Website%20Layout"target="_blank">Gitlab Code</a>
+                </div>
+                <div>
+                    <img src="../images/websitelayout.jpg" alt="Website Layout">
+                </div>
+            </div>
+
+            <div id="flexbox" class="minitussenruimte">
+                <div>
+                    <h1>4. Poc Flexbox</h1>
+                    <p>Met Flexbox kan je makkelijk de content van je website een andere positie geven. Door een element of container een display:flex te geven kun je hierna veel andere dingen doen zoals een flex-direction aangeven of door justify-content je de content van een container in het begin, midden of eind zetten. </p>
+                    <p>Klik hieronder voor een link naar de Flexbox poc, de uitleg van de code en de gitlab repository. </p>
+                    <a class="button projectred" href="pocs/webdev/4basicsflexbox/index.html" target="_blank">Project Link</a>
+    
+                    <!-- Modal knop -->
+                    <button class="button myBtn"><span>Poc Flexbox Code</span></button>
+                    <!--De Modal-->
+                    <div class="modal myModal">
+                        <!-- Modal content -->
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <span class="close">&times;</span>
+                                <h2>Poc Flexbox Code</h2>
+                            </div>
+    
+                            <div class="modal-body">
+                                <iframe src="../documents/flexbox.pdf" width="100%" height="100%"></iframe>
+                            </div>
+                        </div>
+                    </div>
+                    <a class="button gitblue" href="https://git.fhict.nl/I437759/semester-2-media/-/tree/master/POC's/Web%20dev%20tutorial/4.%20Basics%20flexbox"target="_blank">Gitlab Code</a>
+                </div>
+            </div>
+            <div class="kleinetussenruimte">
+                <div>
+                    <h2>Gebruikte bronnen</h2>
+                    <p>Voor deze opdrachten heb ik gebruik gemaakt van een paar bronnen, deze links heb ik hieronder neergezet.</p>
+                    <p><a href="https://flexboxfroggy.com/#nl"target="_blank">Flexbox Frog game</a></p>
+                    <p><a href="https://www.w3schools.com/css/css3_flexbox.asp"target="_blank">w3schools: Flexbox</a></p>
+                    <p><a href="https://css-tricks.com/snippets/css/a-guide-to-flexbox/"target="_blank">css-tricks: Complete guide to Flexbox</a></p>
+                </div>
+            </div>
+
+            <div id="pages" class="minitussenruimte">
+                <div>
+                    <h1>5. Poc Multiple pages</h1>
+                    <p>Een website bestaat meestal uit meerdere pagina's. Omdat ik niet wist hoe dit werkte heb ik dit eerst geoefend in een poc. Door de a tag te gebruiken kun je een linken naar een website of pagina in je eigen folder. Door target="_blank" toe te voegen opent de pagina in een nieuwe tab. Je kunt kiezen Ook heb ik een aparte css file gemaakt en hier naartoe gelinkt vanuit de html. </p>
+                    <p>Klik hieronder voor een link naar de Multiple Pages poc, de uitleg van de code en de gitlab repository. </p>
+                    <a class="button projectred" href="pocs/webdev/5multiplepages/index.html" target="_blank">Project Link</a>
+    
+                    <!-- Modal knop -->
+                    <button class="button myBtn"><span>Poc Multiple Pages</span></button>
+                    <!--De Modal-->
+                    <div class="modal myModal">
+                        <!-- Modal content -->
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <span class="close">&times;</span>
+                                <h2>Poc Multiple Pages</h2>
+                            </div>
+    
+                            <div class="modal-body">
+                                <iframe src="../documents/multiplepages.pdf" width="100%" height="100%"></iframe>
+                            </div>
+                        </div>
+                    </div>
+                    <a class="button gitblue" href="https://git.fhict.nl/I437759/semester-2-media/-/tree/master/POC's/Web%20dev%20tutorial/5.%20Multiple%20pages"target="_blank">Gitlab Code</a>
+                </div>
+            </div>
+            <div class="kleinetussenruimte">
+                <div>
+                    <h2>Gebruikte bronnen</h2>
+                    <p>Voor deze opdrachten heb ik gebruik gemaakt van een bron, deze link heb ik hieronder neergezet.</p>
+                    <p><a href="https://www.w3schools.com/html/html_links.asp"target="_blank">w3schools: Links Hyperlinks</a></p>
+                </div>
+            </div>
+
+            <div id="cssadvanced" class="minitussenruimte">
+                <div>
+                    <h1>6. Poc Css Advanced </h1>
+                    <p>Voordat ik een website kan maken die er goed uitziet moet ik Css beter onder de knie krijgen. Ik zoek meer bronnen over Css en ga hiermee spelen. Afbeeldingen zijn een belangrijk onderdeel van een website. In deze Poc heb ik afbeeldingen nog extra niet gebruikt en focus ik me op de dingen die ik met Css kan doen zoals een knop een ronding geven, id's gebruiken, meerdere classnamen geven aan één element en een first-child element gebruiken. </p>
+                    <p>Klik hieronder voor een link naar de Css Advanced poc, de uitleg van de code en de gitlab repository. </p>
+                    <a class="button projectred" href="pocs/webdev/6cssselectorsandclasses/index.html" target="_blank">Project Link</a>
+    
+                    <!-- Modal knop -->
+                    <button class="button myBtn"><span>Poc Css Advanced Code</span></button>
+                    <!--De Modal-->
+                    <div class="modal myModal">
+                        <!-- Modal content -->
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <span class="close">&times;</span>
+                                <h2>Poc Css Advanced Code</h2>
+                            </div>
+    
+                            <div class="modal-body">
+                                <iframe src="../documents/csspoc.pdf" width="100%" height="100%"></iframe>
+                            </div>
+                        </div>
+                    </div>
+                    <a class="button gitblue" href="https://git.fhict.nl/I437759/semester-2-media/-/tree/master/POC's/Web%20dev%20tutorial/6.%20css%20selectors%20and%20classes"target="_blank">Gitlab Code</a>
+                </div>
+            </div>
+            <div class="kleinetussenruimte">
+                <div>
+                    <h2>Gebruikte bronnen</h2>
+                    <p>Voor deze opdrachten heb ik gebruik gemaakt van een paar bronnen, deze links heb ik hieronder neergezet.</p>
+                    <p><a href="https://www.w3schools.com/css/css3_borders.asp"target="_blank">w3schools: Rounded Corners</a></p>
+                    <p><a href="https://www.w3schools.com/css/css3_colors.asp"target="_blank">w3schools: Colors</a></p>
+                    <p><a href="https://www.w3schools.com/css/css_examples.asp"target="_blank">w3schools: Css Advanced</a></p>
+                </div>
+            </div>
+
+            <div id="images" class="minitussenruimte">
+                <div>
+                    <h1>7. Poc Images </h1>
+                    <p>In deze Poc ga ik gebruik maken van afbeeldingen om een test website te maken. Mijn doel is om dit zo professioneel mogelijk er uit te laten zien. Afbeeldingen zijn erg belangrijk in het design van een website. Het is dus belangrijk dat ik dit onder de knie krijg en weet hoe ik deze in mijn website kan verwerken. Ook heb ik hier de text van een link vervangen door een afbeelding van het logo waardoor de logo een klikbare afbeelding is die je terugleid naar de home page. Hierin gebruik ik alle kennis die ik tot nu toe heb van Html en Css. In de poc hierna gebruik ik deze code om een responsive website te maken voor mobiele gebruikers.</p>
+                    <p>Klik hieronder voor een link naar de Images poc, de uitleg van de code en de gitlab repository. </p>
+                    <a class="button projectred" href="pocs/webdev/7images/index.html" target="_blank">Project Link</a>
+    
+                    <!-- Modal knop -->
+                    <button class="button myBtn"><span>Poc Images Code</span></button>
+                    <!--De Modal-->
+                    <div class="modal myModal">
+                        <!-- Modal content -->
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <span class="close">&times;</span>
+                                <h2>Poc Images Code</h2>
+                            </div>
+    
+                            <div class="modal-body">
+                                <iframe src="../documents/imagespoc.pdf" width="100%" height="100%"></iframe>
+                            </div>
+                        </div>
+                    </div>
+                    <a class="button gitblue" href="https://git.fhict.nl/I437759/semester-2-media/-/tree/master/POC's/Web%20dev%20tutorial/7.%20Images"target="_blank">Gitlab Code</a>
+                </div>
+            </div>
+            <div class="kleinetussenruimte">
+                <div>
+                    <h2>Gebruikte bronnen</h2>
+                    <p>Voor deze opdrachten heb ik gebruik gemaakt van een paar bronnen, deze links heb ik hieronder neergezet.</p>
+                    <p><a href="https://www.w3schools.com/html/html_images.asp"target="_blank">w3schools: Html Images</a></p>
+                    <p><a href="https://www.w3schools.com/css/css3_images.asp"target="_blank">w3schools: Css Styling Images</a></p>
+                    <p><a href="https://www.w3schools.com/css/css3_images.asp"target="_blank">Youtube: How to insert Images Using Html And Css</a></p>
+                </div>
+            </div>
+
+            <div id="responsive" class="minitussenruimte">
+                <div>
+                    <h1>8. Poc Responsive Design </h1>
+                    <p>Je kunt een website op verschillende manieren responsive maken. In deze Poc heb ik een website responsive gemaakt door goed gebruik te maken van flexbox én media queries. Met een media query kun je een regel instellen voor bijvoorbeeld de screensize. Wanneer dit true is zal de styling die in de { } staat toegepast worden. Dit betekent dat ik verschillende styles kan meegeven aan verschillende beeldschermgroottes. Ik kan dus een navigatiebar horizontaal neer zetten voor laptops en deze verticaal weergeven op telefoons.</p>
+                    <p>Wanneer je deze poc opent kun je de website dunner maken. Op een gegeven moment zie je dat de achtergrondkleur roze word. Dit heb ik gedaan om aan te tonen dat de media queries hun werk doen. Wanneer je de website nog kleiner maakt zal de achtergrond kleur rood worden.</p>
+                    <p>Klik hieronder voor een link naar de Responsive Design poc, de uitleg van de code en de gitlab repository. </p>
+                    <a class="button projectred" href="pocs/webdev/8responsivedesign/index.html" target="_blank">Project Link</a>
+    
+                    <!-- Modal knop -->
+                    <button class="button myBtn"><span>Poc Responsive Design Code</span></button>
+                    <!--De Modal-->
+                    <div class="modal myModal">
+                        <!-- Modal content -->
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <span class="close">&times;</span>
+                                <h2>Poc Responsive Design Code</h2>
+                            </div>
+    
+                            <div class="modal-body">
+                                <iframe src="../documents/responsive.pdf" width="100%" height="100%"></iframe>
+                            </div>
+                        </div>
+                    </div>
+                    <a class="button gitblue" href="https://git.fhict.nl/I437759/semester-2-media/-/tree/master/POC's/Web%20dev%20tutorial/8.%20Responsive%20Design"target="_blank">Gitlab Code</a>
+                </div>
+            </div>
+            <div class="kleinetussenruimte">
+                <div>
+                    <h2>Gebruikte bronnen</h2>
+                    <p>Voor deze opdrachten heb ik gebruik gemaakt van een paar bronnen, deze links heb ik hieronder neergezet.</p>
+                    <p><a href="https://www.w3schools.com/css/css_rwd_intro.asp"target="_blank">w3schools: Responsive Web Design - Introduction</a></p>
+                    <p><a href="https://www.w3schools.com/css/css_rwd_mediaqueries.asp"target="_blank">w3schools: Media Queries</a></p>
+                </div>
+            </div>
+            <div class="kleinetussenruimte">
+                <div>
+                    <h2>Feedback</h2>
+                    <p>Ik heb voor deze Poc's feedback gevraagd aan Luuk. Ik kreeg te horen dat dit een erg goeie oefening was voor iemand met mijn niveau. Luuk heeft me veel nuttige kleine tips gegeven, veel over het ordenen en netjes houden van mijn code. Je kunt bijvoorbeeld je css catagoriseren en comments gebruiken om elk onderdeel aan te geven. Zo kun je een deel maken over de body, de nav bar etc. en dit goed bij elkaar houden. </p>
+                    <p>Ondanks dit vond Luuk dat mijn code er goed uit zag en zag dat ik veel geleerd had.</p>
+                </div>
+            </div>
+            <div class="tussenruimte">
+                <div>
+                    <h2>Reflectie</h2>
+                    <p>Dit is een reflectie voor alle poc's die samen in de Artisan Bakery Website zitten. Toen ik hier aan begon had ik nog amper kennis van Html en Css. Ik heb enorm veel kennis op kunnen doen en dit samen kunnen voegen tot een mooie professioneel ogende website die ook responsive is. Deze kennis kan ik nu gebruiken voor het maken van mijn eigen portfolio website.</p>
+                    <p>Ik heb de basics van html geleerd en veel met css kunnen oefenen. Ik weet nu hoe een website layout in elkaar zit en hoe je met flexbox werkt. Ik weet hoe media queries en arrays werken. Ik heb veel hulp gekregen van mijn team en van Luuk. Hun hebben me veel geleerd waardoor ik me nu comfortabeler voel met het maken van websites. </p>
+                    <p>Voor de volgende keer wil ik graag mijn eigen website maken en hiervoor mijn eigen foto's gebruiken. Ook zou ik graag meer over UI/UX design weten waardoor het maken van websites nog beter gaat.</p>
+                </div>
+            </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+            <!-- Zelfportret -->
+        <div id="zelfportret">
+            <div class="kleinetussenruimte textenfoto">
+                <div>
+                    <h1>Zelfportret Selfieweek</h1>
+                    <p>Voor de selfieweek kregen we de opdracht om een interactief zelfportret te maken, dit kon vanalles zijn. Ik besloot om een Illustratie van mijn hoofd te maken en deze clickable te maken. Wanneer je op een kleur van mijn hoofd klikt komt er een stuk tekst tevoorschijn waarin ik over mezelf vertel. </p>
+                    <p>Klik hieronder voor een link naar mijn Selfieweek Project. </p>
+                    <a class="button projectred" href="../zelfportret/index.html" target="_blank">Project Link</a>
+                </div>
+                <div>
+                    <img src="../images/zelfportret.jpg" alt="Zelfportret Selfieweek">
+                </div>
+            </div>
+            <div class="kleinetussenruimte">
+                <div>
+                    <h2>Uitleg code Zelfportret</h2>
+                    <p>Ik ben begonnen met het maken van SVG's in Illustrator. Het was nog best lastig om deze werkend in html te krijgen omdat de verschillende kleuren een andere laag waren. Ook kon je al klikken wanneer je met je muis langs de kleur hoverde omdat de svg deels transparant waren maar toch een heel vierkant. Hierdoor kon je alleen de kleur aanklikken die bovenop lag en werden de onderliggende lagen niet meer werkzaam, het was dus lastig om de SVG's samen te laten werken met de Javascript. Uiteindelijk is het me gelukt om alle kleuren in één grote svg te krijgen maar toch nog apart klikbaar te maken.</p>
+    
+                    <!-- Modal knop -->
+                    <button class="button myBtn"><span>Zelfportret Code</span></button>
+                    <!--De Modal-->
+                    <div class="modal myModal">
+                        <!-- Modal content -->
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <span class="close">&times;</span>
+                                <h2>Zelfportret Poc Code</h2>
+                            </div>
+    
+                            <div class="modal-body">
+                                <iframe src="../documents/selfieweek.pdf" width="100%" height="100%"></iframe>
+                            </div>
+                        </div>
+                    </div>
+                    <a class="button gitblue" href="https://git.fhict.nl/I437759/semester-2-media/-/tree/master/POC's/Poc%20zelfportret%202e%20versie"target="_blank">Gitlab Code</a>
+                </div>
+            </div>
+        </div>
+        <div class="kleinetussenruimte">
+            <div>
+                <h2>Gebruikte bronnen</h2>
+                <p>Voor deze opdrachten heb ik gebruik gemaakt van een paar bronnen, deze links heb ik hieronder neergezet.</p>
+                <p><a href="https://stackoverflow.com/questions/41079839/hovering-over-transparent-svgs"target="_blank">Stackoverflow: Hovering over transparent SVG's</a></p>
+                <p><a href="https://css-tricks.com/the-many-ways-to-change-an-svg-fill-on-hover-and-when-to-use-them/"target="_blank">Css-tricks: Change SVG Fill on Hover</a></p>
+                <p><a href="https://css-tricks.com/almanac/properties/p/pointer-events/"target="_blank">Css-tricks: Pointer Events</a></p>
+                <p><a href="https://www.smashingmagazine.com/2018/05/svg-interaction-pointer-events-property/"target="_blank">Smashingmagazine: SVG interaction with Pointer Events</a></p>
+                <p><a href="https://stackoverflow.com/questions/30327743/interactive-svg-hover-over-one-part-change-the-color-of-another"target="_blank">Stackoverflow: Interactive SVG</a></p>
+            </div>
+        </div>
+        <div class="tussenruimte">
+            <div>
+                <h2>Reflectie</h2>
+                <p>In dit project kwam ik erachter dat het heel handig is om gebruik te maken van vw en vh in plaats van px. Hiermee pak je een gedeelte van de hoogte of breedte als afmeting in paats van het aantal pixels. Hierdoor blijft je project er goed uit zien op verschillende schermgroottes.</p>
+                <p>Ook word ik steeds zelfverzekerder in het gebruik van Css. Ik snap steeds beter hoe alle verschillende codes met elkaar werken en wanneer ik iets bedenk weet ik meteen hoe ik dit kan aanpakken zonder voorbeelden op te moeten zoeken. Zo wist ik meteen hoe ik de achtergrond kleuren moest opdelen in divs om het gewenste resultaat te krijgen.</p>
+                <p>Het was erg lastig om de SVG's goed te laten werken en het transparante gedeelte volledig weg te krijgen. Hier liep ik lang vast en heb hier veel bronnen voor moeten gebruiken. Uiteindelijk lukte het om alle paths bij elkaar te zetten in één SVG en deze paths aparte classes te geven. Het was lastig om dit goed te laten werken samen met de Javascript maar het is gelukt. Hierdoor ben ik veel te weten gekomen over Javascript en weet nu beter hoe ik classes kan halen uit de html, deze kan veranderen door het gebruik van functies én hoe ik deze functies op roep.</p>
+                <p>We hadden maar 4 dagen voor de selfieweek maar voor de volgende keer zou ik graag nog meer vertellen over mezelf en het project nog grootser maken. Zo wou ik ook veranderingen maken in de grootte van de SVG's maar dit lukte niet meer. Ik heb uiteindelijk de pizza gewonnen met mijn project, dit vond ik een heel leuk compliment en gaf zeker een boost aan mijn motivatie. </p>
+            </div>
+        </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        <!-- Portfolio website -->
+        <div id="portfolio">
+            <div class="kleinetussenruimte textenfoto">
+                <div>
+                    <h1>Portfolio Website</h1>
+                    <p>Voor het aantonen van onze leerdoelen in semester 2 moeten we een portfolio maken en hier ons werk in laten zien. Voor dit portfolio heb ik veel code geschreven en ook veel poc's gebruikt. Ik zal de poc's die ik gebruikt heb voor mijn website hieronder neerzetten en de bijbehorende code laten zien. Als je op de blauwe knop hieronder klikt word je naar de gitlab repository van mijn portfolio gestuurd.</p>
+                    <a class="button gitblue" href="https://git.fhict.nl/I437759/semester-2-media/-/tree/master/Portfolio/3.%20derde%20versie"target="_blank">Gitlab Code</a>
+                </div>
+                <div>
+                    <img src="../images/portfolio.jpg" alt="Portfolio">
+                </div>
+            </div>
+        </div>
+            
+        <!-- MODALS -->
+        <div>
+            <div class="kleinetussenruimte">
+                <div>
+                    <h1>1. Poc Modals</h1>
+                    <p>Ik heb verder terug op deze pagina uitgelegd wat de Modal poc inhield en hoe ik deze heb gemaakt. Deze kon ik simpelweg kopiëren en plakken in mijn portfolio website zonder aanpassingen te maken. Je ziet hieronder waar ik deze onder anderen heb staan en hoe dit eruit ziet.</p>
+                    <p>Kijk hieronder hoe ik de modals code heb gebruikt in mijn website. </p>
+                </div>
+            </div>
+        </div>
+        <div class="center">
+            <div class="kleinetussenruimte carousel4 carouselgeneral">
+                <div>
+                    <img src="../images/modal1.png" alt="Selfieweek Iteratie">
+                    <p class="center">Zo ziet de modal knop er uit op mijn website</p>
+                </div>
+                <div>
+                    <img src="../images/modal2.png" alt="Selfieweek Iteratie">
+                    <p class="center">Dit zie je wanneer je de modal opent</p>
+                </div>
+                <div>
+                    <img src="../images/modal3.png" alt="Selfieweek Iteratie">
+                    <p class="center">Zo staat de modal code in mijn website</p>
+                </div>
+            </div>
+        </div>
+
+
+        
+        <!-- Poc Slick -->
+        <div class="kleinetussenruimte">
+            <div>
+                <h1>2. poc slideshow/Slick</h1>
+                <p>Ik heb eerder op deze pagina de slideshow poc uitgelegd. Deze kon ik gebruiken in mijn website maar dan werd de code erg groot. Daarom heb ik een library gebruikt om het overzichtelijk te houden. Ik heb hiervoor eerst een poc gemaakt om te laten zien dat ik met een library kon werken. Deze kan je ook vinden als je op de groene knop hieronder klikt.</p>
+                <a class="button devgreen" href="../pages/libraries.html#lib" target="_blank">Project Link</a>
+                <p>Ik heb door middel van Slick een carousel/slider kunnen maken. Hiervoor moest ik op Slicks Github zoeken naar hun slick.css, deze kopieren en refereren als een stylesheet in de head van mijn html file. Ook moest ik dit doen met slick-theme.css. Ook kon ik op <a href="https://cdnjs.com/libraries/slick-carousel">deze</a> site de cdn van de library kopiëren en in mijn head zetten. Een cdn is een soort online server waar de library op staat. Zo hoef ik die niet te downloaden maar kan ik hem al oproepen door de cdn in mijn head te zetten. Ook heeft deze library jQuery nodig. De cdn hiervoor kan je <a href="https://code.jquery.com/">hier</a> vinden en deze moet voor de cdn van slick komen in je head.</p>
+                <p>Klik <a href="https://code.jquery.com/">hier</a> voor de cdn van jQuery</p>
+                <p>Klik <a href="https://cdnjs.com/libraries/slick-carousel">hier</a> voor de cdn van Slick</p>
+            </div>
+        </div>
+
+        <div class="center">
+            <div class="kleinetussenruimte carousel carouselgeneral">
+                <div>
+                    <img src="../images/samuraiinspiratie1.jpg" alt="Poster Inspiratie">
+                </div>
+                <div>
+                    <img src="../images/samuraiinspiratie2.jpg" alt="Poster Inspiratie">
+                </div>
+                <div>
+                    <img src="../images/samuraiinspiratie3.jpg" alt="Poster Inspiratie">
+                </div>
+                <div>
+                    <img src="../images/samuraiinspiratie4.jpg" alt="Poster Inspiratie">
+                </div>
+                <div>
+                    <img src="../images/samuraiinspiratie5.jpg" alt="Poster Inspiratie">
+                </div>
+                <div>
+                    <img src="../images/samuraiinspiratie6.jpg" alt="Poster Inspiratie">
+                </div>
+            </div>
+        </div>
+
+        <div class="kleinetussenruimte">
+            <div>
+                <p>Ik kan nu de carousel oproepen door $('.carousel').slick(); in de Javascript file te zetten. Vervolgens moet ik de class carousel geven aan een div. Als er in die div weer andere divs zitten met in elke div een afbeelding. Maak deze er een carousel van. Hieronder zie je de code van de carousel die hierboven te zien is. De carousel class zorgt ervoor dat het een carousel word. Eerst had ik problemen met de weergave van de carousel. Het zag er raar uit: de pijltjes waren raar, de positie van de pijtles was helemaal verkeerd en de afbeelding werd steeds voor een helft weergegeven. Uiteindelijk ben ik in de slicktheme.css gaan kijken wat ik hier kon veranderen. Ik heb de pijltjes vervangen door een png afbeelding van pijltjes die ik wel mooi vind. </p>
+                <p>Door</p>
+                <p>$('.carousel').slick({ <br>centerMode: true <br>});</p>
+                <p>in de javascript te gebruiken werden de afbeeldingen weer in het midden weergegeven. Uiteindelijk vond ik hier een beter manier voor door simpelweg flexbox te gebruiken en justify-content: center; Ik heb hiervoor een class genaamd center gemaakt zodat ik deze ook meteen op andere elementen kan zetten die ik gecentered wil hebben</p>
+            </div>
+            <div class="center largerpicture">
+                <img src="../images/carouselcode.png" alt="Carousel Code">
+            </div>
+        </div>
+
+        <div class="kleinetussenruimte">
+            <div>
+                <h1>Reflectie</h1>
+                <p>Dit was de eerste keer dat ik een Library gebruikte. In het begin snapte ik nog niet helemaal hoe alles werkte. Na wat uitleg begreep ik dat een Library functies voor je maakt waardoor je complexe codes heel simpel kan oproepen door maar een paar regels code. Ook heb ik geleerd hoe je een library kunt oproepen via een cdn.</p>
+                <p>Ik heb nu iets meer verstand van de werking van libraries. Voor de volgende keer zou ik sneller voorbeelden opzoeken in plaats van lang bezig zijn met het uitvogelen hoe alles werkt. Ook wil ik voor een volgende keer meer complexere dingen testen.
+            </div>
+        </div>
+
+
+        
+
+        
+    <!-- FLEXBOX -->
+    <div>
+        <div class="kleinetussenruimte">
+            <div>
+                <h1>3. Poc Flexbox</h1>
+                <p>Ik heb voor mijn portfolio website ook veel gebruik gemaakt van flexbox zodat mijn website er goed uitziet op de meeste schermen.</p>
+                <p>Kijk hieronder hoe ik de flexbox code heb gebruikt in mijn website. </p>
+            </div>
+        </div>
+    </div>
+    <div class="center">
+        <div class="kleinetussenruimte carousel4 carouselgeneral">
+            <div>
+                <img src="../images/flex1.jpg" alt="Selfieweek Iteratie">
+                <p class="center">Voorbeeld van flexbox die ik overal in mijn website gebruik</p>
+            </div>
+            <div>
+                <img src="../images/flex2.png" alt="Selfieweek Iteratie">
+                <p class="center">Voorbeeld van content die gewrapt word</p>
+            </div>
+        </div>
+    </div>
+
+
+
+
+    <div id="music" class="minitussenruimte">
+        <div>
+            <h1>4. Poc Music </h1>
+            <p>Ik vond het leuk om wat muziek af te laten spelen die typisch bij mij past op mijn Professional Identity page. Daarom heb ik eerst een Poc gemaakt om te testen of dit lukte. Uiteindelijk is het gelukt om muziek af te laten spelen. Soms moet je een keer de pagina refreshen voordat deze het doet.</p>
+            <p>Klik hieronder voor een link naar de Muziek poc, de uitleg van de code en de gitlab repository. </p>
+            <h3>Pas op, muziek kan hard staan. Er is één player waarmee je de muziek aan kunt zetten maar ik heb ook een code toegevoegd waardoor muziek automatisch gaat spelen (dit doet het soms pas na een aantal x refreshen) Zet je geluid dus alvast zachter.</h3>
+            <a class="button projectred" href="pocs/pocmusic/index.html" target="_blank">Project Link</a>
+
+            <!-- Modal knop -->
+            <button class="button myBtn"><span>Poc Music Code</span></button>
+            <!--De Modal-->
+            <div class="modal myModal">
+                <!-- Modal content -->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <span class="close">&times;</span>
+                        <h2>Poc Music Code</h2>
+                    </div>
+
+                    <div class="modal-body">
+                        <iframe src="../documents/music1.pdf" width="100%" height="100%"></iframe>
+                    </div>
+                </div>
+            </div>
+            <a class="button gitblue" href="https://git.fhict.nl/I437759/semester-2-media/-/tree/master/Portfolio/3.%20derde%20versie/pages/pocs"target="_blank">Gitlab Code</a>
+        </div>
+    </div>
+    <div class="kleinetussenruimte">
+        <div>
+            <h2>Gebruikte bronnen</h2>
+            <p>Voor deze opdrachten heb ik gebruik gemaakt van een paar bronnen, deze links heb ik hieronder neergezet.</p>
+            <p><a href="https://www.w3schools.com/html/html5_audio.asp"target="_blank">w3schools: HTML Audio</a></p>
+            <p><a href="https://www.dummies.com/web-design-development/site-development/how-to-add-sound-to-your-web-site-using-html/"target="_blank">dummies.com: How to add sound to your website</a></p>
+        </div>
+    </div>
+
+
+
+    <!-- de rest -->
+    <div>
+        <div class="kleinetussenruimte">
+            <div>
+                <h1>5. Multiple Pages/Css Advanced/Images</h1>
+                <p>Ik heb meerdere dingen gebruikt die ik geleerd heb van eerdere poc's zoals het gebruik van foto's. Op mijn homepage heb ik één grote foto met daarover veel kleinere foto's. Ik heb de code uit mijn Images poc hiervoor kunnen gebruiken. Ook heb ik veel Css regels kunnen gebruiken die ik eerst helemaal niet kende voordat ik de Css advanced poc had gemaakt. Mijn website maakt ook gebruik van vele pagina's, dit heb ik ook geoefend in mijn Multiple Page Poc. Zo maak ik ook gebruikt van target="_blank" achter de meeste links zodat er een nieuwe tab opent. Anders moeten gebruikers hun weg terug vinden naar waar ze waren.</p>
+            </div>
+        </div>
+    </div>
+    <div class="center">
+        <div class="kleinetussenruimte carousel4 carouselgeneral">
+            <div>
+                <img src="../images/portfolio.jpg" alt="Portfolio">
+                <p class="center">Mijn grote afbeelding op de homepage</p>
+            </div>
+            <div>
+                <img src="../images/code1.png" alt="Selfieweek Iteratie">
+                <p class="center">De styling van de kleine afbeeldingen op mijn homepage</p>
+            </div>
+            <div>
+                <img src="../images/code2.png" alt="Selfieweek Iteratie">
+                <p class="center">De verschillende pages die ik per leerdoel oproep</p>
+            </div>
+        </div>
+    </div>
+        
+    <div class="kleinetussenruimte">
+        <div>
+            <h1>Reflectie</h1>
+            <p>Ik heb heel het semester lang aan mijn portfolio gewerkt. In het begin had ik hier weinig ervaring mee maar naarmate ik steeds meer poc's maakte en code leerde ging dit een stuk makkelijker. Soms moest ik mijn oude code opnieuw schrijven omdat ik een betere manier had gevonden of kon ik een library gebruiken.</p>
+            <p>Ik heb enorm veel geleerd van het maken van dit portfolio. Door steeds meer poc's te maken en deze samen te voegen leer je hoe je code kunt combineren tot een gewenst product. Ook door gebruikerstesten word je product steeds beter.</p>
+            <p>Voor de volgende keer zou ik mijn code beter bijhouden en goed mijn proces documenteren. Ik wist in het begin nog niet helemaal hoe dit moest en wat er verwacht word. Als ik de volgende keer meteen mijn stappen goed opschrijf is dit een stuk makkelijker en duidelijker om in mijn portfolio website te zetten.</p>
+        </div>
+    </div>
+
+        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    </div>
+
+
+
+</body>
+
+<script src="scriptpages.js" type="text/javascript"></script>
+
+</html>

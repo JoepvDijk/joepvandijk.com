@@ -1,0 +1,55 @@
+/* Omdat je vaak dezelfde style over al je pages wilt, gebruiken we een external stylesheet
+   Dit doe je door link, achter de href zet je de naam van je stylesheet. Dit zet je in de head van je html file
+   Als deze in een andere map staat gebruik je ook weer "mapnaam/" of "../" */
+body {
+    background: rgb(58, 58, 58);
+    color: white;
+    font-family: Helvetica Neue, Helvetica, Arial;
+    margin: 0;
+    padding: 0;
+}              
+header {
+    background: black;
+    padding: 20px; 
+}         
+section {
+    background: white;
+    color: grey;
+    padding: 20px; 
+    display: flex; 
+    flex-direction: row; 
+}                              
+div {
+    margin: auto;  
+    width: 100px;   
+}
+.red {
+    background: red;
+}
+.blue{
+    background: blue;
+}
+.green{
+    background: green;
+}
+ul {
+    margin: 0;
+    padding: 0; 
+    list-style-type: none; 
+}
+li {
+    display: inline-block; 
+    margin: 0 20px 0 0;    
+}
+
+footer {
+    background: black;
+    padding: 10px 20px;
+}                    
+a{
+    text-decoration: none;
+    color: white;
+}
+a:hover{
+    text-decoration: underline;
+}

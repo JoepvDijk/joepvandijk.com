@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Joep's Page</title>
+    <style>
+        body {
+            background: rgb(58, 58, 58);
+            color: white;
+            font-family: Helvetica Neue, Helvetica, Arial;
+            margin: 0;
+            padding: 0;
+        }              
+        header {
+            background: black;
+            padding: 20px; 
+        }         
+        section {
+            background: white;
+            color: white;
+            padding: 20px; 
+        }
+        div {
+            background: red;
+            width: 10vw;
+            
+        }
+
+        ul {
+            margin: 0;
+            padding: 0; /* Hiermee halen we de standaard margin/padding weg omdat dat er nu iets netter uit ziet */
+            list-style-type: none; /* Hiermee halen we de bolletjes voor de list items weg */
+        }
+
+        li {
+            display: inline-block; /* Hiermee zetten we de list items achter elkaar */
+            margin: 0 20px 0 0;    /* Hiermee zetten we wat margin rechts van de list items, margin-right: 20px; werkt ook */
+        }
+
+        footer {
+            background: black;
+            padding: 10px 20px;
+        }             
+        
+        
+
+
+
+        section.een{
+            display: flex; /* Display flex moet op de parent container van de divs en maakt er standaard row van */
+            flex-direction: row; /* Hier kun je de richting van de divs veranderen. */
+                                /* row voor links naar rechts, row-reverse voor rechts naar links */                       
+                                 /* column voor boven naar onderen, column reverse voor onderen naar boven*/
+        }
+        .twee{
+            display: flex;
+            flex-direction: column;
+        }
+        .drie{
+            display: flex;
+            flex-direction: row-reverse;
+            
+        }
+        .drie div{
+            margin: auto;   /* Hiermee zorg je ervoor dat je divs gelijk over het scherm worden verdeeld, zelfs als je je window verkleint */
+        }
+
+        .center{
+            display: flex;
+            justify-content: center;   /*Met justify-content kun je de content van een container veranderen, Door center word alles in het midden gezet*/
+        }
+        .end{
+            display: flex;
+            justify-content: flex-end;  /* Door flex-end word alles aan het einde gezet. Door space-between word de ruimte tussen de content blokken even groot*/
+        }
+
+        
+                              
+    </style>
+
+</head>
+
+<body>
+
+    <header>
+        <nav>          <!-- De nav blijft een sementic tag, dit is dus gewoon een div maar met een duidelijke naam -->
+            <ul>       <!-- Voor een navigatie balk gebruiken we een unordered list met daarin de pagina's die we willen -->
+                <li>Home</li>       
+                <li>Locations</li>    <!-- Door ul>li*3 maak je een <ul> aan met daarin 3 * <li> -->
+                <li>Contact</li>
+            </ul>
+        </nav>
+        <h1>Title</h1>
+    </header>
+
+    <section class="een">
+        <div>a</div>
+        <div>b</div>
+        <div>c</div>
+    </section>
+    <section class="twee">
+        <div>a</div>
+        <div>b</div>
+        <div>c</div>
+    </section>
+    <section class="drie">
+        <div>a</div>
+        <div>b</div>
+        <div>c</div>
+    </section>
+
+    
+        
+    </section>
+    <section>second-section</section>
+    <footer>footer</footer>
+
+    <div>
+        <div class="center">1</div>
+        <div class="end">2</div>
+        <div>3</div>
+    </div>
+
+
+    
+   
+
+
+
+
+    
+</body>
+
+</html>

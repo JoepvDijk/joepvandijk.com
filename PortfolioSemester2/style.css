@@ -1,0 +1,208 @@
+/*BODY*/
+body{
+    color: white;                            /* Zorgt ervoor dat alle tekst in de body wit is */
+    font-family: 'Montserrat', Helvetica, sans-serif; /* Zorgt ervoor dat in de hele body de Montserrat font word gebruikt */
+    margin: 0;
+    padding: 0;        /* Deze padding/margin zorgt ervoor dat de hele body goed aansluit op de linker en bovenkant van het scherm */  
+
+
+
+    zoom: 0.9;
+    
+
+}   
+h1{
+    font-family: 'Poppins', Helvetica, sans-serif;
+}
+.hometextcrop {
+    padding: 0 15% 0 15%;
+}
+
+.homepage{             /*Zorgt ervoor dat de body van .homepage de afbeelding krijgt*/
+    background-image: url("images/backgroundjoep2.jpg"); 
+    height: 11700px;                                       
+    background-position: center;      
+    background-size: cover;
+}
+
+
+
+/*NAVIGATIE*/
+nav ul { 
+    text-align: right;   
+    margin: 0;
+    padding: 15px 380px 0 0;                   /* Deze padding/margin zorgt ervoor dat de unordered list container goed aansluit */
+    font-size: 20px;
+}
+
+    
+nav ul li {
+    display: inline-block;        /* Zorgt ervoor dat de list items naast elkaar komen te staan */
+    padding: 55px 20px 0px 20px;  /* Zorgt ervoor dat de list items mooi van elkaar afstaan */
+}
+
+nav ul li a {
+    color: white;              /* Zorgt ervoor dat de linkjes waar je op klikt een witte tekst hebben */
+    text-decoration: none;       /* Zorgt ervoor dat de linkjes waar je op klikt geen underline hebben */
+    text-transform: uppercase;   /* Verandert de tekst naar hoofdletters, doe dit in css omdat je in html schrijft maar niet designed */
+    
+}
+
+a:hover {                       /* Word actief wanneer je muis over een link zweeft of hovert */
+    text-decoration: underline; /* Er komt nu een lijntje onder een linkje als je muis erboven zweeft */
+}
+
+.logo img{
+  height: 9vw;
+  position: absolute;
+  padding: 5px;
+}
+
+
+
+/*SIDEMENU*/
+.sidemenu{
+    position: absolute;
+    position: fixed;
+    right: 0;
+    top: 20%;
+    text-align: right;
+    display: none; /*Deze staat verborgen totdat je naar beneder scrollt, dit word gedaan met Javascript*/
+    /*background-color: rgb(223, 150, 102);
+    padding: 0;      Deze kan je aan zetten wanneer je een achtergrond voor het gehele side menu wilt*/
+}
+.sidemenulink{
+    padding: 10px;
+}
+.sidemenulink a{
+    color: white;           
+    text-decoration: none;      
+    text-transform: uppercase;
+    background-color: rgb(223, 150, 102);
+    padding: 5px;
+    border-radius: 5;
+    font-size: 15px;
+}
+
+
+
+
+
+
+
+
+/*ABOUT ME*/
+.aboutme h1 {
+    margin: 278px 0 0 110px;
+    color: black;
+}
+
+.aboutme p {
+    margin: 0 0 0 110px;
+    color: black;
+    width: 400px;
+}
+.aboutmelink {
+    border-radius: 4px;
+    background-color: rgb(223, 150, 102);
+    border: none;
+    color: #FFFFFF;
+    text-align: center;
+    padding: 5px;
+    cursor: pointer; /*Zorgt ervoor dat de cursor een pointer word als die erover komt*/
+    text-decoration: none;
+}
+
+
+
+
+/*GENERAL STYLING*/
+.tussenruimtediv{
+    padding: 100px 0 0 0;
+    
+} 
+
+.hometitle{
+    margin: 0;
+    text-align: center;
+    text-transform: uppercase;
+    font-size: 80px;
+}
+
+.hometext{
+    text-align: center;
+    font-size: 30px;
+    padding: 20px 0 50px 0;
+    margin: 0;
+}
+
+.homecontent {
+    display: flex;                /* Zorgt ervoor dat op de section met klassnaam feautures flexbox kan worden gebruikt */ 
+    flex-direction: row;          /* Zet de divs in de section container in een row */ 
+    text-align: center;           /* Zet alles in .feautures in het midden. De afbeeldingen staan nu dus mooi gecenterd */
+    font-size: 25px;
+    flex-wrap: wrap;  /* Dit zorgt ervoor dat je website responsive word. Als je scherm nu kleiner word zullen de afbeeldingen */
+                      /* automatisch zichzelf onder elkaar zetten, maar niet netjes in het midden*/ 
+    justify-content: center;      /* Zet alle children in het midden van de container */
+                                  /* Dus alle figures in de feautures section worden nu mooi gecentered */
+  /* Nu heb je dus je website al responsive gemaakt zonder media query's te gebruiken, door een slim design is dit dus niet altijd nodig! */
+}
+
+.homecontent figure { 
+    
+    width: 25%;                    /* Zorgt ervoor dat er niet 4 maar 3 divs per rij weergegeven worden */
+    text-transform: uppercase; /* Verandert de tekst naar hoofdletters, doe dit in css omdat je in html schrijft maar niet designed */
+}
+
+.homecontent figure img {
+    height: 250px;  /*Verandert de grootte van de afbeeldingen, kan nog verandert worden voor verschillende beeldschermen*/
+    width: 250px;
+    border-radius: 5%; /* Zorgt ervoor dat je afbeelding een cirkel wordt. Bijv. 10px ipv 50% geeft de afbeelding wat rondere hoeken */
+    box-shadow: black 0px 0px 10px; /* Hiermee geef je een schaduw aan je box*/
+    /* box-shadow heeft 4 waardes nodig, eerst de kleur, dan lengte horizontaal, dan lengte verticaal, dan hoeveel blur */
+    border: 5px solid rgba(0, 0, 0, 0);        /* Dit zorgt voor een border die ontzichtbaar is  */
+    
+}
+
+.homecontent figure img:hover{
+    border: 5px solid rgb(223, 150, 102);        /* Dit zorgt voor een border  */
+}
+
+
+
+
+
+/*achievements*/
+.achievementdiv{
+    padding: 650px 0 0 0; /*Deze padding moet apart worden toegevoegd omdat de scroll to naar het bovenste gedeelte van een element scrollt*/
+}                         /*Als ik deze padding bij de titel had gezet zou er niet naar de juiste plek worden gescrollt*/
+.achievementcontent {
+    display: flex;
+   
+}
+.achievementcontent div {
+    padding: 20px;
+}
+.achievementcontent img {
+    height: 150px;
+}
+
+
+
+
+/*FOOTER*/
+footer {
+    background-color: black;     
+    color: gray;         
+    font-size: 15px;                  /* Verandert de grootte van je tekst */
+    padding: 30px;
+    margin-top: 200px;
+    text-align: center;
+}
+
+
+
+/*SCROLL TO ELEMENT*/
+html {
+    scroll-behavior: smooth;
+  }

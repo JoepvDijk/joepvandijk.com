@@ -1,0 +1,45 @@
+body {
+    background-color: #ccc;
+}
+
+.selections {
+    display: flex;
+    justify-content: center;   /*Zet alle content van de container in het midden*/
+}
+
+.selection {
+    background: none;
+    border: none;
+    outline: none;           /*Zorgt ervoor dat er geen background, border en outline van de button te zien is*/
+    cursor: pointer;         /*verandert de cursor in een pointer zodat je toch nog kunt zien dat het klikbaar is*/
+    font-size: 5rem;         /*rem is een grootte relatief aan de base font-size. deze is nu dus 5x groter*/
+    transition: 200ms;       /*Hierdoor word de scale transform hieronder vloeiend. Hij word dus groter over de span van 200ms ipv meteen in een klap groter te worden*/
+}
+
+.selection:hover {
+    transform: scale(1.2);   /*Wanneer je hieroverheen hovert word de scale vergroot met 1.2*/
+}
+
+.results {
+    margin-top: 1rem;       /*Zorgt voor iets meer ruimte tussen de emoticons en de text*/
+    display: grid;          /*Hiermee maak je gebruik van css grid*/
+    justify-content: center;
+    grid-template-columns: repeat(2, 1fr); /*Hiermee maak je een twee colums grid, door 1fr worden ze beide gelijke grootte*/
+    justify-items: center;
+    align-items: center;               /*Met justify-items center en align-items center komt de tekst in het midden te staan ookal word het scherm groter*/
+}
+
+.result-score {
+    margin-left: .1rem;              /*zorgt voor een beetje ruimte tussen het getal en de text*/
+    font-size: .5rem;                /*zorgt dat de font size halveert*/
+    color: #333;                   /*Geeft de cijfer een andere kleur*/
+}
+
+.result-selection {                 /*Hierdoor krijgt de verliezende emoticon een minder hoge opacity*/
+    opacity: .5;
+}
+
+.result-selection.winner {
+    opacity: 1;                    /*Hierdoor krijgt de winnende emoticon een normale opacity*/
+    font-size: 1.5rem;             /*Hierdoor krijgt de winnende emoticon een iets grotere font-size*/
+}

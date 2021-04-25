@@ -1,0 +1,340 @@
+
+
+
+
+/* GENERAL STYLING FOR PAGES */
+body{
+    font-family: 'Montserrat', Helvetica, sans-serif;
+    padding: 0;
+    margin: 0;
+    
+}
+
+h1, h2, h3, h4{
+    font-family: 'Poppins', Helvetica, sans-serif; /* Geeft alle H1's de poppin font*/
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+.padding {
+    padding: 0 20% 0 20%;
+}
+
+.padding img {
+    border-radius: 4%;
+    height: 250px;
+    margin-left: 15px; /*Zorgt ervoor dat de tekst niet tegen de foto aan komt*/
+    box-shadow: black 2px 2px 10px; /* Hiermee geef je een schaduw aan je box*/
+    /* box-shadow heeft 4 waardes nodig, eerst de kleur, dan lengte horizontaal, dan lengte verticaal, dan hoeveel blur */
+    
+}
+.largerpicture img {
+    height: 350px;
+}
+
+.tussenruimte {
+    margin: 0 0 200px 0;
+}
+.kleinetussenruimte {
+    margin: 0 0 100px 0;
+}
+.minitussenruimte{
+    margin: 0 0 50px 0;
+}
+
+
+/* .gallerycontainer{
+    display: flex;
+    display: block;
+    
+}
+.galleryholder{
+    display: flex;
+    justify-content: center;
+    
+}
+.gallery {
+    width: 15vw;
+    padding: 15px;
+    
+} */
+
+.container{
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    padding: 0 14% 0 14%;
+}
+.container img{
+    height: 27vh;
+    margin: 0px;
+    border-radius: 0; /* Zorgt ervoor dat je afbeelding een cirkel wordt. Bijv. 10px ipv 50% geeft de afbeelding wat rondere hoeken */
+    border: 5px solid rgba(0, 0, 0, 0);        /* Dit zorgt voor een border die ontzichtbaar is  */
+    
+}
+
+.container img:hover{
+    border: 5px solid rgb(223, 150, 102);        /* Dit zorgt voor een border  */
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.list li {
+    padding: 3px;
+}
+.list a {
+    text-decoration: none;
+    color: rgb(82, 122, 197);
+}
+.list a:hover {
+    text-decoration: underline;
+}
+.textenfoto {
+    display: flex;
+    align-items: flex-end; /*Met display flex komt de text en foto naast elkaar en met flex-end komt de text onderaan gelijk te staan met de foto.*/
+   
+}
+.textenfoto p{
+    width: 40vw;   /*Zorgt ervoor dat de tekst een grootte krijgt en dus de afbeeldingen op dezelfde plek blijven staan, zelfs als er minder of geen tekst is*/
+}
+
+
+.homebutton, .topbutton, .gitbutton {
+    background-color: black;
+    width: 100px;
+    height: 40px;
+    text-align: center;
+    margin: 50px 0px 0px 90%;
+    position: fixed;
+}
+.homebutton a, .topbutton a, .gitbutton a {
+    color: white;
+    text-decoration: none;
+}
+.topbutton {
+    margin-top: 100px;
+}
+.gitbutton {
+    margin-top: 150px;
+    background-color: rgb(70, 118, 186);
+}
+
+
+
+/* .background1 {
+    background-color: rgb(202, 208, 235);
+    position: absolute;
+    margin: -5% 0 0 15%;
+    
+    padding: 130% 35% 100% 35%;
+    z-index: -1;
+}
+.background2 {
+    background-image: linear-gradient(rgb(45, 28, 115), rgb(144, 0, 255));
+    position: absolute;
+    padding: 130% 100% 120% 100%;
+    margin-top: -5%;
+    z-index: -2;
+} */
+/* .background1 {
+    background-image: linear-gradient(rgb(236, 202, 226), rgb(180, 203, 235));
+} */
+
+
+
+
+/*LIBRARIES.HTML*/
+.librarypage div{
+    margin: 0 0 60px 0;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+/* MODALS */
+
+/*Model (Achtergrond)*/
+.modal {
+    display: none; /*In eerste instantie is de modal niet zichtbaar*/
+    position: fixed; /*Zorgt ervoor dat de modal op dezelfde plek blijft*/
+    z-index: 1; /*Zorgt ervoor dat deze boven alles word weergegeven*/
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%; /*Zorgt ervoor dat de model over heel het scherm komt*/
+    overflow: auto; /*Hierdoor kan je scrollen*/
+    background-color: rgb(0,0,0);
+    background-color: rgba(0, 0, 0, 0.4); /*Geeft een opacity aan de kleur, hierdoor word de achtergrond wat donkerder*/
+}
+
+
+/*Close Button*/
+.close {
+    color: rgb(119, 119, 119);
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover, .close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer; /*Zorgt ervoor dat je cursor pointer krijgt ipv de cursor text*/
+}
+
+/*Modal Header*/
+.modal-header {
+    padding: 2px 16px;
+    background-color: #5cb85c;
+    color: white;
+}
+
+/*Modal Body*/
+.modal-body {
+    padding: 2px 16px;
+    height: 100vh;
+}
+
+/*Modal Footer*/
+.modal-footer {
+    padding: 2px 16px;
+    background-color: #5cb85c;
+    color: white;
+}
+
+/*Modal Content*/
+.modal-content {
+    position: relative;  /*Zorgt ervoor dat de animatie dit stuk kan veranderen met top*/
+    background-color: #fefefe;
+    margin: auto;
+    padding: 0;
+    border: 1px solid #888;
+    width: 80%;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px rgba(0, 0, 0, 0.19);
+    animation-name: animatetop;
+    animation-duration: 0.4s;
+    
+}
+
+/*Animatie*/
+@keyframes animatetop {
+    from {
+        top: -300px; opacity: 0
+    }
+    to {
+        top: 0; opacity: 1
+    }
+}
+
+
+/* BUTTON */
+.button {
+    
+    border-radius: 4px;
+    background-color: rgb(223, 150, 102);
+    border: none;
+    color: #FFFFFF;
+    text-align: center;
+    font-size: 18px;
+    padding: 10px;
+    cursor: pointer; /*Zorgt ervoor dat de cursor een pointer word als die erover komt*/
+    
+  }
+  .button span {
+   
+    
+    position: relative;
+    transition: 0.5s;  /*Zorgt ervoor dat de pijltjes er smooth inkomen*/
+  }
+  
+  .button span:after {
+    content: '\00bb'; /*zorgt ervoor dat de >> tekentjes verschijnen, hier had je ook tekst in kunnen zetten*/
+    position: absolute;
+    opacity: 0;
+    top: 0;
+    right: -20px;     /*zorgt dat de pijltjes -20px verplaats worden (in de button)*/
+    transition: 0.5s;
+    
+  }
+  
+  .button:hover span {
+    padding-right: 25px;  /*maakt de padding rechts groter wanneer je erover hovert*/
+    
+  }
+  
+  .button:hover span:after { 
+    opacity: 1;
+    right: 0;
+    
+  }
+  .button:hover{
+    animation: animatebutton 1s ;
+    animation-fill-mode: forwards;
+  }
+
+  .gitblue {
+    background-color: rgb(70, 118, 186);
+}
+
+.devgreen{
+    background-color: #5cb85c;
+}
+
+.projectred{
+    background-color: rgb(186, 70, 70);
+}
+
+
+  /*Animatie*/
+@keyframes animatebutton {
+    
+    0% {
+        border-radius: 4px;
+    }
+    100% {
+        border-radius: 20px;
+    }
+}
+
+
+
+
+/* SLICK */
+
+
+.carouselgeneral img {
+    height: calc(50vh - 100px);
+    width: auto;
+    margin: 0 auto; /* it centers any block level element */
+  }
+  .carouselgeneral{
+      width: 40vw;
+  }
+  .center{
+      display: flex;
+      justify-content: center;
+  }

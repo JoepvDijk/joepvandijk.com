@@ -1,0 +1,165 @@
+body{
+    background-color: rgb(151, 221, 186);
+    margin: 0;
+    padding: 0;
+    font-family: 'Montserrat', Helvetica, sans-serif;
+    color: rgb(61, 14, 96);
+}
+
+/* HOMEBUTTON */
+.homebutton, .topbutton {
+    background-color: black;
+    width: 100px;
+    height: 40px;
+    text-align: center;
+    margin: 50px 0px 0px 90%;
+    position: fixed;
+    z-index: 1;
+}
+.homebutton a, .topbutton a {
+    color: white;
+    text-decoration: none;
+}
+
+ 
+
+/* BACKGROUND */
+div.colors {
+    display: flex;
+   
+}
+div.background {
+    position: absolute;
+}
+div.red {
+    background-color: rgb(200, 221, 220);
+    height: 50vh;
+    width: 50vw;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+div.blue {
+    background-color: rgb(186, 186, 228);
+    height: 50vh;
+    width: 50vw;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+div.green {
+    background-color: rgb(221, 189, 214);
+    height: 50vh;
+    width: 50vw;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+div.purple {
+    background-color: rgb(230, 215, 182);
+    height: 50vh;
+    width: 50vw;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* TEKST */
+/* p.text {
+    width: 400px;
+    display: none;   js werkte niet als ik meerdere klassen gaf aan de text
+} */
+
+h2{
+    position: absolute; /* Hierdoor is de tekst te lezen over alle andere elementen.*/
+    width: 20vw;        /*Geeft de beschrijvende tekst een goede breedte op alle schermen waardoor dit niet over de andere tekst heen komt*/
+    text-align: center;
+}
+
+div.tip{
+    display: flex;
+    justify-content: center;
+    padding-top: 60vh;
+    
+}
+
+p.textone{
+    width: 25vw;
+    display: none;
+}
+p.texttwo{
+    width: 25vw;
+    display: none;             /*Reflectie: Ik merk dat het veel handiger is om met vw en vh te werken ipv px. Hierdoor blijft alles er hetzelfde uitzien
+                                  ook wanneer de formaat van je beeldscherm verandert. */
+}
+p.textthree{
+    width: 25vw;
+    display: none;  /*Reflectie achteraf, dit is niet efficiënt code schrijven, deze selectors konden allemaal bij elkaar waardoor je maar 1x width en displat hoefte te schrijven*/
+}
+p.textfour{
+    width: 25vw;
+    display: none;
+}
+
+
+.st2:hover {
+    animation: animatie 2s infinite;
+}
+.st3:hover {
+    animation: animatie 2s infinite;
+}
+.st4:hover {                            /*Ook hier had ik de code efficienter kunnen schrijven zodat ik maar 1x de animatie hoefde op te roepen*/
+    animation: animatie 2s infinite;    
+}
+.st6:hover {
+    animation: animatie 2s infinite;
+}
+.st7:hover {
+    animation: animatie 2s infinite;
+}
+
+
+
+/* ANIMATIE */
+@keyframes animatie{
+    0% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.5;
+    }
+    100% {
+        opacity: 1;
+    }
+   
+}
+
+
+
+
+
+div.portret {
+    display: flex;
+    justify-content: center;
+    padding-top: 15vh;
+    
+}
+
+svg {
+    height: 60vh;
+    position: absolute;
+   
+}
+
+
+
+/* Reflectie: Ik probeerde meerdere svg's over elkaar te zetten en deze apart te laten veranderen met een hover of click. Dit kon niet omdat de hele svg
+een achtergrond krijg en zodra die over de ander heen ligt de onderste niet meer bereikbaar of klikbaar is. We hebben hier veel sites voor gebruikt maar niet veel werkte
+https://stackoverflow.com/questions/41079839/hovering-over-transparent-svgs
+https://css-tricks.com/the-many-ways-to-change-an-svg-fill-on-hover-and-when-to-use-them/
+https://css-tricks.com/almanac/properties/p/pointer-events/
+https://www.smashingmagazine.com/2018/05/svg-interaction-pointer-events-property/
+https://stackoverflow.com/questions/30327743/interactive-svg-hover-over-one-part-change-the-color-of-another
+
+Uiteindelijk bleek dat je de paths een aparte klasse kunt geven en naar deze kunt verwijzen, eerst verwees ik naar de svg zelf ipv de paths in de svg, 
+omdat ik meerdere svg's over elkaar had liggen moest ik dus alle paths uit alle svg's bij elkaar stoppen in één svg en alle paths klasnamen geven.*/

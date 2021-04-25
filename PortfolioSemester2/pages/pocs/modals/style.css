@@ -1,0 +1,70 @@
+/*Model (Achtergrond)*/
+.modal {
+    display: none; /*In eerste instantie is de modal niet zichtbaar*/
+    position: fixed; /*Zorgt ervoor dat de modal op dezelfde plek blijft*/
+    z-index: 1; /*Zorgt ervoor dat deze boven alles word weergegeven*/
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%; /*Zorgt ervoor dat de model over heel het scherm komt*/
+    overflow: auto; /*Hierdoor kan je scrollen*/
+    background-color: rgb(0,0,0);
+    background-color: rgba(0, 0, 0, 0.4); /*Geeft een opacity aan de kleur, hierdoor word de achtergrond wat donkerder*/
+}
+
+
+/*Close Button*/
+.close {
+    color: rgb(119, 119, 119);
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover, .close:focus {    /*Dit gebeurd wanneer je over de close button hovert*/
+    color: black;
+    text-decoration: none;
+    cursor: pointer;        /*Zorgt ervoor dat je cursor pointer krijgt ipv de cursor text*/
+}
+
+/*Modal Header*/
+.modal-header {             /*Wat basic styling voor het bovenste gedeelte van de modal(header), de body en de footer */
+    padding: 2px 16px;
+    background-color: #5cb85c;
+    color: white;
+}
+
+/*Modal Body*/
+.modal-body {
+    padding: 2px 16px;
+}
+
+/*Modal Footer*/
+.modal-footer {
+    padding: 2px 16px;
+    background-color: #5cb85c;
+    color: white;
+}
+
+/*Modal Content*/
+.modal-content {
+    position: relative;            /*Zorgt ervoor dat de animatie dit stuk een andere positie kan geven met top*/
+    background-color: #fefefe;
+    margin: auto;
+    padding: 0;
+    border: 1px solid #888;
+    width: 80%;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px rgba(0, 0, 0, 0.19);
+    animation-name: animatetop;
+    animation-duration: 0.4s;
+}
+
+/*Animatie*/
+@keyframes animatetop {
+    from {                                 
+        top: -300px; opacity: 0            /*Dit is een animatie waarin de modal eerst 300px naar boven is en dan omlaag komt*/
+    }                                      /*Hierdoor krijg je het fade-in effect wanneer je de modal opent*/
+    to {
+        top: 0; opacity: 1                 
+    }
+}

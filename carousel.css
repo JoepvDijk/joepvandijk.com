@@ -1,0 +1,185 @@
+* {
+    font-family: 'Nunito', sans-serif;
+}
+
+body {
+    background-image: linear-gradient(130deg, #d59b30, #af60ba, #257785);
+    background-repeat: no-repeat;
+    background-attachment: fixed;       /*Zorgt dat de achtergrond altijd het hele scherm blijft bedekken*/
+    color: white;
+
+    height: 600px;
+    margin: 0;
+    /* display: grid;
+    grid-template-rows: 500px 100px;
+    grid-template-columns: 1fr 30px 30px 30px 30px 30px 1fr; */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-items: center;
+
+    /* display: flex;
+    flex-direction: column;
+    align-items: center; */
+  
+  }
+  
+  main#carousel {
+    /* grid-row: 1 / 2;
+    grid-column: 1 / 8; */
+    width: 100vw;
+    height: 300px;
+    display: flex;
+    
+    justify-content: center;
+    overflow: hidden;
+    transform-style: preserve-3d;
+    perspective: 600px;
+    --items: 5;
+    --middle: 3;
+    --position: 1;
+    pointer-events: none;
+
+    
+   
+    
+  }
+  
+  div.item {
+    position: absolute;
+    width: 250px;
+    height: 250px;
+    background-color: coral;
+    --r: calc(var(--position) - var(--offset));
+    --abs: max(calc(var(--r) * -1), var(--r));
+    transition: all 0.25s linear;
+    transform: rotateY(calc(-10deg * var(--r)))
+      translateX(calc(-300px * var(--r)));
+    z-index: calc((var(--position) - var(--abs)));
+    border-radius: 40px;
+  }
+  
+  div.item:nth-of-type(1) {
+    --offset: 1;
+    background-color: #90f1ef;
+  }
+  div.item:nth-of-type(2) {
+    --offset: 2;
+    background-color: #ff70a6;
+  }
+  div.item:nth-of-type(3) {
+    --offset: 3;
+    background-color: #ff9770;
+  }
+  div.item:nth-of-type(4) {
+    --offset: 4;
+    background-color: #ffd670;
+  }
+  div.item:nth-of-type(5) {
+    --offset: 5;
+    background-color: #e9ff70;
+  }
+  
+  input:nth-of-type(1) {
+    grid-column: 2 / 3;
+    grid-row: 2 / 3;
+  }
+  input:nth-of-type(1):checked ~ main#carousel {
+    --position: 1;
+  }
+  
+  input:nth-of-type(2) {
+    grid-column: 3 / 4;
+    grid-row: 2 / 3;
+  }
+  input:nth-of-type(2):checked ~ main#carousel {
+    --position: 2;
+  }
+  
+  input:nth-of-type(3) {
+    grid-column: 4 /5;
+    grid-row: 2 / 3;
+  }
+  input:nth-of-type(3):checked ~ main#carousel {
+    --position: 3;
+  }
+  
+  input:nth-of-type(4) {
+    grid-column: 5 / 6;
+    grid-row: 2 / 3;
+  }
+  input:nth-of-type(4):checked ~ main#carousel {
+    --position: 4;
+  }
+  
+  input:nth-of-type(5) {
+    grid-column: 6 / 7;
+    grid-row: 2 / 3;
+  }
+  input:nth-of-type(5):checked ~ main#carousel {
+    --position: 5;
+  }
+
+
+
+
+
+
+
+.carouselbutton{
+  height: 40px;
+  
+}
+
+  p {
+    margin-top: 0px;
+    margin-bottom: 20px;
+    font-size: 30px;
+}
+
+div.beschrijving{
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+
+input{
+  opacity: 0;
+  pointer-events: none;
+}
+
+
+div.buttonSpace{
+  width: 50vw;
+  display: flex;
+  justify-content: space-between;
+  
+  
+}
+.carouselbutton{
+ 
+}
+
+
+
+/* MEDIA QUARIES */
+@media (max-width: 700px) {                    /*Dit wordt actief wanneer de max-width van je scherm de aangegeven waarde heeft*/
+  div.buttonSpace{
+    width: 80vw;
+  }
+  .carouselbutton{
+    height: 30px;
+  }
+  div.item{
+    height: 250px;
+    width: 250px;
+  }
+  main#carousel{
+    height: 350px;
+  }
+  p{
+    font-size: 23px;
+  }
+}
+
