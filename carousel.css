@@ -38,7 +38,7 @@ body {
     --items: 5;
     --middle: 3;
     --position: 1;
-    pointer-events: none;
+    
 
     
    
@@ -158,9 +158,21 @@ div.buttonSpace{
   
 }
 .carouselbutton{
- 
+  cursor: pointer;
 }
 
+a.carouselLink{
+  display: flex;
+  justify-content: center;
+  height: 100%;
+  width: 100%;
+}
+
+.carousel1{
+  background-image: url(images/loop2.gif);
+  background-repeat: repeat;
+  
+}
 
 
 /* MEDIA QUARIES */
