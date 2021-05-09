@@ -5,14 +5,32 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Portfolio Joep</title>
+    <script src="jquery-2.1.4.js"></script>
     <link rel="shortcut icon" type="image/png" href="images/favicon.png">
     <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@700&display=swap" rel="stylesheet"> <!-- Dit is een Embed link naar een font van googlefonts. 
         word deze font beschikbaar voor alle mensen die gebruik maken van mijn site -->
+        <script
+        src="https://code.jquery.com/jquery-3.5.1.min.js"
+        integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0="
+        crossorigin="anonymous"></script>        <!-- Dit is script van een externe bron waardoor mijn website gebruik kan maken van jquery -->
+      
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.9.0/slick.min.js"></script> <!-- voor slick -->
+        <link rel="stylesheet" href="slick.css">                  <!-- link naar de stylesheet van slick -->
+        <link rel="stylesheet" href="slicktheme.css">     
 </head>
 
 <body class="homepage">
+            <!-- Quick Loading screen added -->
+            <div class="loader-wrapper">
+                <span class="loader"><span class="loader-inner"></span></span>
+            </div>
+            <script>
+                $(window).on("load",function(){
+                  $(".loader-wrapper").fadeOut("slow");
+                });
+            </script>
     <header>
         <nav>
             <div class="logo"><img src="images/logojoepwit.png" alt=""></div>
@@ -171,22 +189,22 @@
     <section class="homecontent">
 
         <figure> 
-            <a href="pages/intmedia.html"><img src="images/selfie.jpg" alt="Zelfportret Selfieweek"></a>
+            <a href="pages/intmedia.html"target="_blank"><img src="images/selfie.jpg" alt="Zelfportret Selfieweek"></a>
             <figcaption>Zelfportret Selfieweek</figcaption>
         </figure>
 
         <figure>
-            <a href="pages/intmedia.html#cookie"><img src="images/cookie.png" alt="Cookie Clicker"></a>
+            <a href="pages/intmedia.html#cookie"target="_blank"><img src="images/cookie.png" alt="Cookie Clicker"></a>
             <figcaption>Cookie Clicker</figcaption>
         </figure>
 
         <figure>
-            <a href="pages/intmedia.html#websitemilo"><img src="images/milo.jpg" alt="Website Milo"></a>
+            <a href="pages/intmedia.html#websitemilo"target="_blank"><img src="images/milo.jpg" alt="Website Milo"></a>
             <figcaption>Website Milo</figcaption>
         </figure>
 
         <figure> 
-            <a href="pages/intmedia.html#portfoliowebsite"><img src="images/portfoliowebsite.jpg" alt="Portfolio Website"></a>
+            <a href="pages/intmedia.html#portfoliowebsite"target="_blank"><img src="images/portfoliowebsite.jpg" alt="Portfolio Website"></a>
             <figcaption>Portfolio Website</figcaption>
         </figure>
 
@@ -206,52 +224,52 @@
     <section class="homecontent">
 
         <figure> 
-            <a href="pages/poc.html"><img src="images/pocs.jpg" alt="Poc's"></a>
+            <a href="pages/poc.html"target="_blank"><img src="images/pocs.jpg" alt="Poc's"></a>
             <figcaption>Poc's</figcaption>
         </figure>
 
         <figure>
-            <a href="pages/poc.html#helloworld"><img src="images/helloworldsmall.jpg" alt="Hello World Poc"></a>
+            <a href="pages/poc.html#helloworld"target="_blank"><img src="images/helloworldsmall.jpg" alt="Hello World Poc"></a>
             <figcaption>Hello World</figcaption>
         </figure>
 
         <figure> 
-            <a href="pages/poc.html#tekstanimaties"><img src="images/tekstanim.jpg" alt="Tekst Animaties Poc"></a>
+            <a href="pages/poc.html#tekstanimaties"target="_blank"><img src="images/tekstanim.jpg" alt="Tekst Animaties Poc"></a>
             <figcaption>Tekst Animaties</figcaption>
         </figure>
 
         <figure>
-            <a href="pages/poc.html#modals"><img src="images/modalssmall.jpg" alt="Modals Poc"></a>
+            <a href="pages/poc.html#modals"target="_blank"><img src="images/modalssmall.jpg" alt="Modals Poc"></a>
             <figcaption>Modals</figcaption>
         </figure>
 
         <figure>
-            <a href="pages/poc.html#slideshow"><img src="images/slideshowsmall.jpg" alt="SlideShow Poc"></a>
+            <a href="pages/poc.html#slideshow"target="_blank"><img src="images/slideshowsmall.jpg" alt="SlideShow Poc"></a>
             <figcaption>Slideshow</figcaption>
         </figure>
 
         <figure>
-            <a href="pages/poc.html#webdev"><img src="images/artisansmall.jpg" alt="Artisan Website Poc"></a>
+            <a href="pages/poc.html#webdev"target="_blank"><img src="images/artisansmall.jpg" alt="Artisan Website Poc"></a>
             <figcaption>Artisan Website</figcaption>
         </figure>
 
         <figure>
-            <a href="pages/poc.html#flexbox"><img src="images/flexbox.jpg" alt="Flexbox Poc"></a>
+            <a href="pages/poc.html#flexbox"target="_blank"><img src="images/flexbox.jpg" alt="Flexbox Poc"></a>
             <figcaption>Flexbox</figcaption>
         </figure>
 
         <figure>
-            <a href="pages/poc.html#flexbox"><img src="images/responsive.jpg" alt="Responsive Design Poc"></a>
+            <a href="pages/poc.html#flexbox"target="_blank"><img src="images/responsive.jpg" alt="Responsive Design Poc"></a>
             <figcaption>Responsive Design</figcaption>
         </figure>
 
         <figure>
-            <a href="pages/poc.html#zelfportret"><img src="images/selfie.jpg" alt="Selfieweek Poc"></a>
+            <a href="pages/poc.html#zelfportret"target="_blank"><img src="images/selfie.jpg" alt="Selfieweek Poc"></a>
             <figcaption>Zelfportret Selfieweek</figcaption>
         </figure>
 
         <figure>
-            <a href="pages/poc.html#portfolio"><img src="images/portfoliowebsite.jpg" alt="Portfolio Website"></a>
+            <a href="pages/poc.html#portfolio"target="_blank"><img src="images/portfoliowebsite.jpg" alt="Portfolio Website"></a>
             <figcaption>Portfolio Website</figcaption>
         </figure>
 
@@ -270,42 +288,42 @@
     <section class="homecontent">
 
         <figure> 
-            <a href="pages/albumcover.html"><img src="images/albumcover.jpg" alt="Album Cover"></a>
+            <a href="pages/albumcover.html"target="_blank"><img src="images/albumcover.jpg" alt="Album Cover"></a>
             <figcaption>Album Cover</figcaption>
         </figure>
 
         <figure>
-            <a href="pages/logo.html"><img src="images/logomileaux.jpg" alt="Logo"></a>
+            <a href="pages/logo.html"target="_blank"><img src="images/logomileaux.jpg" alt="Logo"></a>
             <figcaption>Logo's Mileaux</figcaption>
         </figure>
 
         <figure>
-            <a href="pages/mediatechnieken.html#posters"><img src="images/posters.jpg" alt="Posters"></a>
+            <a href="pages/mediatechnieken.html#posters"target="_blank"><img src="images/posters.jpg" alt="Posters"></a>
             <figcaption>Posters</figcaption>
         </figure>
 
         <figure> 
-            <a href="pages/mediatechnieken.html#posterremake"><img src="images/mediatechnieken.jpg" alt="Filmposter"></a>
+            <a href="pages/mediatechnieken.html#posterremake"target="_blank"><img src="images/mediatechnieken.jpg" alt="Filmposter"></a>
             <figcaption>Filmposter Remake</figcaption>
         </figure>
 
         <figure>
-            <a href="pages/mediatechnieken.html#bladspiegels"><img src="images/bladspiegels.jpg" alt="Bladspiegels"></a>
+            <a href="pages/mediatechnieken.html#bladspiegels"target="_blank"><img src="images/bladspiegels.jpg" alt="Bladspiegels"></a>
             <figcaption>Bladspiegels</figcaption>
         </figure>
 
         <figure>
-            <a href="pages/mediatechnieken.html#infographic"><img src="images/gardevoir.png" alt="Infographic"></a>
+            <a href="pages/mediatechnieken.html#infographic"target="_blank"><img src="images/gardevoir.png" alt="Infographic"></a>
             <figcaption>Infographic</figcaption>
         </figure>
 
         <figure>
-            <a href="pages/mediatechnieken.html#premiere"><img src="images/premierepro.jpg" alt="Premiere Pro"></a>
+            <a href="pages/mediatechnieken.html#premiere"target="_blank"><img src="images/premierepro.jpg" alt="Premiere Pro"></a>
             <figcaption>Premiere Pro</figcaption>
         </figure>
 
         <figure>
-            <a href="pages/mediatechnieken.html#aftereffects"><img src="images/aftereffects.jpg" alt="After Effects"></a>
+            <a href="pages/mediatechnieken.html#aftereffects"target="_blank"><img src="images/aftereffects.jpg" alt="After Effects"></a>
             <figcaption>After Effects</figcaption>
         </figure>
 
@@ -324,47 +342,47 @@
     <section class="homecontent">
 
         <figure> 
-            <a href="pages/research.html#mediaverkenning"><img src="images/mediaverkenning.jpg" alt="Blank"></a>
+            <a href="pages/research.html#mediaverkenning"target="_blank"><img src="images/mediaverkenning.jpg" alt="Blank"></a>
             <figcaption>Mediaverkenning</figcaption>
         </figure>
 
         <figure>
-            <a href="pages/research.html#onderzoekmilo"><img src="images/milo.jpg" alt="Onderzoek Milo"></a>
+            <a href="pages/research.html#onderzoekmilo"target="_blank"><img src="images/milo.jpg" alt="Onderzoek Milo"></a>
             <figcaption>Onderzoek Milo</figcaption>
         </figure>
 
         <figure>
-            <a href="pages/research.html#trendsenontwikkelingen"><img src="images/trends.jpg" alt="Trends"></a>
+            <a href="pages/research.html#trendsenontwikkelingen"target="_blank"><img src="images/trends.jpg" alt="Trends"></a>
             <figcaption>Trends & Ontwikkelingen</figcaption>
         </figure>
 
         <figure> 
-            <a href="pages/research.html#interview"><img src="images/interview.jpg" alt="Interview"></a>
+            <a href="pages/research.html#interview"target="_blank"><img src="images/interview.jpg" alt="Interview"></a>
             <figcaption>Interview</figcaption>
         </figure>
 
         <figure>
-            <a href="pages/research.html#software"><img src="images/software.jpg" alt="Software"></a>
+            <a href="pages/research.html#software"target="_blank"><img src="images/software.jpg" alt="Software"></a>
             <figcaption>Onderzoek Software</figcaption>
         </figure>
 
         <figure>
-            <a href="pages/research.html#enquete"><img src="images/googleforms.jpg" alt="Google Forms"></a>
+            <a href="pages/research.html#enquete"target="_blank"><img src="images/googleforms.jpg" alt="Google Forms"></a>
             <figcaption>Online Enquête</figcaption>
         </figure>
 
         <figure>
-            <a href="pages/research.html#persona"><img src="images/persona.jpg" alt="Persona"></a>
+            <a href="pages/research.html#persona"target="_blank"><img src="images/persona.jpg" alt="Persona"></a>
             <figcaption>Persona</figcaption>
         </figure>
 
         <figure>
-            <a href="pages/research.html#moscow"><img src="images/moscow.jpg" alt="MoSCoW"></a>
+            <a href="pages/research.html#moscow"target="_blank"><img src="images/moscow.jpg" alt="MoSCoW"></a>
             <figcaption>MoSCoW</figcaption>
         </figure>
 
         <figure>
-            <a href="pages/research.html#socialmedia"><img src="images/socialmedia.jpg" alt="Social Media Plan"></a>
+            <a href="pages/research.html#socialmedia"target="_blank"><img src="images/socialmedia.jpg" alt="Social Media Plan"></a>
             <figcaption>Social Media Plan</figcaption>
         </figure>
 
@@ -384,27 +402,27 @@
     <section class="homecontent">
 
         <figure> 
-            <a href="pages/communication.html"><img src="images/whatsapp.jpg" alt="Communication Opdrachtgever"></a>
+            <a href="pages/communication.html"target="_blank"><img src="images/whatsapp.jpg" alt="Communication Opdrachtgever"></a>
             <figcaption>Communication Opdrachtgever</figcaption>
         </figure>
 
         <figure>
-            <a href="pages/communication.html#docenten"><img src="images/teams.jpg" alt="Communication Docenten"></a>
+            <a href="pages/communication.html#docenten"target="_blank"><img src="images/teams.jpg" alt="Communication Docenten"></a>
             <figcaption>Communication Docenten</figcaption>
         </figure>
 
         <figure>
-            <a href="pages/communication.html#groep"><img src="images/discord.jpg" alt="Communication Docenten"></a>
+            <a href="pages/communication.html#groep"target="_blank"><img src="images/discord.jpg" alt="Communication Docenten"></a>
             <figcaption>Communication Groepsgenoten</figcaption>
         </figure>
 
         <figure> 
-            <a href="pages/communication.html#logboek"><img src="images/logboek.jpg" alt="Communication Logboek"></a>
+            <a href="pages/communication.html#logboek"target="_blank"><img src="images/logboek.jpg" alt="Communication Logboek"></a>
             <figcaption>Logboek</figcaption>
         </figure>
 
         <figure> 
-            <a href="pages/communication.html#gitlab"><img src="images/gitlab1.jpg" alt="Communication Gitlab"></a>
+            <a href="pages/communication.html#gitlab"target="_blank"><img src="images/gitlab1.jpg" alt="Communication Gitlab"></a>
             <figcaption>Gitlab</figcaption>
         </figure>
 
@@ -423,27 +441,27 @@
     <section class="homecontent">
 
         <figure>
-            <a href="pages/profidentity.html"><img src="images/iksmall.jpg" alt="Professional Identity"></a>
+            <a href="pages/profidentity.html"target="_blank"><img src="images/iksmall.jpg" alt="Professional Identity"></a>
             <figcaption>Professional Identity</figcaption>
         </figure>
 
         <figure> 
-            <a href="pages/libraries.html"><img src="images/advanceddev.jpg" alt="Advanced Development"></a>
+            <a href="pages/libraries.html"target="_blank"><img src="images/advanceddev.jpg" alt="Advanced Development"></a>
             <figcaption>Advanced Development</figcaption>
         </figure>
 
         <figure>
-            <a href="pages/mediatechnieken.html"><img src="images/mediatechnieken.jpg" alt="Mediatechnieken"></a>
+            <a href="pages/mediatechnieken.html"target="_blank"><img src="images/mediatechnieken.jpg" alt="Mediatechnieken"></a>
             <figcaption>Mediatechnieken</figcaption>
         </figure>
 
         <figure> 
-            <a href="pages/storytelling.html"><img src="images/storytelling.jpg" alt="Storytelling & Gamification"></a>
+            <a href="pages/storytelling.html"target="_blank"><img src="images/storytelling.jpg" alt="Storytelling & Gamification"></a>
             <figcaption>Storytelling & Gamification</figcaption>
         </figure>
 
         <figure> 
-            <a href="pages/sprintx.html"><img src="images/sprintx.jpg" alt="Sprint X"></a>
+            <a href="pages/sprintx.html"target="_blank"><img src="images/sprintx.jpg" alt="Sprint X"></a>
             <figcaption>Sprint X</figcaption>
         </figure>
 

@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Joep Prof Identity</title>
+    <script src="jquery-2.1.4.js"></script>
     <link rel="shortcut icon" type="image/png" href="../images/favicon.png">
     <!-- <iframe style="display: none;" width="560" height="315" src="https://www.youtuberepeater.com/watch?v=Hmbm3G-Q444" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe> -->
     <link rel="stylesheet" href="stylepages.css">
@@ -33,6 +34,15 @@
     </div>
     
 
+        <!-- Quick Loading screen added -->
+        <div class="loader-wrapper">
+            <span class="loader"><span class="loader-inner"></span></span>
+        </div>
+        <script>
+            $(window).on("load",function(){
+              $(".loader-wrapper").fadeOut("slow");
+            });
+        </script>
 
 
 

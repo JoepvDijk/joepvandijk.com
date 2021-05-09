@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Joep Libraries</title>
+    <script src="jquery-2.1.4.js"></script>
     <link rel="shortcut icon" type="image/png" href="../images/favicon.png">
     <link rel="stylesheet" href="stylepages.css">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500&display=swap" rel="stylesheet">
@@ -27,6 +28,17 @@
     <div class="topbutton">
         <a href="#voorwoord">Back to Top</a>
     </div>
+
+
+        <!-- Quick Loading screen added -->
+        <div class="loader-wrapper">
+            <span class="loader"><span class="loader-inner"></span></span>
+        </div>
+        <script>
+            $(window).on("load",function(){
+              $(".loader-wrapper").fadeOut("slow");
+            });
+        </script>
 
 
 
