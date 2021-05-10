@@ -27,6 +27,9 @@ window.addEventListener("load", () =>{                        //Zorgt ervoor dat
     const beschrijving = document.querySelector(".beschrijving p")
     beschrijving.innerText = input[currentChecked].dataset.beschrijving
     
+    const beschrijving2 = document.querySelector(".beschrijving2 p")
+    beschrijving2.innerText = input[currentChecked].dataset.beschrijving2
+    
 
     buttonLeft.addEventListener("click", () => {
         input.forEach(checkButton => {
@@ -38,6 +41,7 @@ window.addEventListener("load", () =>{                        //Zorgt ervoor dat
         }
         input[currentChecked].checked = true;
         beschrijving.innerText = input[currentChecked].dataset.beschrijving
+        beschrijving2.innerText = input[currentChecked].dataset.beschrijving2
     })
 
     buttonRight.addEventListener("click", () => {
@@ -50,6 +54,7 @@ window.addEventListener("load", () =>{                        //Zorgt ervoor dat
         }
         input[currentChecked].checked = true;
         beschrijving.innerText = input[currentChecked].dataset.beschrijving
+        beschrijving2.innerText = input[currentChecked].dataset.beschrijving2
     })
 
 

@@ -142,6 +142,13 @@ div.beschrijving{
   justify-content: center;
   width: 100%;
 }
+.beschrijving2 p{
+  font-size: 22px;
+  text-align: center;
+  margin-left: 6vw;
+  margin-right: 6vw;
+  margin-top: 20px;
+}
 
 
 input{
@@ -169,7 +176,7 @@ a.carouselLink{
 }
 
 .carousel1{
-  background-image: url(images/loop2.gif);
+  background-image: url(images/loop3.gif);
   background-repeat: repeat;
   
 }
@@ -192,6 +199,10 @@ a.carouselLink{
   }
   p{
     font-size: 23px;
+  }
+  .beschrijving2 p{
+    font-size: 15px;
+    text-align: center;
   }
 }
 
