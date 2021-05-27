@@ -178,9 +178,11 @@ a.carouselLink{
 .carousel1{
   background-image: url(images/loop3.gif);
   background-repeat: repeat;
-  
 }
-
+.carousel2{
+  background-image: url(images/NinjaGame.jpg);
+  background-repeat: repeat;
+}
 
 /* MEDIA QUARIES */
 @media (max-width: 700px) {                    /*Dit wordt actief wanneer de max-width van je scherm de aangegeven waarde heeft*/
