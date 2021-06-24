@@ -183,6 +183,10 @@ a.carouselLink{
   background-image: url(images/NinjaGame.jpg);
   background-repeat: repeat;
 }
+.carousel3{
+  background-image: url(images/ThroughTheEyes.jpg);
+  background-repeat: repeat;
+}
 
 /* MEDIA QUARIES */
 @media (max-width: 700px) {                    /*Dit wordt actief wanneer de max-width van je scherm de aangegeven waarde heeft*/
