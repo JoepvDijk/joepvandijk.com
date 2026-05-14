@@ -1,0 +1,1504 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<title>Tesla Tower Defense</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: #0a0a18;
+    color: #e8f4ff;
+    font-family: 'Segoe UI', Arial, sans-serif;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100vh;
+  }
+  #hud {
+    display: flex;
+    gap: 24px;
+    padding: 8px 16px;
+    background: #111127;
+    width: 100%;
+    justify-content: center;
+    border-bottom: 1px solid #2a2a55;
+    font-size: 14px;
+  }
+  #hud .stat {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  #hud .stat .icon {
+    width: 14px; height: 14px;
+    border-radius: 50%;
+  }
+  #gameContainer {
+    position: relative;
+    flex: 1;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  canvas {
+    background: radial-gradient(circle at center, #1a1a3a 0%, #050510 80%);
+    cursor: crosshair;
+    display: block;
+  }
+  #shop {
+    width: 100%;
+    background: #111127;
+    border-top: 2px solid #2a2a55;
+    padding: 10px;
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .upgrade {
+    background: linear-gradient(180deg, #1f1f44 0%, #15152e 100%);
+    border: 1px solid #3a3a7a;
+    border-radius: 8px;
+    padding: 8px 14px;
+    cursor: pointer;
+    color: #d4e7ff;
+    transition: all 0.15s ease;
+    text-align: center;
+    min-width: 140px;
+    user-select: none;
+  }
+  .upgrade:hover {
+    background: linear-gradient(180deg, #2a2a66 0%, #1c1c44 100%);
+    border-color: #5fa8ff;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(95,168,255,0.3);
+  }
+  .upgrade.disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+  }
+  .upgrade.active {
+    border-color: #ffe066;
+    box-shadow: 0 0 12px rgba(255,224,102,0.5);
+  }
+  .upgrade .title {
+    font-weight: bold;
+    font-size: 14px;
+    margin-bottom: 4px;
+  }
+  .upgrade .info {
+    font-size: 11px;
+    color: #9fb4d0;
+  }
+  .upgrade .cost {
+    color: #ffd95f;
+    font-weight: bold;
+    margin-top: 3px;
+    font-size: 12px;
+  }
+  #message {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(15,15,35,0.92);
+    border: 2px solid #5fa8ff;
+    padding: 30px 50px;
+    border-radius: 12px;
+    text-align: center;
+    font-size: 24px;
+    z-index: 10;
+    display: none;
+    box-shadow: 0 0 30px rgba(95,168,255,0.4);
+  }
+  #message button {
+    margin-top: 20px;
+    background: #5fa8ff;
+    color: #0a0a18;
+    border: none;
+    padding: 10px 30px;
+    font-size: 18px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+  }
+  #message button:hover { background: #7fc0ff; }
+  #pauseBtn {
+    position: absolute;
+    top: 10px;
+    right: 12px;
+    background: linear-gradient(180deg, #2a2a66 0%, #15152e 100%);
+    border: 1px solid #5fa8ff;
+    color: #d4e7ff;
+    padding: 8px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: bold;
+    z-index: 5;
+    box-shadow: 0 2px 8px rgba(95,168,255,0.2);
+    user-select: none;
+  }
+  #pauseBtn:hover {
+    background: linear-gradient(180deg, #3a3a88 0%, #1c1c44 100%);
+    box-shadow: 0 4px 12px rgba(95,168,255,0.4);
+  }
+  #pauseOverlay {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(15,15,35,0.85);
+    border: 2px solid #ffe066;
+    padding: 24px 50px;
+    border-radius: 12px;
+    text-align: center;
+    font-size: 32px;
+    font-weight: bold;
+    color: #ffe066;
+    z-index: 8;
+    display: none;
+    box-shadow: 0 0 30px rgba(255,224,102,0.4);
+    letter-spacing: 2px;
+  }
+</style>
+</head>
+<body>
+  <div id="hud">
+    <div class="stat">⚡ <span>Wave: <b id="waveNum">1</b></span></div>
+    <div class="stat">❤️ <span>Leven: <b id="lives">20</b></span></div>
+    <div class="stat">💰 <span>Geld: <b id="money">50</b></span></div>
+    <div class="stat">💀 <span>Score: <b id="score">0</b></span></div>
+    <div class="stat">🔋 <span>Energie: <b id="energy">100</b></span></div>
+  </div>
+
+  <div id="gameContainer">
+    <canvas id="game" width="900" height="600"></canvas>
+    <button id="pauseBtn" onclick="togglePause()">⏸ Pauze</button>
+    <div id="pauseOverlay">⏸ GEPAUZEERD</div>
+    <div id="message">
+      <div id="msgText">Game Over</div>
+      <button onclick="restart()">Opnieuw</button>
+    </div>
+  </div>
+
+  <div id="shop">
+    <div class="upgrade" id="upDamage" onclick="buyUpgrade('damage')">
+      <div class="title">⚔️ Damage+</div>
+      <div class="info">Niveau: <span id="dmgLvl">1</span></div>
+      <div class="cost">$<span id="dmgCost">30</span></div>
+    </div>
+    <div class="upgrade" id="upRange" onclick="buyUpgrade('range')">
+      <div class="title">🎯 Range+</div>
+      <div class="info">Niveau: <span id="rngLvl">1</span></div>
+      <div class="cost">$<span id="rngCost">25</span></div>
+    </div>
+    <div class="upgrade" id="upEnergy" onclick="buyUpgrade('energy')">
+      <div class="title">🔋 Energie+</div>
+      <div class="info">Niveau: <span id="enLvl">1</span></div>
+      <div class="cost">$<span id="enCost">20</span></div>
+    </div>
+    <div class="upgrade" id="upBuyTower" onclick="startPlacingTower()">
+      <div class="title">🗼 Mini-Toren</div>
+      <div class="info">Plaats een auto-toren</div>
+      <div class="cost">$<span id="towerCost">75</span></div>
+    </div>
+    <div class="upgrade" id="upMiniBoost" onclick="buyUpgrade('mini')">
+      <div class="title">⚡ Mini-Boost</div>
+      <div class="info">Niveau: <span id="miniLvl">1</span></div>
+      <div class="cost">$<span id="miniCost">40</span></div>
+    </div>
+    <div class="upgrade" id="upBuyHouse" onclick="startPlacingHouse()">
+      <div class="title">🏠 Huisje</div>
+      <div class="info" id="houseInfo">Unlock op wave 15</div>
+      <div class="cost">$<span id="houseCost">200</span></div>
+    </div>
+  </div>
+
+<script>
+const canvas = document.getElementById('game');
+const ctx = canvas.getContext('2d');
+const W = canvas.width, H = canvas.height;
+
+// Resize for responsive
+function resize() {
+  const container = document.getElementById('gameContainer');
+  const maxW = Math.min(window.innerWidth, 1100);
+  const maxH = window.innerHeight - 180;
+  const ratio = W / H;
+  let w = maxW, h = maxW / ratio;
+  if (h > maxH) { h = maxH; w = h * ratio; }
+  canvas.style.width = w + 'px';
+  canvas.style.height = h + 'px';
+}
+window.addEventListener('resize', resize);
+resize();
+
+// Game state
+let game = {};
+function initGame() {
+  game = {
+    tower: { x: W/2, y: H/2, range: 0 }, // Main tower (just decorative attack origin)
+    enemies: [],
+    miniTowers: [],
+    houses: [],
+    bolts: [],         // player-triggered lightning strikes
+    autoBolts: [],     // mini-tower lightning
+    particles: [],
+    floatTexts: [],
+    money: 50,
+    lives: 20,
+    score: 0,
+    wave: 1,
+    energy: 100,
+    maxEnergy: 100,
+    energyRegen: 25,   // per second
+    boltCost: 20,
+    upgrades: {
+      damage: { lvl: 1, cost: 30, value: 25 },
+      range:  { lvl: 1, cost: 25, value: 60 },
+      energy: { lvl: 1, cost: 20, value: 100 },
+      mini:   { lvl: 1, cost: 40, dmg: 6, rng: 110, rate: 0.9 },
+    },
+    towerCost: 75,
+    placingTower: false,
+    houseCost: 200,
+    placingHouse: false,
+    houseIncome: 3,         // $ per tick
+    houseIncomeInterval: 3.5, // seconds
+    houseMaxHp: 200,
+    spawnTimer: 0,
+    waveTimer: 0,
+    waveActive: true,
+    enemiesToSpawn: 5,
+    spawnedThisWave: 0,
+    spawnInterval: 1.2,
+    knightSpawnCounter: 0,
+    gameOver: false,
+    paused: false,
+    mouseX: W/2, mouseY: H/2,
+    time: 0,
+  };
+}
+initGame();
+
+// Mouse tracking
+canvas.addEventListener('mousemove', e => {
+  const r = canvas.getBoundingClientRect();
+  game.mouseX = (e.clientX - r.left) * (W / r.width);
+  game.mouseY = (e.clientY - r.top) * (H / r.height);
+});
+canvas.addEventListener('click', e => {
+  if (game.gameOver || game.paused) return;
+  const r = canvas.getBoundingClientRect();
+  const x = (e.clientX - r.left) * (W / r.width);
+  const y = (e.clientY - r.top) * (H / r.height);
+
+  if (game.placingTower) {
+    if (game.money >= game.towerCost) {
+      // No placement on top of main tower
+      const dx = x - game.tower.x, dy = y - game.tower.y;
+      if (Math.sqrt(dx*dx + dy*dy) > 50) {
+        const mu = game.upgrades.mini;
+        game.miniTowers.push({
+          x, y,
+          cooldown: 0,
+        });
+        game.money -= game.towerCost;
+        game.towerCost = Math.floor(game.towerCost * 1.4);
+        document.getElementById('towerCost').textContent = game.towerCost;
+      }
+    }
+    game.placingTower = false;
+    document.getElementById('upBuyTower').classList.remove('active');
+    return;
+  }
+
+  if (game.placingHouse) {
+    if (game.money >= game.houseCost && game.wave >= 15) {
+      const dx = x - game.tower.x, dy = y - game.tower.y;
+      if (Math.sqrt(dx*dx + dy*dy) > 55) {
+        game.houses.push({
+          x, y,
+          hp: game.houseMaxHp,
+          maxHp: game.houseMaxHp,
+          incomeTimer: 0,
+          smokePhase: Math.random() * Math.PI * 2,
+        });
+        game.money -= game.houseCost;
+        game.houseCost = Math.floor(game.houseCost * 1.5);
+        document.getElementById('houseCost').textContent = game.houseCost;
+      }
+    }
+    game.placingHouse = false;
+    document.getElementById('upBuyHouse').classList.remove('active');
+    return;
+  }
+
+  // Player lightning strike
+  if (game.energy >= game.boltCost) {
+    fireBolt(x, y);
+    game.energy -= game.boltCost;
+  }
+});
+
+function getTowerTop() {
+  const rangeTier = Math.floor((game.upgrades.range.lvl - 1) / 5);
+  return { x: game.tower.x, y: game.tower.y - 28 - rangeTier * 14 };
+}
+
+function isAttackable(en) {
+  if (en.type === 'shadow') return en.emerge >= 0.5;
+  return true;
+}
+
+function fireBolt(x, y) {
+  const dmg = game.upgrades.damage.value;
+  const range = game.upgrades.range.value;
+  // Damage enemies within range of click point
+  for (const en of game.enemies) {
+    if (!isAttackable(en)) continue;
+    const dx = en.x - x, dy = en.y - y;
+    const d = Math.sqrt(dx*dx + dy*dy);
+    if (d < range) {
+      // Falloff
+      const factor = 1 - (d / range) * 0.5;
+      en.hp -= dmg * factor;
+      spawnHitParticles(en.x, en.y);
+    }
+  }
+  const top = getTowerTop();
+  game.bolts.push({
+    x1: top.x, y1: top.y,
+    x2: x, y2: y,
+    range: range,
+    life: 0.35,
+    maxLife: 0.35,
+    segments: generateBoltSegments(top.x, top.y, x, y),
+    color: getBoltColor(),
+  });
+}
+
+function generateBoltSegments(x1, y1, x2, y2) {
+  const segs = [];
+  const steps = 8 + Math.floor(Math.random() * 4);
+  let px = x1, py = y1;
+  for (let i = 1; i <= steps; i++) {
+    const t = i / steps;
+    const cx = x1 + (x2 - x1) * t;
+    const cy = y1 + (y2 - y1) * t;
+    const offset = (1 - Math.abs(t - 0.5) * 2) * 22;
+    const nx = cx + (Math.random() - 0.5) * offset;
+    const ny = cy + (Math.random() - 0.5) * offset;
+    segs.push({ x1: px, y1: py, x2: nx, y2: ny });
+    px = nx; py = ny;
+  }
+  return segs;
+}
+
+function spawnHitParticles(x, y) {
+  for (let i = 0; i < 6; i++) {
+    game.particles.push({
+      x, y,
+      vx: (Math.random() - 0.5) * 120,
+      vy: (Math.random() - 0.5) * 120,
+      life: 0.4,
+      maxLife: 0.4,
+      color: '#ffe066',
+    });
+  }
+}
+
+function spawnEnemy() {
+  const side = Math.floor(Math.random() * 4);
+  let x, y;
+  if (side === 0) { x = Math.random() * W; y = -20; }
+  else if (side === 1) { x = W + 20; y = Math.random() * H; }
+  else if (side === 2) { x = Math.random() * W; y = H + 20; }
+  else { x = -20; y = Math.random() * H; }
+
+  // Shadow chance: from wave 20+
+  let isShadow = false;
+  if (game.wave >= 20) {
+    isShadow = Math.random() < 0.22;
+  }
+
+  // Knight chance: from wave 10, small chance. From wave 15, higher chance.
+  let isKnight = false;
+  if (!isShadow) {
+    if (game.wave >= 15) {
+      isKnight = Math.random() < 0.28;
+    } else if (game.wave >= 10) {
+      isKnight = Math.random() < 0.12;
+    }
+  }
+
+  if (isShadow) {
+    const hp = 12 + game.wave * 3;
+    const speed = 28 + Math.min(game.wave * 1.2, 22);
+    game.enemies.push({
+      type: 'shadow',
+      x, y,
+      hp, maxHp: hp,
+      speed,
+      radius: 9,
+      bobPhase: Math.random() * Math.PI * 2,
+      legPhase: Math.random() * Math.PI * 2,
+      emerge: 0, // 0 = fully buried, 1 = fully emerged
+    });
+  } else if (isKnight) {
+    const hp = 90 + game.wave * 14;
+    const speed = 18 + Math.min(game.wave * 0.6, 12);
+    game.enemies.push({
+      type: 'knight',
+      x, y,
+      hp, maxHp: hp,
+      speed,
+      radius: 14,
+      bobPhase: Math.random() * Math.PI * 2,
+      legPhase: Math.random() * Math.PI * 2,
+    });
+  } else {
+    const hp = 20 + game.wave * 6;
+    const speed = 35 + Math.min(game.wave * 2, 40);
+    game.enemies.push({
+      type: 'basic',
+      x, y,
+      hp, maxHp: hp,
+      speed,
+      radius: 10,
+      bobPhase: Math.random() * Math.PI * 2,
+      legPhase: Math.random() * Math.PI * 2,
+    });
+  }
+}
+
+// Game loop
+let lastTime = performance.now();
+function loop(now) {
+  const dt = Math.min((now - lastTime) / 1000, 0.05);
+  lastTime = now;
+  update(dt);
+  draw();
+  requestAnimationFrame(loop);
+}
+
+function update(dt) {
+  if (game.gameOver || game.paused) return;
+  game.time += dt;
+
+  // Energy regen
+  game.energy = Math.min(game.maxEnergy, game.energy + game.energyRegen * dt);
+
+  // Spawn enemies
+  if (game.waveActive) {
+    game.spawnTimer += dt;
+    if (game.spawnTimer >= game.spawnInterval && game.spawnedThisWave < game.enemiesToSpawn) {
+      spawnEnemy();
+      game.spawnedThisWave++;
+      game.spawnTimer = 0;
+    }
+    if (game.spawnedThisWave >= game.enemiesToSpawn && game.enemies.length === 0) {
+      // Wave complete
+      game.waveActive = false;
+      game.waveTimer = 0;
+      game.money += 25 + game.wave * 5;
+    }
+  } else {
+    game.waveTimer += dt;
+    if (game.waveTimer > 3) {
+      game.wave++;
+      game.enemiesToSpawn = 5 + game.wave * 2;
+      game.spawnedThisWave = 0;
+      game.spawnInterval = Math.max(0.4, 1.2 - game.wave * 0.05);
+      game.waveActive = true;
+    }
+  }
+
+  // Move enemies toward nearest target (main tower OR house)
+  for (const en of game.enemies) {
+    // Find nearest target
+    let tgt = { kind: 'main', x: game.tower.x, y: game.tower.y, ref: null };
+    let bestD = Math.hypot(game.tower.x - en.x, game.tower.y - en.y);
+    for (const h of game.houses) {
+      const d = Math.hypot(h.x - en.x, h.y - en.y);
+      if (d < bestD) { bestD = d; tgt = { kind: 'house', x: h.x, y: h.y, ref: h }; }
+    }
+
+    const dx = tgt.x - en.x;
+    const dy = tgt.y - en.y;
+    const d = Math.sqrt(dx*dx + dy*dy);
+    const attackDist = tgt.kind === 'house' ? 28 : 20;
+
+    if (d > attackDist) {
+      en.x += (dx / d) * en.speed * dt;
+      en.y += (dy / d) * en.speed * dt;
+    } else {
+      if (tgt.kind === 'main') {
+        game.lives--;
+        en.hp = 0;
+      } else {
+        // Damage house based on enemy type, then die
+        let dmg = 25;
+        if (en.type === 'knight') dmg = 70;
+        else if (en.type === 'shadow') dmg = 35;
+        tgt.ref.hp -= dmg;
+        en.hp = 0;
+        spawnHitParticles(tgt.x, tgt.y);
+      }
+    }
+    en.bobPhase += dt * 8;
+    en.legPhase += dt * 10;
+    // Shadow emerge progress: fully buried far away, fully emerged near (its target)
+    if (en.type === 'shadow') {
+      const far = 240, near = 100;
+      en.emerge = Math.max(0, Math.min(1, (far - d) / (far - near)));
+    }
+  }
+
+  // House income + cleanup
+  for (let i = game.houses.length - 1; i >= 0; i--) {
+    const h = game.houses[i];
+    h.incomeTimer += dt;
+    h.smokePhase += dt;
+    if (h.incomeTimer >= game.houseIncomeInterval) {
+      h.incomeTimer = 0;
+      game.money += game.houseIncome;
+      game.floatTexts.push({
+        x: h.x + (Math.random() - 0.5) * 6,
+        y: h.y - 20,
+        text: '+$' + game.houseIncome,
+        life: 1.2, maxLife: 1.2,
+        color: '#5fff7f',
+      });
+    }
+    if (h.hp <= 0) {
+      // House destroyed
+      for (let k = 0; k < 18; k++) spawnHitParticles(h.x + (Math.random()-0.5)*20, h.y + (Math.random()-0.5)*20);
+      game.floatTexts.push({
+        x: h.x, y: h.y - 10,
+        text: 'Huisje vernietigd!',
+        life: 1.6, maxLife: 1.6,
+        color: '#ff6f6f',
+      });
+      game.houses.splice(i, 1);
+    }
+  }
+
+  // Float text updates
+  for (let i = game.floatTexts.length - 1; i >= 0; i--) {
+    const ft = game.floatTexts[i];
+    ft.y -= 24 * dt;
+    ft.life -= dt;
+    if (ft.life <= 0) game.floatTexts.splice(i, 1);
+  }
+
+  // Mini-tower firing (uses shared mini upgrade stats)
+  const mu = game.upgrades.mini;
+  for (const mt of game.miniTowers) {
+    mt.cooldown -= dt;
+    if (mt.cooldown <= 0) {
+      let target = null, bestD = mu.rng;
+      for (const en of game.enemies) {
+        if (!isAttackable(en)) continue;
+        const dx = en.x - mt.x, dy = en.y - mt.y;
+        const d = Math.sqrt(dx*dx + dy*dy);
+        if (d < bestD) { bestD = d; target = en; }
+      }
+      if (target) {
+        target.hp -= mu.dmg;
+        spawnHitParticles(target.x, target.y);
+        const miniTier = Math.floor((mu.lvl - 1) / 5);
+        const oy = mt.y - 14 - miniTier * 5;
+        game.autoBolts.push({
+          x1: mt.x, y1: oy,
+          x2: target.x, y2: target.y,
+          life: 0.25, maxLife: 0.25,
+          segments: generateBoltSegments(mt.x, oy, target.x, target.y),
+        });
+        mt.cooldown = mu.rate;
+      }
+    }
+  }
+
+  // Remove dead enemies
+  for (let i = game.enemies.length - 1; i >= 0; i--) {
+    const e = game.enemies[i];
+    if (e.hp <= 0) {
+      if (e.type === 'knight') {
+        game.money += 18 + Math.floor(game.wave * 0.8);
+        game.score += 35;
+      } else if (e.type === 'shadow') {
+        game.money += 8 + Math.floor(game.wave * 0.6);
+        game.score += 20;
+      } else {
+        game.money += 5 + Math.floor(game.wave * 0.5);
+        game.score += 10;
+      }
+      spawnHitParticles(e.x, e.y);
+      spawnHitParticles(e.x, e.y);
+      game.enemies.splice(i, 1);
+    }
+  }
+
+  // Update bolts
+  for (let i = game.bolts.length - 1; i >= 0; i--) {
+    game.bolts[i].life -= dt;
+    if (game.bolts[i].life <= 0) game.bolts.splice(i, 1);
+  }
+  for (let i = game.autoBolts.length - 1; i >= 0; i--) {
+    game.autoBolts[i].life -= dt;
+    if (game.autoBolts[i].life <= 0) game.autoBolts.splice(i, 1);
+  }
+
+  // Particles
+  for (let i = game.particles.length - 1; i >= 0; i--) {
+    const p = game.particles[i];
+    p.x += p.vx * dt;
+    p.y += p.vy * dt;
+    p.life -= dt;
+    p.vx *= 0.95; p.vy *= 0.95;
+    if (p.life <= 0) game.particles.splice(i, 1);
+  }
+
+  // Check game over
+  if (game.lives <= 0) {
+    game.gameOver = true;
+    document.getElementById('msgText').innerHTML = `Game Over!<br>Wave ${game.wave} bereikt<br>Score: ${game.score}`;
+    document.getElementById('message').style.display = 'block';
+  }
+
+  updateHUD();
+}
+
+function updateHUD() {
+  document.getElementById('waveNum').textContent = game.wave;
+  document.getElementById('lives').textContent = game.lives;
+  document.getElementById('money').textContent = game.money;
+  document.getElementById('score').textContent = game.score;
+  document.getElementById('energy').textContent = Math.floor(game.energy);
+
+  document.getElementById('dmgLvl').textContent = game.upgrades.damage.lvl;
+  document.getElementById('rngLvl').textContent = game.upgrades.range.lvl;
+  document.getElementById('enLvl').textContent = game.upgrades.energy.lvl;
+  document.getElementById('miniLvl').textContent = game.upgrades.mini.lvl;
+  document.getElementById('dmgCost').textContent = game.upgrades.damage.cost;
+  document.getElementById('rngCost').textContent = game.upgrades.range.cost;
+  document.getElementById('enCost').textContent = game.upgrades.energy.cost;
+  document.getElementById('miniCost').textContent = game.upgrades.mini.cost;
+  document.getElementById('towerCost').textContent = game.towerCost;
+  document.getElementById('houseCost').textContent = game.houseCost;
+
+  // House info text
+  const houseInfo = document.getElementById('houseInfo');
+  if (game.wave < 15) {
+    houseInfo.textContent = `Unlock op wave 15`;
+  } else {
+    houseInfo.textContent = `+$${game.houseIncome} / ${game.houseIncomeInterval}s`;
+  }
+
+  setEnabled('upDamage', game.money >= game.upgrades.damage.cost);
+  setEnabled('upRange', game.money >= game.upgrades.range.cost);
+  setEnabled('upEnergy', game.money >= game.upgrades.energy.cost);
+  setEnabled('upMiniBoost', game.money >= game.upgrades.mini.cost);
+  setEnabled('upBuyTower', game.money >= game.towerCost);
+  setEnabled('upBuyHouse', game.wave >= 15 && game.money >= game.houseCost);
+}
+function setEnabled(id, ok) {
+  document.getElementById(id).classList.toggle('disabled', !ok);
+}
+
+function buyUpgrade(type) {
+  const up = game.upgrades[type];
+  if (game.money < up.cost || game.gameOver) return;
+  game.money -= up.cost;
+  up.lvl++;
+  if (type === 'damage') {
+    up.value += 12;
+    up.cost = Math.floor(up.cost * 1.5);
+  } else if (type === 'range') {
+    up.value += 9;
+    up.cost = Math.floor(up.cost * 1.5);
+  } else if (type === 'energy') {
+    up.value += 25;
+    game.maxEnergy = up.value;
+    game.energyRegen += 5;
+    up.cost = Math.floor(up.cost * 1.5);
+  } else if (type === 'mini') {
+    up.dmg += 3;
+    up.rng += 12;
+    up.rate = Math.max(0.2, up.rate * 0.92);
+    up.cost = Math.floor(up.cost * 1.5);
+  }
+}
+
+function togglePause() {
+  if (game.gameOver) return;
+  game.paused = !game.paused;
+  document.getElementById('pauseOverlay').style.display = game.paused ? 'block' : 'none';
+  document.getElementById('pauseBtn').innerHTML = game.paused ? '▶ Hervat' : '⏸ Pauze';
+}
+
+// Keyboard pause (Space or P)
+document.addEventListener('keydown', e => {
+  if (e.code === 'Space' || e.key === 'p' || e.key === 'P') {
+    e.preventDefault();
+    togglePause();
+  }
+});
+
+// Color for player bolts based on damage upgrade tier (every 5 levels)
+function getBoltColor() {
+  const tier = Math.floor((game.upgrades.damage.lvl - 1) / 5);
+  const palette = [
+    { core: '#ffffff', glow: '#7fc0ff', main: '180,220,255' }, // blue
+    { core: '#ffffff', glow: '#6fffaa', main: '170,255,200' }, // green
+    { core: '#ffffff', glow: '#ff7f7f', main: '255,180,180' }, // red
+    { core: '#ffffff', glow: '#d97fff', main: '220,180,255' }, // purple
+    { core: '#ffffff', glow: '#ffd95f', main: '255,235,150' }, // gold
+    { core: '#ffffff', glow: '#ff6fcf', main: '255,180,220' }, // pink
+  ];
+  return palette[Math.min(tier, palette.length - 1)];
+}
+
+function startPlacingTower() {
+  if (game.money < game.towerCost || game.gameOver) return;
+  game.placingTower = true;
+  game.placingHouse = false;
+  document.getElementById('upBuyTower').classList.add('active');
+  document.getElementById('upBuyHouse').classList.remove('active');
+}
+
+function startPlacingHouse() {
+  if (game.wave < 15 || game.money < game.houseCost || game.gameOver) return;
+  game.placingHouse = true;
+  game.placingTower = false;
+  document.getElementById('upBuyHouse').classList.add('active');
+  document.getElementById('upBuyTower').classList.remove('active');
+}
+
+function restart() {
+  initGame();
+  document.getElementById('message').style.display = 'none';
+}
+
+// Drawing
+function draw() {
+  ctx.clearRect(0, 0, W, H);
+
+  // Grid background
+  ctx.strokeStyle = 'rgba(60,80,140,0.12)';
+  ctx.lineWidth = 1;
+  for (let x = 0; x < W; x += 40) {
+    ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, H); ctx.stroke();
+  }
+  for (let y = 0; y < H; y += 40) {
+    ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(W, y); ctx.stroke();
+  }
+
+  // Placement preview - tower
+  if (game.placingTower) {
+    ctx.strokeStyle = 'rgba(95,200,255,0.5)';
+    ctx.fillStyle = 'rgba(95,200,255,0.08)';
+    ctx.beginPath();
+    ctx.arc(game.mouseX, game.mouseY, game.upgrades.mini.rng, 0, Math.PI*2);
+    ctx.fill();
+    ctx.stroke();
+    drawMiniTower(game.mouseX, game.mouseY, 0.5);
+  }
+  // Placement preview - house
+  if (game.placingHouse) {
+    ctx.strokeStyle = 'rgba(255,200,100,0.5)';
+    ctx.fillStyle = 'rgba(255,200,100,0.06)';
+    ctx.beginPath();
+    ctx.arc(game.mouseX, game.mouseY, 30, 0, Math.PI*2);
+    ctx.fill();
+    ctx.stroke();
+    drawHouse({ x: game.mouseX, y: game.mouseY, hp: game.houseMaxHp, maxHp: game.houseMaxHp, smokePhase: game.time }, 0.5);
+  }
+
+  // Mouse aim range preview (subtle)
+  if (!game.placingTower) {
+    ctx.strokeStyle = 'rgba(255,224,102,0.18)';
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.arc(game.mouseX, game.mouseY, game.upgrades.range.value, 0, Math.PI*2);
+    ctx.stroke();
+  }
+
+  // Houses
+  for (const h of game.houses) {
+    drawHouse(h, 1);
+  }
+
+  // Mini towers
+  for (const mt of game.miniTowers) {
+    ctx.strokeStyle = 'rgba(95,168,255,0.12)';
+    ctx.beginPath();
+    ctx.arc(mt.x, mt.y, game.upgrades.mini.rng, 0, Math.PI*2);
+    ctx.stroke();
+    drawMiniTower(mt.x, mt.y, 1);
+  }
+
+  // Main tower
+  drawMainTower(game.tower.x, game.tower.y);
+
+  // Enemies
+  for (const en of game.enemies) {
+    drawStickman(en);
+  }
+
+  // Bolts (player)
+  for (const b of game.bolts) {
+    const alpha = b.life / b.maxLife;
+    const col = b.color || getBoltColor();
+    ctx.strokeStyle = `rgba(${col.main},${alpha})`;
+    ctx.lineWidth = 3;
+    ctx.shadowColor = col.glow;
+    ctx.shadowBlur = 15;
+    ctx.beginPath();
+    for (const s of b.segments) {
+      ctx.moveTo(s.x1, s.y1);
+      ctx.lineTo(s.x2, s.y2);
+    }
+    ctx.stroke();
+    // Inner bright
+    ctx.strokeStyle = `rgba(255,255,255,${alpha})`;
+    ctx.lineWidth = 1.5;
+    ctx.stroke();
+    ctx.shadowBlur = 0;
+
+    // Impact radius
+    ctx.strokeStyle = `rgba(${col.main},${alpha * 0.6})`;
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.arc(b.x2, b.y2, b.range * (1 - alpha) * 0.6 + 10, 0, Math.PI*2);
+    ctx.stroke();
+  }
+
+  // Auto bolts
+  for (const b of game.autoBolts) {
+    const alpha = b.life / b.maxLife;
+    ctx.strokeStyle = `rgba(150,255,200,${alpha})`;
+    ctx.lineWidth = 2;
+    ctx.shadowColor = '#5fffaa';
+    ctx.shadowBlur = 8;
+    ctx.beginPath();
+    for (const s of b.segments) {
+      ctx.moveTo(s.x1, s.y1);
+      ctx.lineTo(s.x2, s.y2);
+    }
+    ctx.stroke();
+    ctx.shadowBlur = 0;
+  }
+
+  // Particles
+  for (const p of game.particles) {
+    const a = p.life / p.maxLife;
+    ctx.fillStyle = p.color;
+    ctx.globalAlpha = a;
+    ctx.beginPath();
+    ctx.arc(p.x, p.y, 2.5, 0, Math.PI*2);
+    ctx.fill();
+  }
+  ctx.globalAlpha = 1;
+
+  // Energy bar at mouse
+  if (game.energy < game.maxEnergy) {
+    const pct = game.energy / game.maxEnergy;
+    ctx.fillStyle = 'rgba(0,0,0,0.5)';
+    ctx.fillRect(game.mouseX - 25, game.mouseY + 18, 50, 6);
+    ctx.fillStyle = pct >= (game.boltCost/game.maxEnergy) ? '#5fc8ff' : '#ff6f6f';
+    ctx.fillRect(game.mouseX - 25, game.mouseY + 18, 50 * pct, 6);
+  }
+
+  // Wave countdown
+  if (!game.waveActive && !game.gameOver) {
+    ctx.fillStyle = 'rgba(255,224,102,0.9)';
+    ctx.font = 'bold 26px Arial';
+    ctx.textAlign = 'center';
+    ctx.fillText(`Volgende wave in ${Math.ceil(3 - game.waveTimer)}...`, W/2, 50);
+  }
+
+  // Floating texts (income popups, destruction)
+  for (const ft of game.floatTexts) {
+    const a = Math.min(1, ft.life / ft.maxLife * 1.5);
+    ctx.globalAlpha = a;
+    ctx.fillStyle = ft.color;
+    ctx.font = 'bold 14px Arial';
+    ctx.textAlign = 'center';
+    ctx.strokeStyle = 'rgba(0,0,0,0.7)';
+    ctx.lineWidth = 3;
+    ctx.strokeText(ft.text, ft.x, ft.y);
+    ctx.fillText(ft.text, ft.x, ft.y);
+  }
+  ctx.globalAlpha = 1;
+}
+
+function drawMainTower(x, y) {
+  // Height tier from range upgrade (every 5 levels)
+  const rangeTier = Math.floor((game.upgrades.range.lvl - 1) / 5);
+  // Width tier from energy upgrade (every 5 levels)
+  const energyTier = Math.floor((game.upgrades.energy.lvl - 1) / 5);
+
+  const extraHeight = rangeTier * 14;       // tower grows up
+  const widthMul = 1 + energyTier * 0.22;   // tower grows wider
+  const baseY = y + 25;
+  const topY = y - 20 - extraHeight;
+  const sphereY = y - 28 - extraHeight;
+  const sphereR = 12 * (1 + energyTier * 0.15);
+
+  // Base
+  ctx.fillStyle = '#3a3a6a';
+  ctx.beginPath();
+  ctx.arc(x, baseY, 22 * widthMul, 0, Math.PI*2);
+  ctx.fill();
+
+  // Tower body (trapezoid)
+  ctx.fillStyle = '#555588';
+  ctx.beginPath();
+  ctx.moveTo(x - 14 * widthMul, baseY);
+  ctx.lineTo(x - 6 * widthMul, topY);
+  ctx.lineTo(x + 6 * widthMul, topY);
+  ctx.lineTo(x + 14 * widthMul, baseY);
+  ctx.closePath();
+  ctx.fill();
+  ctx.strokeStyle = '#888bb8';
+  ctx.lineWidth = 1.5;
+  ctx.stroke();
+
+  // Add support rings for taller towers (range tier visual)
+  if (rangeTier > 0) {
+    ctx.strokeStyle = '#7d7dbb';
+    ctx.lineWidth = 1.5;
+    for (let i = 1; i <= rangeTier && i <= 4; i++) {
+      const t = i / (rangeTier + 1);
+      const ringY = baseY + (topY - baseY) * t;
+      const ringW = (14 - 8 * t) * widthMul;
+      ctx.beginPath();
+      ctx.moveTo(x - ringW, ringY);
+      ctx.lineTo(x + ringW, ringY);
+      ctx.stroke();
+    }
+  }
+
+  // Color of the sphere tracks the player bolt color (damage upgrade tier)
+  const col = getBoltColor();
+  const sphereTints = getSphereTints();
+
+  // Extra coil bands for energy tiers
+  if (energyTier > 0) {
+    ctx.strokeStyle = sphereTints.band;
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.ellipse(x, sphereY + sphereR * 0.4, sphereR * 1.1, sphereR * 0.35, 0, 0, Math.PI*2);
+    ctx.stroke();
+    if (energyTier >= 2) {
+      ctx.beginPath();
+      ctx.ellipse(x, sphereY - sphereR * 0.4, sphereR * 1.0, sphereR * 0.3, 0, 0, Math.PI*2);
+      ctx.stroke();
+    }
+  }
+
+  // Coil sphere on top
+  const pulse = 1 + Math.sin(game.time * 5) * 0.1;
+  const grad = ctx.createRadialGradient(x, sphereY, 2, x, sphereY, (sphereR + 2) * pulse);
+  grad.addColorStop(0, '#ffffff');
+  grad.addColorStop(0.4, sphereTints.mid);
+  grad.addColorStop(1, sphereTints.outer);
+  ctx.fillStyle = grad;
+  ctx.beginPath();
+  ctx.arc(x, sphereY, sphereR * pulse, 0, Math.PI*2);
+  ctx.fill();
+
+  // Electric arcs around sphere
+  ctx.strokeStyle = `rgba(${col.main},${0.4 + Math.sin(game.time * 10) * 0.3})`;
+  ctx.lineWidth = 1.5;
+  const numArcs = 3 + energyTier;
+  for (let i = 0; i < numArcs; i++) {
+    const a = game.time * 3 + i * (Math.PI * 2 / numArcs);
+    const r1 = sphereR + 1, r2 = sphereR + 6 + Math.sin(game.time * 7 + i) * 3;
+    ctx.beginPath();
+    ctx.moveTo(x + Math.cos(a) * r1, sphereY + Math.sin(a) * r1);
+    ctx.lineTo(x + Math.cos(a) * r2, sphereY + Math.sin(a) * r2);
+    ctx.stroke();
+  }
+
+  // Glow
+  ctx.shadowColor = col.glow;
+  ctx.shadowBlur = 25;
+  ctx.beginPath();
+  ctx.arc(x, sphereY, 4, 0, Math.PI*2);
+  ctx.fillStyle = '#ffffff';
+  ctx.fill();
+  ctx.shadowBlur = 0;
+}
+
+// Sphere fill tints matching the bolt color tier
+function getSphereTints() {
+  const tier = Math.floor((game.upgrades.damage.lvl - 1) / 5);
+  const palette = [
+    { mid: '#aaddff', outer: '#3366aa', band: '#aaccff' }, // blue
+    { mid: '#aaffd5', outer: '#2a8a6a', band: '#9fffd0' }, // green
+    { mid: '#ffb0b0', outer: '#aa3333', band: '#ffb5b5' }, // red
+    { mid: '#dab5ff', outer: '#6a30aa', band: '#d4afff' }, // purple
+    { mid: '#fff0a0', outer: '#aa8a20', band: '#ffe88f' }, // gold
+    { mid: '#ffb5dd', outer: '#aa3380', band: '#ffaad5' }, // pink
+  ];
+  return palette[Math.min(tier, palette.length - 1)];
+}
+
+function drawMiniTower(x, y, alpha) {
+  ctx.globalAlpha = alpha;
+  // Bulk tier from mini upgrade (every 5 levels)
+  const tier = Math.floor((game.upgrades.mini.lvl - 1) / 5);
+  const bulk = 1 + tier * 0.28;
+  const heightBoost = tier * 5;
+
+  // Base
+  ctx.fillStyle = '#2a4a4a';
+  ctx.beginPath();
+  ctx.arc(x, y + 12, 12 * bulk, 0, Math.PI*2);
+  ctx.fill();
+
+  // Body
+  ctx.fillStyle = '#3a6a6a';
+  ctx.beginPath();
+  ctx.moveTo(x - 7 * bulk, y + 12);
+  ctx.lineTo(x - 3 * bulk, y - 10 - heightBoost);
+  ctx.lineTo(x + 3 * bulk, y - 10 - heightBoost);
+  ctx.lineTo(x + 7 * bulk, y + 12);
+  ctx.closePath();
+  ctx.fill();
+  if (tier > 0) {
+    ctx.strokeStyle = '#5fc8aa';
+    ctx.lineWidth = 1.2;
+    ctx.stroke();
+  }
+
+  // Support rings for upgraded versions
+  if (tier > 0) {
+    ctx.strokeStyle = '#5fc8aa';
+    ctx.lineWidth = 1.2;
+    for (let i = 1; i <= tier && i <= 3; i++) {
+      const t = i / (tier + 1);
+      const ringY = (y + 12) + (y - 10 - heightBoost - (y + 12)) * t;
+      const ringW = (7 - 4 * t) * bulk;
+      ctx.beginPath();
+      ctx.moveTo(x - ringW, ringY);
+      ctx.lineTo(x + ringW, ringY);
+      ctx.stroke();
+    }
+  }
+
+  // Coil top
+  const pulse = 1 + Math.sin(game.time * 6 + x) * 0.15;
+  ctx.fillStyle = '#5fffaa';
+  ctx.shadowColor = '#5fffaa';
+  ctx.shadowBlur = 10;
+  ctx.beginPath();
+  ctx.arc(x, y - 14 - heightBoost, 5 * bulk * pulse, 0, Math.PI*2);
+  ctx.fill();
+  ctx.shadowBlur = 0;
+
+  // Extra arcs for upgraded
+  if (tier > 0) {
+    ctx.strokeStyle = `rgba(150,255,200,${0.4 + Math.sin(game.time * 8 + x) * 0.3})`;
+    ctx.lineWidth = 1;
+    const numArcs = 2 + tier;
+    for (let i = 0; i < numArcs; i++) {
+      const a = game.time * 4 + i * (Math.PI * 2 / numArcs) + x * 0.01;
+      const r1 = 5 * bulk + 1, r2 = 5 * bulk + 4 + Math.sin(game.time * 9 + i) * 2;
+      ctx.beginPath();
+      ctx.moveTo(x + Math.cos(a) * r1, y - 14 - heightBoost + Math.sin(a) * r1);
+      ctx.lineTo(x + Math.cos(a) * r2, y - 14 - heightBoost + Math.sin(a) * r2);
+      ctx.stroke();
+    }
+  }
+  ctx.globalAlpha = 1;
+}
+
+function drawHouse(h, alpha) {
+  const x = h.x, y = h.y;
+  ctx.globalAlpha = alpha;
+
+  // Ground/foundation shadow
+  ctx.fillStyle = 'rgba(0,0,0,0.35)';
+  ctx.beginPath();
+  ctx.ellipse(x, y + 16, 22, 5, 0, 0, Math.PI*2);
+  ctx.fill();
+
+  // Walls
+  ctx.fillStyle = '#d9a86b';
+  ctx.strokeStyle = '#7a5630';
+  ctx.lineWidth = 1.5;
+  ctx.beginPath();
+  ctx.rect(x - 16, y - 4, 32, 22);
+  ctx.fill();
+  ctx.stroke();
+
+  // Wall planks (decoration)
+  ctx.strokeStyle = 'rgba(122,86,48,0.5)';
+  ctx.lineWidth = 1;
+  for (let i = 1; i < 4; i++) {
+    ctx.beginPath();
+    ctx.moveTo(x - 16, y - 4 + i * 5.5);
+    ctx.lineTo(x + 16, y - 4 + i * 5.5);
+    ctx.stroke();
+  }
+
+  // Door
+  ctx.fillStyle = '#5a3a1a';
+  ctx.fillRect(x - 4, y + 6, 8, 12);
+  ctx.strokeStyle = '#3a2010';
+  ctx.lineWidth = 1;
+  ctx.strokeRect(x - 4, y + 6, 8, 12);
+  // Door knob
+  ctx.fillStyle = '#ffd95f';
+  ctx.beginPath();
+  ctx.arc(x + 2, y + 12, 0.8, 0, Math.PI*2);
+  ctx.fill();
+
+  // Window (with $ inside)
+  ctx.fillStyle = '#a4d8ff';
+  ctx.fillRect(x - 13, y + 1, 7, 6);
+  ctx.strokeStyle = '#7a5630';
+  ctx.strokeRect(x - 13, y + 1, 7, 6);
+  ctx.beginPath();
+  ctx.moveTo(x - 9.5, y + 1); ctx.lineTo(x - 9.5, y + 7);
+  ctx.moveTo(x - 13, y + 4); ctx.lineTo(x - 6, y + 4);
+  ctx.stroke();
+
+  // Coin sign on right side
+  ctx.fillStyle = '#ffd95f';
+  ctx.strokeStyle = '#a07a20';
+  ctx.lineWidth = 1;
+  ctx.beginPath();
+  ctx.arc(x + 9, y + 4, 2.8, 0, Math.PI*2);
+  ctx.fill();
+  ctx.stroke();
+  ctx.fillStyle = '#7a5a10';
+  ctx.font = 'bold 4px Arial';
+  ctx.textAlign = 'center';
+  ctx.fillText('$', x + 9, y + 5.5);
+
+  // Roof
+  ctx.fillStyle = '#a04545';
+  ctx.strokeStyle = '#5a2020';
+  ctx.lineWidth = 1.5;
+  ctx.beginPath();
+  ctx.moveTo(x - 19, y - 4);
+  ctx.lineTo(x, y - 16);
+  ctx.lineTo(x + 19, y - 4);
+  ctx.closePath();
+  ctx.fill();
+  ctx.stroke();
+
+  // Roof shingle lines
+  ctx.strokeStyle = 'rgba(90,32,32,0.55)';
+  ctx.lineWidth = 0.8;
+  ctx.beginPath();
+  ctx.moveTo(x - 14, y - 6); ctx.lineTo(x + 14, y - 6);
+  ctx.moveTo(x - 9, y - 10); ctx.lineTo(x + 9, y - 10);
+  ctx.stroke();
+
+  // Chimney
+  ctx.fillStyle = '#8a4a4a';
+  ctx.strokeStyle = '#3a1a1a';
+  ctx.lineWidth = 1;
+  ctx.fillRect(x + 7, y - 16, 4, 8);
+  ctx.strokeRect(x + 7, y - 16, 4, 8);
+
+  // Smoke puffs from chimney
+  const smokeT = h.smokePhase || 0;
+  for (let i = 0; i < 3; i++) {
+    const t = ((smokeT * 0.7 + i * 0.5) % 1.5);
+    const sy = y - 16 - t * 12;
+    const sx = x + 9 + Math.sin(t * 4 + i) * 3;
+    const r = 1.5 + t * 1.6;
+    ctx.fillStyle = `rgba(220,220,220,${0.5 * (1 - t / 1.5)})`;
+    ctx.beginPath();
+    ctx.arc(sx, sy, r, 0, Math.PI*2);
+    ctx.fill();
+  }
+
+  // HP bar when damaged
+  const hpPct = h.hp / h.maxHp;
+  if (hpPct < 1) {
+    ctx.fillStyle = 'rgba(0,0,0,0.7)';
+    ctx.fillRect(x - 18, y - 24, 36, 4);
+    ctx.fillStyle = hpPct > 0.5 ? '#5fff7f' : hpPct > 0.25 ? '#ffd95f' : '#ff5f5f';
+    ctx.fillRect(x - 18, y - 24, 36 * hpPct, 4);
+    ctx.strokeStyle = 'rgba(255,255,255,0.4)';
+    ctx.lineWidth = 0.5;
+    ctx.strokeRect(x - 18, y - 24, 36, 4);
+  }
+
+  ctx.globalAlpha = 1;
+}
+
+function drawStickman(en) {
+  if (en.type === 'knight') {
+    drawKnight(en);
+    return;
+  }
+  if (en.type === 'shadow') {
+    drawShadow(en);
+    return;
+  }
+  const x = en.x, y = en.y;
+  const hpPct = en.hp / en.maxHp;
+  const bob = Math.sin(en.bobPhase) * 1.5;
+  const legSwing = Math.sin(en.legPhase) * 4;
+
+  ctx.strokeStyle = '#e8e8e8';
+  ctx.lineWidth = 1.8;
+  ctx.lineCap = 'round';
+
+  // Head
+  ctx.beginPath();
+  ctx.arc(x, y - 8 + bob, 4, 0, Math.PI*2);
+  ctx.stroke();
+
+  // Body
+  ctx.beginPath();
+  ctx.moveTo(x, y - 4 + bob);
+  ctx.lineTo(x, y + 5 + bob);
+  ctx.stroke();
+
+  // Arms
+  ctx.beginPath();
+  ctx.moveTo(x, y - 1 + bob);
+  ctx.lineTo(x - 5, y + 3 + bob - legSwing*0.3);
+  ctx.moveTo(x, y - 1 + bob);
+  ctx.lineTo(x + 5, y + 3 + bob + legSwing*0.3);
+  ctx.stroke();
+
+  // Legs
+  ctx.beginPath();
+  ctx.moveTo(x, y + 5 + bob);
+  ctx.lineTo(x - 3, y + 12 + legSwing);
+  ctx.moveTo(x, y + 5 + bob);
+  ctx.lineTo(x + 3, y + 12 - legSwing);
+  ctx.stroke();
+
+  // HP bar
+  if (hpPct < 1) {
+    ctx.fillStyle = 'rgba(0,0,0,0.6)';
+    ctx.fillRect(x - 10, y - 16, 20, 3);
+    ctx.fillStyle = hpPct > 0.5 ? '#5fff7f' : hpPct > 0.25 ? '#ffd95f' : '#ff5f5f';
+    ctx.fillRect(x - 10, y - 16, 20 * hpPct, 3);
+  }
+}
+
+function drawKnight(en) {
+  const x = en.x, y = en.y;
+  const hpPct = en.hp / en.maxHp;
+  const bob = Math.sin(en.bobPhase) * 1;
+  const legSwing = Math.sin(en.legPhase) * 3;
+
+  ctx.strokeStyle = '#c0c4d0';
+  ctx.fillStyle = '#8a90a8';
+  ctx.lineWidth = 2.2;
+  ctx.lineCap = 'round';
+
+  // Helmet (head with bulkier outline)
+  ctx.beginPath();
+  ctx.arc(x, y - 10 + bob, 6, 0, Math.PI*2);
+  ctx.fill();
+  ctx.stroke();
+  // Helmet plume (slight crest)
+  ctx.strokeStyle = '#ff5f6f';
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+  ctx.moveTo(x, y - 16 + bob);
+  ctx.lineTo(x + 2, y - 21 + bob);
+  ctx.stroke();
+  // Helmet visor slit
+  ctx.strokeStyle = '#222';
+  ctx.lineWidth = 1.5;
+  ctx.beginPath();
+  ctx.moveTo(x - 3, y - 10 + bob);
+  ctx.lineTo(x + 3, y - 10 + bob);
+  ctx.stroke();
+
+  // Body (broader torso/armor)
+  ctx.fillStyle = '#9095af';
+  ctx.strokeStyle = '#5a5e75';
+  ctx.lineWidth = 1.5;
+  ctx.beginPath();
+  ctx.moveTo(x - 7, y - 4 + bob);
+  ctx.lineTo(x + 7, y - 4 + bob);
+  ctx.lineTo(x + 6, y + 7 + bob);
+  ctx.lineTo(x - 6, y + 7 + bob);
+  ctx.closePath();
+  ctx.fill();
+  ctx.stroke();
+  // Armor detail
+  ctx.beginPath();
+  ctx.moveTo(x, y - 4 + bob);
+  ctx.lineTo(x, y + 7 + bob);
+  ctx.stroke();
+
+  // Shield (left arm)
+  ctx.fillStyle = '#6a7a8a';
+  ctx.strokeStyle = '#3a4a5a';
+  ctx.lineWidth = 1.2;
+  ctx.beginPath();
+  ctx.ellipse(x - 9, y + 2 + bob, 4, 6, 0, 0, Math.PI*2);
+  ctx.fill();
+  ctx.stroke();
+  // Shield cross
+  ctx.strokeStyle = '#ffe066';
+  ctx.lineWidth = 1;
+  ctx.beginPath();
+  ctx.moveTo(x - 9, y - 2 + bob); ctx.lineTo(x - 9, y + 6 + bob);
+  ctx.moveTo(x - 11, y + 2 + bob); ctx.lineTo(x - 7, y + 2 + bob);
+  ctx.stroke();
+
+  // Sword (right arm)
+  ctx.strokeStyle = '#e0e4ee';
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+  ctx.moveTo(x + 7, y - 2 + bob);
+  ctx.lineTo(x + 12, y - 11 + bob);
+  ctx.stroke();
+  // Sword hilt
+  ctx.strokeStyle = '#8a6a3a';
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+  ctx.moveTo(x + 5, y - 1 + bob);
+  ctx.lineTo(x + 9, y + 1 + bob);
+  ctx.stroke();
+
+  // Legs (thicker)
+  ctx.strokeStyle = '#5a5e75';
+  ctx.lineWidth = 3;
+  ctx.beginPath();
+  ctx.moveTo(x - 3, y + 7 + bob);
+  ctx.lineTo(x - 4, y + 15 + legSwing);
+  ctx.moveTo(x + 3, y + 7 + bob);
+  ctx.lineTo(x + 4, y + 15 - legSwing);
+  ctx.stroke();
+
+  // HP bar (wider)
+  ctx.fillStyle = 'rgba(0,0,0,0.6)';
+  ctx.fillRect(x - 14, y - 22, 28, 4);
+  ctx.fillStyle = hpPct > 0.5 ? '#5fff7f' : hpPct > 0.25 ? '#ffd95f' : '#ff5f5f';
+  ctx.fillRect(x - 14, y - 22, 28 * hpPct, 4);
+}
+
+function drawShadow(en) {
+  const x = en.x, y = en.y;
+  const hpPct = en.hp / en.maxHp;
+  const emerge = en.emerge || 0; // 0..1
+  const bob = Math.sin(en.bobPhase) * 1.2 * emerge;
+  const legSwing = Math.sin(en.legPhase) * 4 * emerge;
+
+  // Ground shadow / puddle — pulses slightly while buried so the player notices it
+  const pulsing = 1 + Math.sin(game.time * 4 + en.bobPhase) * 0.08 * (1 - emerge);
+  const shadowR = 11 * pulsing;
+  // Soft shadow gradient (grey-ish so it's still visible on dark bg)
+  const sg = ctx.createRadialGradient(x, y + 2, 1, x, y + 2, shadowR + 4);
+  sg.addColorStop(0, 'rgba(110,110,125,0.85)');
+  sg.addColorStop(0.6, 'rgba(90,90,105,0.55)');
+  sg.addColorStop(1, 'rgba(70,70,85,0)');
+  ctx.fillStyle = sg;
+  ctx.beginPath();
+  ctx.ellipse(x, y + 4, shadowR + 4, (shadowR + 2) * 0.5, 0, 0, Math.PI*2);
+  ctx.fill();
+
+  // Faint glyph hint while still buried (subtle wisps)
+  if (emerge < 1) {
+    ctx.strokeStyle = `rgba(170,140,200,${0.45 * (1 - emerge)})`;
+    ctx.lineWidth = 1;
+    for (let i = 0; i < 3; i++) {
+      const a = game.time * 1.5 + i * (Math.PI * 2 / 3) + en.bobPhase;
+      ctx.beginPath();
+      ctx.moveTo(x + Math.cos(a) * 3, y + 2 + Math.sin(a) * 1.5);
+      ctx.lineTo(x + Math.cos(a) * (5 + Math.sin(game.time * 6 + i) * 1), y + Math.sin(a) * 2.5);
+      ctx.stroke();
+    }
+  }
+
+  // Stickman body (alpha based on emerge); clip to area above ground line so it looks like it's rising out
+  if (emerge > 0.05) {
+    ctx.save();
+    // Ground clipping line — only show what has emerged above ground
+    const groundY = y + 4;
+    const maxStickHeight = 22;
+    const visibleTop = groundY - maxStickHeight * emerge;
+    ctx.beginPath();
+    ctx.rect(x - 20, visibleTop, 40, groundY - visibleTop + 1);
+    ctx.clip();
+
+    const a = Math.min(1, emerge * 1.4);
+    ctx.globalAlpha = a;
+
+    // Grey silhouette (visible against dark bg)
+    ctx.strokeStyle = '#7a7a85';
+    ctx.fillStyle = '#7a7a85';
+    ctx.lineWidth = 2;
+    ctx.lineCap = 'round';
+
+    // Head
+    ctx.beginPath();
+    ctx.arc(x, y - 8 + bob, 4, 0, Math.PI*2);
+    ctx.fill();
+
+    // Body
+    ctx.beginPath();
+    ctx.moveTo(x, y - 4 + bob);
+    ctx.lineTo(x, y + 5 + bob);
+    ctx.stroke();
+
+    // Arms
+    ctx.beginPath();
+    ctx.moveTo(x, y - 1 + bob);
+    ctx.lineTo(x - 5, y + 3 + bob - legSwing*0.3);
+    ctx.moveTo(x, y - 1 + bob);
+    ctx.lineTo(x + 5, y + 3 + bob + legSwing*0.3);
+    ctx.stroke();
+
+    // Legs
+    ctx.beginPath();
+    ctx.moveTo(x, y + 5 + bob);
+    ctx.lineTo(x - 3, y + 12 + legSwing);
+    ctx.moveTo(x, y + 5 + bob);
+    ctx.lineTo(x + 3, y + 12 - legSwing);
+    ctx.stroke();
+
+    // Glowing red eyes once mostly emerged
+    if (emerge > 0.6) {
+      ctx.fillStyle = `rgba(255,80,80,${(emerge - 0.6) * 2.5})`;
+      ctx.beginPath();
+      ctx.arc(x - 1.5, y - 8 + bob, 0.9, 0, Math.PI*2);
+      ctx.arc(x + 1.5, y - 8 + bob, 0.9, 0, Math.PI*2);
+      ctx.fill();
+    }
+
+    ctx.restore();
+    ctx.globalAlpha = 1;
+  }
+
+  // HP bar only when attackable
+  if (isAttackable(en)) {
+    ctx.fillStyle = 'rgba(0,0,0,0.6)';
+    ctx.fillRect(x - 10, y - 16, 20, 3);
+    ctx.fillStyle = hpPct > 0.5 ? '#a060ff' : hpPct > 0.25 ? '#d96fff' : '#ff5fa0';
+    ctx.fillRect(x - 10, y - 16, 20 * hpPct, 3);
+  } else if (emerge > 0.15) {
+    // "?" indicator above the shadow while it's still emerging
+    ctx.fillStyle = `rgba(180,120,255,${0.6 * (1 - emerge * 1.5)})`;
+    ctx.font = 'bold 10px Arial';
+    ctx.textAlign = 'center';
+    ctx.fillText('?', x, y - 14);
+  }
+}
+
+requestAnimationFrame(loop);
+</script>
+</body>
+</html>
