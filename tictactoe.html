@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Dodge the X</title>
+<style>
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    background: #0f0f17;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    color: #f5f5f5;
+    overflow: hidden;
+    user-select: none;
+  }
+  body {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  #game {
+    position: relative;
+    width: 700px;
+    height: 700px;
+  }
+  #scoreWrap {
+    position: absolute;
+    top: 20px;
+    right: 30px;
+    text-align: right;
+    z-index: 5;
+  }
+  #score {
+    font-size: 36px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: #f5f5f5;
+    text-shadow: 0 0 12px rgba(255,255,255,0.3);
+    line-height: 1.1;
+  }
+  #highscore {
+    position: absolute;
+    top: 56px;
+    left: 30px;
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    opacity: 0.6;
+    z-index: 5;
+  }
+  #highscore span {
+    color: #fbbf24;
+    margin-left: 6px;
+  }
+  #title {
+    position: absolute;
+    top: 30px;
+    left: 30px;
+    font-size: 18px;
+    font-weight: 600;
+    letter-spacing: 3px;
+    opacity: 0.6;
+    z-index: 5;
+  }
+  #board {
+    position: absolute;
+    top: 200px;
+    left: 200px;
+    width: 300px;
+    height: 300px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+    z-index: 2;
+  }
+  .cell {
+    border: 4px solid #f5f5f5;
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+  .cell:hover {
+    background: rgba(255,255,255,0.08);
+  }
+  /* trim outer borders to make a # symbol */
+  .cell:nth-child(1) { border-top: none; border-left: none; }
+  .cell:nth-child(2) { border-top: none; }
+  .cell:nth-child(3) { border-top: none; border-right: none; }
+  .cell:nth-child(4) { border-left: none; }
+  .cell:nth-child(6) { border-right: none; }
+  .cell:nth-child(7) { border-bottom: none; border-left: none; }
+  .cell:nth-child(8) { border-bottom: none; }
+  .cell:nth-child(9) { border-bottom: none; border-right: none; }
+
+  #player {
+    position: absolute;
+    width: 65px;
+    height: 65px;
+    border: 7px solid #4ade80;
+    border-radius: 50%;
+    box-shadow: 0 0 20px rgba(74, 222, 128, 0.6);
+    transition: left 0.08s linear, top 0.08s linear;
+    pointer-events: none;
+    display: none;
+    z-index: 4;
+  }
+  .cross {
+    position: absolute;
+    width: 60px;
+    height: 60px;
+    pointer-events: none;
+    z-index: 3;
+  }
+  .cross::before, .cross::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: 100%;
+    height: 9px;
+    margin-top: -4.5px;
+    background: #ef4444;
+    border-radius: 4px;
+    box-shadow: 0 0 12px rgba(239,68,68,0.7);
+  }
+  .cross::before { transform: rotate(45deg); }
+  .cross::after  { transform: rotate(-45deg); }
+
+  #hint {
+    position: absolute;
+    top: 110px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 26px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-align: center;
+    background: rgba(0,0,0,0.75);
+    padding: 18px 30px;
+    border-radius: 12px;
+    display: none;
+    z-index: 6;
+    animation: pulse 1.4s ease-in-out infinite;
+    white-space: nowrap;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.55; }
+  }
+
+  #intro {
+    position: absolute;
+    top: 100px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 22px;
+    font-weight: 500;
+    opacity: 0.85;
+    z-index: 6;
+    text-align: center;
+  }
+
+  #gameover {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    background: rgba(0,0,0,0.85);
+    padding: 40px 60px;
+    border-radius: 16px;
+    display: none;
+    z-index: 10;
+    border: 2px solid #ef4444;
+  }
+  #gameover h1 {
+    margin: 0 0 10px;
+    font-size: 42px;
+    color: #ef4444;
+  }
+  #gameover p {
+    margin: 0 0 24px;
+    font-size: 22px;
+  }
+  #gameover button {
+    background: #4ade80;
+    border: none;
+    padding: 12px 28px;
+    font-size: 18px;
+    font-weight: 600;
+    color: #0f0f17;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: transform 0.15s;
+  }
+  #gameover button:hover {
+    transform: scale(1.05);
+  }
+</style>
+</head>
+<body>
+<div id="game">
+  <div id="title">TIC TAC TOE</div>
+  <div id="highscore">YOUR HIGHSCORE<span id="highscoreVal">0</span></div>
+  <div id="scoreWrap">
+    <div id="score">0</div>
+  </div>
+  <div id="intro">Click a square to start</div>
+  <div id="hint">Move with wasd or ⬆️⬇️⬅️➡️</div>
+  <div id="board"></div>
+  <div id="player"></div>
+  <div id="gameover">
+    <h1>Game Over</h1>
+    <p>Score: <span id="finalScore">0</span></p>
+    <button onclick="location.reload()">Play again</button>
+  </div>
+</div>
+
+<script>
+  const game = document.getElementById('game');
+  const board = document.getElementById('board');
+  const player = document.getElementById('player');
+  const hint = document.getElementById('hint');
+  const intro = document.getElementById('intro');
+  const scoreEl = document.getElementById('score');
+  const highscoreValEl = document.getElementById('highscoreVal');
+  const gameoverEl = document.getElementById('gameover');
+  const finalScoreEl = document.getElementById('finalScore');
+
+  const HS_KEY = 'dodgeTheX_highscore';
+  let highscore = 0;
+  try {
+    const stored = localStorage.getItem(HS_KEY);
+    if (stored !== null) highscore = parseInt(stored, 10) || 0;
+  } catch (e) {}
+  highscoreValEl.textContent = highscore;
+
+  // game state: 'placing' -> 'hint' -> 'playing' -> 'gameover'
+  let state = 'placing';
+  let playerPos = { row: 1, col: 1 };
+  let score = 0;
+  let crosses = [];
+
+  const BOARD_X = 200;
+  const BOARD_Y = 200;
+  const BOARD_SIZE = 300;
+  const CELL = BOARD_SIZE / 3;
+  const PLAYER_SIZE = 65;
+  const CROSS_SIZE = 60;
+
+  function cellCenter(row, col) {
+    return {
+      x: BOARD_X + col * CELL + CELL / 2,
+      y: BOARD_Y + row * CELL + CELL / 2
+    };
+  }
+
+  function placePlayer(instant = false) {
+    const c = cellCenter(playerPos.row, playerPos.col);
+    if (instant) {
+      player.style.transition = 'none';
+      player.style.left = (c.x - PLAYER_SIZE / 2) + 'px';
+      player.style.top = (c.y - PLAYER_SIZE / 2) + 'px';
+      // force reflow then restore transition
+      void player.offsetWidth;
+      player.style.transition = 'left 0.08s linear, top 0.08s linear';
+    } else {
+      player.style.left = (c.x - PLAYER_SIZE / 2) + 'px';
+      player.style.top = (c.y - PLAYER_SIZE / 2) + 'px';
+    }
+  }
+
+  // Build cells
+  for (let i = 0; i < 9; i++) {
+    const cell = document.createElement('div');
+    cell.className = 'cell';
+    cell.addEventListener('click', () => {
+      if (state !== 'placing') return;
+      playerPos = { row: Math.floor(i / 3), col: i % 3 };
+      player.style.display = 'block';
+      placePlayer(true);
+      intro.style.display = 'none';
+      hint.style.display = 'block';
+      state = 'hint';
+    });
+    board.appendChild(cell);
+  }
+
+  // Key handling
+  document.addEventListener('keydown', (e) => {
+    if (state === 'placing' || state === 'gameover') return;
+    let nr = playerPos.row;
+    let nc = playerPos.col;
+    let moved = false;
+    const k = e.key.toLowerCase();
+    if (k === 'arrowup' || k === 'w')    { nr = Math.max(0, nr - 1); moved = true; }
+    else if (k === 'arrowdown' || k === 's')  { nr = Math.min(2, nr + 1); moved = true; }
+    else if (k === 'arrowleft' || k === 'a')  { nc = Math.max(0, nc - 1); moved = true; }
+    else if (k === 'arrowright' || k === 'd') { nc = Math.min(2, nc + 1); moved = true; }
+    if (!moved) return;
+    e.preventDefault();
+    playerPos = { row: nr, col: nc };
+    placePlayer();
+
+    if (state === 'hint') {
+      hint.style.display = 'none';
+      document.getElementById('title').textContent = 'DODGE THE X';
+      state = 'playing';
+      lastSpawn = performance.now();
+      lastFrame = performance.now();
+      requestAnimationFrame(loop);
+    }
+  });
+
+  // Spawning
+  let lastSpawn = 0;
+  let lastFrame = 0;
+
+  function spawnCross() {
+    // Pick orientation
+    const horizontal = Math.random() < 0.5;
+    const el = document.createElement('div');
+    el.className = 'cross';
+    game.appendChild(el);
+
+    const baseSpeed = 220 + score * 7; // px/sec
+    const speed = baseSpeed + Math.random() * 60;
+
+    let c;
+    if (horizontal) {
+      const row = Math.floor(Math.random() * 3);
+      const dir = Math.random() < 0.5 ? 1 : -1;
+      const y = cellCenter(row, 0).y;
+      const startX = dir === 1 ? -CROSS_SIZE : 700 + CROSS_SIZE;
+      c = { el, x: startX, y, vx: dir * speed, vy: 0, row, col: null };
+    } else {
+      const col = Math.floor(Math.random() * 3);
+      const dir = Math.random() < 0.5 ? 1 : -1;
+      const x = cellCenter(0, col).x;
+      const startY = dir === 1 ? -CROSS_SIZE : 700 + CROSS_SIZE;
+      c = { el, x, y: startY, vx: 0, vy: dir * speed, row: null, col };
+    }
+    crosses.push(c);
+    updateCrossEl(c);
+  }
+
+  function updateCrossEl(c) {
+    c.el.style.left = (c.x - CROSS_SIZE / 2) + 'px';
+    c.el.style.top  = (c.y - CROSS_SIZE / 2) + 'px';
+  }
+
+  function collide(c) {
+    const p = cellCenter(playerPos.row, playerPos.col);
+    const dx = c.x - p.x;
+    const dy = c.y - p.y;
+    // approximate as circle-circle
+    return (dx * dx + dy * dy) < (38 * 38);
+  }
+
+  function spawnDelay() {
+    return Math.max(450, 1800 - score * 20);
+  }
+
+  function loop(now) {
+    if (state !== 'playing') return;
+    const dt = Math.min(0.05, (now - lastFrame) / 1000);
+    lastFrame = now;
+
+    if (now - lastSpawn > spawnDelay()) {
+      spawnCross();
+      lastSpawn = now;
+    }
+
+    for (let i = crosses.length - 1; i >= 0; i--) {
+      const c = crosses[i];
+      c.x += c.vx * dt;
+      c.y += c.vy * dt;
+      updateCrossEl(c);
+
+      if (collide(c)) {
+        return gameOver();
+      }
+
+      // Off-screen cleanup
+      if (c.x < -CROSS_SIZE * 2 || c.x > 700 + CROSS_SIZE * 2 ||
+          c.y < -CROSS_SIZE * 2 || c.y > 700 + CROSS_SIZE * 2) {
+        c.el.remove();
+        crosses.splice(i, 1);
+        score++;
+        scoreEl.textContent = score;
+      }
+    }
+    requestAnimationFrame(loop);
+  }
+
+  function gameOver() {
+    state = 'gameover';
+    finalScoreEl.textContent = score;
+    if (score > highscore) {
+      highscore = score;
+      highscoreValEl.textContent = highscore;
+      try { localStorage.setItem(HS_KEY, String(highscore)); } catch (e) {}
+    }
+    gameoverEl.style.display = 'block';
+    // freeze remaining crosses
+    crosses.forEach(c => c.el.style.opacity = '0.4');
+    player.style.borderColor = '#ef4444';
+    player.style.boxShadow = '0 0 24px rgba(239,68,68,0.9)';
+  }
+</script>
+</body>
+</html>

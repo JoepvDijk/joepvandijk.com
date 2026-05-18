@@ -140,6 +140,8 @@
     z-index: 5;
     box-shadow: 0 2px 8px rgba(95,168,255,0.2);
     user-select: none;
+    min-width: 130px;
+    text-align: center;
   }
   #pauseBtn:hover {
     background: linear-gradient(180deg, #3a3a88 0%, #1c1c44 100%);
@@ -262,6 +264,335 @@
     color: #b6c6df;
     line-height: 1.45;
   }
+  .choiceCard.taken {
+    opacity: 0.4;
+    cursor: not-allowed;
+    filter: grayscale(70%);
+    pointer-events: none;
+  }
+  .choiceCard.taken .name::after {
+    content: ' ✓';
+    color: #5fff7f;
+  }
+  .choiceCard.taken .desc::after {
+    content: ' (already picked)';
+    color: #5fff7f;
+    font-weight: bold;
+  }
+  #introModal {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(8,12,28,0.97);
+    border: 2px solid #5fa8ff;
+    padding: 16px 22px;
+    border-radius: 12px;
+    z-index: 20;
+    display: block;
+    box-shadow: 0 0 40px rgba(95,168,255,0.45);
+    text-align: center;
+    max-width: 560px;
+    width: 88%;
+  }
+  #introModal h2 {
+    color: #ffe066;
+    margin-bottom: 8px;
+    font-size: 20px;
+    letter-spacing: 1px;
+  }
+  #introModal .goal {
+    color: #d4e7ff;
+    font-size: 12.5px;
+    margin: 8px 0 12px;
+    line-height: 1.45;
+    background: rgba(40,60,100,0.35);
+    border-left: 3px solid #5fa8ff;
+    padding: 7px 10px;
+    text-align: left;
+    border-radius: 4px;
+  }
+  #introModal .goal strong { color: #ffe066; }
+  .introGrid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px;
+    text-align: left;
+    margin-bottom: 12px;
+  }
+  .introItem {
+    background: linear-gradient(180deg, rgba(40,50,90,0.45) 0%, rgba(25,30,55,0.45) 100%);
+    border: 1px solid #2c3565;
+    border-radius: 6px;
+    padding: 6px 9px;
+    font-size: 11.5px;
+    color: #b6c6df;
+    line-height: 1.35;
+  }
+  .introItem strong {
+    display: block;
+    color: #5fc8ff;
+    font-size: 12.5px;
+    margin-bottom: 2px;
+  }
+  .introItem.wide { grid-column: span 2; }
+  .introItem.wide strong { color: #ffd95f; }
+  #introModal button {
+    background: linear-gradient(180deg, #5fa8ff 0%, #4a8fdf 100%);
+    color: #0a0a18;
+    border: none;
+    padding: 8px 28px;
+    border-radius: 7px;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 3px 10px rgba(95,168,255,0.4);
+  }
+  #introModal button:hover {
+    background: linear-gradient(180deg, #7fc0ff 0%, #5fa8ff 100%);
+    transform: translateY(-1px);
+  }
+  #achievementsBtn {
+    position: absolute;
+    top: 54px;
+    right: 12px;
+    background: linear-gradient(180deg, #2a2a66 0%, #15152e 100%);
+    border: 1px solid #5fa8ff;
+    color: #d4e7ff;
+    padding: 8px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: bold;
+    z-index: 5;
+    box-shadow: 0 2px 8px rgba(95,168,255,0.2);
+    user-select: none;
+    min-width: 130px;
+    text-align: center;
+  }
+  #achievementsBtn:hover {
+    background: linear-gradient(180deg, #3a3a88 0%, #1c1c44 100%);
+    box-shadow: 0 4px 12px rgba(95,168,255,0.4);
+  }
+  #resetBtn {
+    position: absolute;
+    top: 98px;
+    right: 12px;
+    background: linear-gradient(180deg, #2a2a66 0%, #15152e 100%);
+    border: 1px solid #5fa8ff;
+    color: #d4e7ff;
+    padding: 8px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: bold;
+    z-index: 5;
+    box-shadow: 0 2px 8px rgba(95,168,255,0.2);
+    user-select: none;
+    min-width: 130px;
+    text-align: center;
+  }
+  #resetBtn:hover {
+    background: linear-gradient(180deg, #3a3a88 0%, #1c1c44 100%);
+    box-shadow: 0 4px 12px rgba(95,168,255,0.4);
+  }
+  #resetConfirm {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(8,12,28,0.98);
+    border: 2px solid #ff7f7f;
+    padding: 22px 30px;
+    border-radius: 12px;
+    z-index: 18;
+    display: none;
+    text-align: center;
+    max-width: 420px;
+    width: 88%;
+    box-shadow: 0 0 36px rgba(255,127,127,0.45);
+  }
+  #resetConfirm h3 {
+    color: #ff9a9a;
+    margin-bottom: 12px;
+    font-size: 18px;
+    letter-spacing: 0.5px;
+  }
+  #resetConfirm p {
+    color: #d4e7ff;
+    font-size: 13.5px;
+    margin: 8px 0;
+    line-height: 1.5;
+  }
+  #resetConfirm p strong { color: #ffe066; }
+  #resetConfirm .buttons {
+    display: flex;
+    gap: 14px;
+    justify-content: center;
+    margin-top: 16px;
+  }
+  #resetConfirm button {
+    padding: 8px 30px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: bold;
+  }
+  #resetConfirm button.yes {
+    background: linear-gradient(180deg, #ff7f7f 0%, #cf4f4f 100%);
+    color: #1a0a0a;
+  }
+  #resetConfirm button.yes:hover { background: linear-gradient(180deg, #ff9a9a 0%, #df5f5f 100%); }
+  #resetConfirm button.no {
+    background: linear-gradient(180deg, #5fa8ff 0%, #4a8fdf 100%);
+    color: #0a0a18;
+  }
+  #resetConfirm button.no:hover { background: linear-gradient(180deg, #7fc0ff 0%, #5fa8ff 100%); }
+  #achievementsModal {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(8,12,28,0.97);
+    border: 2px solid #5fa8ff;
+    padding: 18px 24px;
+    border-radius: 12px;
+    z-index: 16;
+    display: none;
+    box-shadow: 0 0 36px rgba(95,168,255,0.45);
+    text-align: center;
+    max-width: 880px;
+    width: 92%;
+  }
+  #achievementsModal h2 {
+    color: #ffe066;
+    margin-bottom: 14px;
+    font-size: 20px;
+    letter-spacing: 1px;
+  }
+  .achievementsList {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px 12px;
+    text-align: left;
+    margin-bottom: 14px;
+  }
+  .achRow {
+    display: flex;
+    gap: 14px;
+    align-items: center;
+    background: linear-gradient(180deg, rgba(60,72,108,0.5) 0%, rgba(40,48,80,0.5) 100%);
+    padding: 10px 14px;
+    border-radius: 8px;
+    border: 1px solid #3c4a72;
+  }
+  .achText {
+    flex: 1;
+    font-size: 12.5px;
+    color: #c8d6ee;
+    line-height: 1.45;
+  }
+  .achText strong {
+    display: block;
+    color: #8fbfee;
+    font-size: 14px;
+    margin-bottom: 3px;
+  }
+  .achRow:has(.badge.unlocked) {
+    background: linear-gradient(180deg, rgba(80,95,140,0.55) 0%, rgba(55,65,108,0.55) 100%);
+    border-color: #5a7ab0;
+  }
+  .achRow .badge.unlocked + .achText strong { color: #ffe066; }
+  .achRow .badge.unlocked + .achText strong::after {
+    content: ' ✓';
+    color: #5fff7f;
+  }
+  #achievementsModal button {
+    background: linear-gradient(180deg, #5fa8ff 0%, #4a8fdf 100%);
+    color: #0a0a18;
+    border: none;
+    padding: 8px 26px;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: bold;
+    cursor: pointer;
+  }
+  #achievementsModal button:hover {
+    background: linear-gradient(180deg, #7fc0ff 0%, #5fa8ff 100%);
+  }
+  .badge {
+    width: 56px;
+    height: 56px;
+    background: radial-gradient(circle at 30% 25%, #8b95ad 0%, #525a72 80%);
+    border: 2.5px solid #6a7390;
+    clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 28px;
+    position: relative;
+    filter: grayscale(100%) brightness(0.95);
+    transition: filter 0.4s ease;
+    flex-shrink: 0;
+  }
+  .badge .icon {
+    line-height: 1;
+    user-select: none;
+  }
+  .badge.unlocked {
+    filter: none;
+    animation: badgeGlow 2.4s ease-in-out infinite;
+  }
+  @keyframes badgeGlow {
+    0%, 100% { box-shadow: 0 0 8px rgba(255,255,255,0.15); }
+    50% { box-shadow: 0 0 16px rgba(255,255,255,0.35); }
+  }
+  .badge.unlocked.gold {
+    background: radial-gradient(circle at 30% 25%, #fff0a0 0%, #d99b1a 70%, #6e4a0a 100%);
+    border-color: #ffe066;
+  }
+  .badge.unlocked.blue {
+    background: radial-gradient(circle at 30% 25%, #c0e4ff 0%, #2d7fcf 70%, #1a3a66 100%);
+    border-color: #5fa8ff;
+  }
+  .badge.unlocked.green {
+    background: radial-gradient(circle at 30% 25%, #c0ffd0 0%, #2dcf6a 70%, #1a663a 100%);
+    border-color: #5fff7f;
+  }
+  .badge.unlocked.purple {
+    background: radial-gradient(circle at 30% 25%, #d0b8ff 0%, #7a3fcf 70%, #3a1a66 100%);
+    border-color: #b07fff;
+  }
+  .badge.unlocked.red {
+    background: radial-gradient(circle at 30% 25%, #ffb0b0 0%, #cf3f3f 70%, #661a1a 100%);
+    border-color: #ff7f7f;
+  }
+  .badge.unlocked.teal {
+    background: radial-gradient(circle at 30% 25%, #b0ffe8 0%, #2fb8a0 70%, #1a665a 100%);
+    border-color: #5fffcf;
+  }
+  #achievementToast {
+    position: absolute;
+    top: 16px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(8,12,28,0.96);
+    border: 2px solid #ffe066;
+    padding: 10px 24px;
+    border-radius: 10px;
+    color: #ffe066;
+    font-weight: bold;
+    font-size: 14px;
+    z-index: 11;
+    display: none;
+    box-shadow: 0 0 24px rgba(255,224,102,0.5);
+    animation: toastIn 0.4s ease;
+  }
+  @keyframes toastIn {
+    from { transform: translate(-50%, -20px); opacity: 0; }
+    to { transform: translate(-50%, 0); opacity: 1; }
+  }
 </style>
 </head>
 <body>
@@ -276,12 +607,72 @@
   <div id="gameContainer">
     <canvas id="game" width="900" height="600"></canvas>
     <button id="pauseBtn" onclick="togglePause()">⏸ Pause</button>
+    <button id="achievementsBtn" onclick="toggleAchievementsModal()">Achievements</button>
+    <button id="resetBtn" onclick="showResetConfirm()">Reset</button>
+    <div id="resetConfirm">
+      <h3>⚠️ Reset progress?</h3>
+      <p>If you reset, you start over at wave 1. Your achievement progress will NOT be reset.</p>
+      <p><strong>Proceed?</strong></p>
+      <div class="buttons">
+        <button class="yes" onclick="confirmReset()">Yes</button>
+        <button class="no" onclick="closeResetConfirm()">No</button>
+      </div>
+    </div>
+    <div id="achievementToast"></div>
+    <div id="achievementsModal">
+      <h2>🏅 Achievements</h2>
+      <div class="achievementsList">
+        <div class="achRow">
+          <div class="badge gold" data-id="wave100"><span class="icon">🏆</span></div>
+          <div class="achText">
+            <strong>Centurion</strong>
+            Reach wave 100.
+          </div>
+        </div>
+        <div class="achRow">
+          <div class="badge blue" data-id="pure50"><span class="icon">🗼</span></div>
+          <div class="achText">
+            <strong>Pure Tower</strong>
+            Reach wave 50 without buying Damage+, Range+ or Energy+.
+          </div>
+        </div>
+        <div class="achRow">
+          <div class="badge green" data-id="powerPlant"><span class="icon">🔋</span></div>
+          <div class="achText">
+            <strong>Power Plant</strong>
+            Own 15 battery houses with the Battery Boost perk active.
+          </div>
+        </div>
+        <div class="achRow">
+          <div class="badge red" data-id="balloons"><span class="icon">🎈</span></div>
+          <div class="achText">
+            <strong>Pop the Bunch</strong>
+            Survive the hidden bonus wave.
+          </div>
+        </div>
+        <div class="achRow">
+          <div class="badge purple" data-id="mystery2"><span class="icon">❓</span></div>
+          <div class="achText">
+            <strong>???</strong>
+            A hidden challenge. Keep playing to discover how.
+          </div>
+        </div>
+        <div class="achRow">
+          <div class="badge teal" data-id="mystery3"><span class="icon">❓</span></div>
+          <div class="achText">
+            <strong>???</strong>
+            A hidden challenge. Keep playing to discover how.
+          </div>
+        </div>
+      </div>
+      <button onclick="closeAchievementsModal()">Close</button>
+    </div>
     <div id="pauseOverlay">⏸ PAUSED</div>
     <div id="unlockNotice">
       <h3>🎉 New buildings unlocked!</h3>
       <div class="item">
         <strong>🔋 Battery House</strong>
-        A small energy cell that passively generates money for you. But beware: enemies can attack it too, and if it gets destroyed you'll lose your investment. Place it wisely — not too close to where enemies pass by.
+        A small energy cell that passively generates money for you. But beware: enemies can attack it too, and if it gets destroyed you lose your investment. Place it wisely, not too close to where enemies pass by.
       </div>
       <div class="item">
         <strong>🟫 Sand Patch</strong>
@@ -308,6 +699,39 @@
           <div class="desc">Your battery houses generate more money per tick and gain more HP so they last much longer.</div>
         </div>
       </div>
+    </div>
+    <div id="introModal">
+      <h2>⚡ Welcome to Tesla Tower Defense ⚡</h2>
+      <div class="goal">
+        <strong>Your goal:</strong> Defend your Tesla tower. Enemies spawn from every edge and walk toward you. <strong>Click anywhere</strong> to fire a lightning bolt at that spot.
+      </div>
+      <div class="introGrid">
+        <div class="introItem">
+          <strong>⚔️ Damage+</strong>
+          Upgrades the damage of your zaps.
+        </div>
+        <div class="introItem">
+          <strong>🎯 Range+</strong>
+          Upgrades the hit radius of your zaps.
+        </div>
+        <div class="introItem">
+          <strong>🔋 Energy+</strong>
+          Upgrades max energy and recharge speed.
+        </div>
+        <div class="introItem">
+          <strong>🗼 Mini-Tower</strong>
+          Place auto-firing towers around the field.
+        </div>
+        <div class="introItem wide">
+          <strong>⚡ Mini-Boost</strong>
+          Upgrades all your mini-towers at once.
+        </div>
+        <div class="introItem wide">
+          <strong>⏸ Pause anytime</strong>
+          Press the pause button or <b>Space</b> / <b>P</b>. You can still buy upgrades and place buildings while paused.
+        </div>
+      </div>
+      <button onclick="dismissIntro()">⚡ Start Game ⚡</button>
     </div>
     <div id="message">
       <div id="msgText">Game Over</div>
@@ -358,6 +782,15 @@ const canvas = document.getElementById('game');
 const ctx = canvas.getContext('2d');
 const W = canvas.width, H = canvas.height;
 
+// localStorage keys (defined early so all startup code can use them safely)
+const SAVE_KEY = 'tesla_save';
+const ACH_KEY = 'tesla_achievements';
+const INTRO_KEY = 'tesla_intro_seen';
+
+// Whether the player has seen the intro modal (persisted in localStorage)
+let introSeen = false;
+try { if (localStorage.getItem(INTRO_KEY) === '1') introSeen = true; } catch(e) {}
+
 // Resize for responsive
 function resize() {
   const container = document.getElementById('gameContainer');
@@ -383,6 +816,7 @@ function initGame() {
     walls: [],
     bolts: [],         // player-triggered lightning strikes
     autoBolts: [],     // mini-tower lightning
+    tankShells: [],    // tank cannon projectiles
     particles: [],
     floatTexts: [],
     teslaLinks: [],    // cached edges between mini-towers
@@ -395,7 +829,17 @@ function initGame() {
     },
     unlock15Shown: false,
     choice25Triggered: false,
-    choice25Made: false,
+    choice29Triggered: false,
+    choosing: false,
+    achievements: {
+      wave100: false,
+      pure50: false,
+      powerPlant: false,
+      balloons: false,
+      mystery2: false,
+      mystery3: false,
+    },
+    lostPurist: false,
     money: 50,
     lives: 20,
     score: 0,
@@ -414,7 +858,7 @@ function initGame() {
     placingTower: false,
     houseCost: 200,
     placingHouse: false,
-    houseIncome: 3,         // $ per tick
+    houseIncome: 8,         // $ per tick
     houseIncomeInterval: 3.5, // seconds
     houseMaxHp: 200,
     wallCost: 20,
@@ -427,6 +871,10 @@ function initGame() {
     spawnedThisWave: 0,
     spawnInterval: 1.2,
     knightSpawnCounter: 0,
+    bonusWaveActive: false,
+    bonusSpawnTimer: 0,
+    bonusSpawned: 0,
+    bonusTotal: 0,
     gameOver: false,
     paused: false,
     mouseX: W/2, mouseY: H/2,
@@ -434,6 +882,17 @@ function initGame() {
   };
 }
 initGame();
+// Restore persistent data (achievements, optional save)
+loadAchievementsFromStorage();
+applyAchievementsToDOM();
+const hadSave = loadGame();
+// If the player has already seen the intro before, hide it; otherwise pause and show it.
+if (introSeen) {
+  document.getElementById('introModal').style.display = 'none';
+  game.paused = false;
+} else {
+  game.paused = true;
+}
 
 // Mouse tracking
 canvas.addEventListener('mousemove', e => {
@@ -544,9 +1003,14 @@ function fireBolt(x, y) {
     const dx = en.x - x, dy = en.y - y;
     const d = Math.sqrt(dx*dx + dy*dy);
     if (d < range) {
-      // Falloff
-      const factor = 1 - (d / range) * 0.5;
-      en.hp -= dmg * factor;
+      if (en.type === 'balloon') {
+        // Balloons always take exactly 1 hit per click, regardless of Damage+
+        en.hp -= 1;
+      } else {
+        // Falloff for normal enemies
+        const factor = 1 - (d / range) * 0.5;
+        en.hp -= dmg * factor;
+      }
       spawnHitParticles(en.x, en.y);
     }
   }
@@ -606,8 +1070,87 @@ function spawnKnight(x, y) {
   });
 }
 
+// Snake-shaped path: starts off-screen left, weaves middle/up/middle/down, ends at the tower
+function buildBalloonPath() {
+  return [
+    { x: -30, y: H/2 },
+    { x: W*0.16, y: H/2 },
+    { x: W*0.16, y: H*0.24 },
+    { x: W*0.30, y: H*0.24 },
+    { x: W*0.30, y: H/2 },
+    { x: W*0.44, y: H/2 },
+    { x: W*0.44, y: H*0.76 },
+    { x: W*0.58, y: H*0.76 },
+    { x: W*0.58, y: H/2 },
+    { x: W*0.72, y: H/2 },
+    { x: W*0.72, y: H*0.24 },
+    { x: W*0.84, y: H*0.24 },
+    { x: W*0.84, y: H/2 },
+    { x: game.tower.x, y: game.tower.y },
+  ];
+}
+
+function spawnBalloon() {
+  const path = buildBalloonPath();
+  const hp = 5; // always exactly 5 clicks to pop, regardless of wave or upgrades
+  game.enemies.push({
+    type: 'balloon',
+    x: path[0].x, y: path[0].y,
+    hp, maxHp: hp,
+    speed: 70,
+    radius: 12,
+    bobPhase: Math.random() * Math.PI * 2,
+    legPhase: 0,
+    path,
+    wpIndex: 1,
+  });
+}
+
+function spawnTank(x, y) {
+  const hp = 6000 + game.wave * 72;
+  const fromLeft = x < W/2;
+  game.enemies.push({
+    type: 'tank',
+    x, y,
+    hp, maxHp: hp,
+    speed: 22, // crawl speed
+    radius: 24,
+    bobPhase: 0,
+    legPhase: 0,
+    treadPhase: 0,
+    shootTimer: 4, // first shot ~4s after spawn
+    shotsFired: 0,
+    barrelAngle: fromLeft ? 0 : Math.PI,
+    bodyAngle: fromLeft ? 0 : Math.PI,
+    facing: fromLeft ? 1 : -1,
+    phase: 'approach',
+  });
+}
+
+function fireTankShell(tank) {
+  const ang = tank.barrelAngle || 0;
+  const bx = tank.x + Math.cos(ang) * 24;
+  const by = tank.y + Math.sin(ang) * 24;
+  // Muzzle flash particles
+  for (let k = 0; k < 8; k++) {
+    game.particles.push({
+      x: bx, y: by,
+      vx: Math.cos(ang) * (60 + Math.random()*80) + (Math.random()-0.5)*40,
+      vy: Math.sin(ang) * (60 + Math.random()*80) + (Math.random()-0.5)*40,
+      life: 0.25, maxLife: 0.25,
+      color: Math.random() < 0.5 ? '#ffd95f' : '#ff8030',
+    });
+  }
+  game.tankShells.push({
+    x: bx, y: by,
+    tx: game.tower.x, ty: game.tower.y - 12,
+    speed: 220,
+    damage: 1,
+  });
+}
+
 function spawnHorse(x, y) {
-  const hp = 650 + game.wave * 10;
+  const hp = 1300 + game.wave * 20;
   game.enemies.push({
     type: 'horse',
     x, y,
@@ -693,7 +1236,162 @@ function loop(now) {
   update(dt);
   draw();
   updateHUD(); // always run so HUD updates while paused too
+  checkAchievements();
   requestAnimationFrame(loop);
+}
+
+function unlockAchievement(id) {
+  if (game.achievements[id]) return;
+  game.achievements[id] = true;
+  saveAchievements();
+  const el = document.querySelector(`.badge[data-id="${id}"]`);
+  if (el) el.classList.add('unlocked');
+  const titles = {
+    wave100: 'Centurion',
+    pure50: 'Pure Tower',
+    powerPlant: 'Power Plant',
+    balloons: 'Pop the Bunch',
+    mystery2: '???',
+    mystery3: '???',
+  };
+  showAchievementToast(titles[id] || 'Achievement');
+}
+
+let toastTimer = null;
+function showAchievementToast(title) {
+  const t = document.getElementById('achievementToast');
+  t.innerHTML = `🏅 Achievement unlocked: <span style="color:#fff">${title}</span>`;
+  t.style.display = 'block';
+  // Restart animation
+  t.style.animation = 'none';
+  t.offsetHeight; // reflow
+  t.style.animation = 'toastIn 0.4s ease';
+  if (toastTimer) clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => { t.style.display = 'none'; }, 3500);
+}
+
+function toggleAchievementsModal() {
+  const m = document.getElementById('achievementsModal');
+  if (m.style.display === 'block') {
+    m.style.display = 'none';
+  } else {
+    m.style.display = 'block';
+  }
+}
+
+function closeAchievementsModal() {
+  document.getElementById('achievementsModal').style.display = 'none';
+}
+
+function showResetConfirm() {
+  document.getElementById('resetConfirm').style.display = 'block';
+}
+
+function closeResetConfirm() {
+  document.getElementById('resetConfirm').style.display = 'none';
+}
+
+function confirmReset() {
+  // Wipe run-save but keep achievements
+  try { localStorage.removeItem(SAVE_KEY); } catch(e) {}
+  initGame();
+  // initGame resets game.achievements to all-false; reload from storage so unlocks persist
+  loadAchievementsFromStorage();
+  applyAchievementsToDOM();
+  // Hide any leftover overlays
+  closeResetConfirm();
+  document.getElementById('message').style.display = 'none';
+  document.getElementById('pauseOverlay').style.display = 'none';
+  document.getElementById('pauseBtn').innerHTML = '⏸ Pause';
+}
+
+// ── Save / load progression to localStorage ──
+function saveGame() {
+  if (game.gameOver) return;
+  try {
+    const save = {
+      wave: game.wave,
+      money: game.money,
+      lives: game.lives,
+      score: game.score,
+      energy: game.energy,
+      maxEnergy: game.maxEnergy,
+      energyRegen: game.energyRegen,
+      upgrades: game.upgrades,
+      towerCost: game.towerCost,
+      houseCost: game.houseCost,
+      houseIncome: game.houseIncome,
+      houseIncomeInterval: game.houseIncomeInterval,
+      houseMaxHp: game.houseMaxHp,
+      wallCost: game.wallCost,
+      miniTowers: game.miniTowers.map(mt => ({ x: mt.x, y: mt.y })),
+      houses: game.houses.map(h => ({ x: h.x, y: h.y, hp: h.hp, maxHp: h.maxHp })),
+      walls: game.walls.map(w => ({ x: w.x, y: w.y, hx: w.hx, hy: w.hy })),
+      perks: game.perks,
+      unlock15Shown: game.unlock15Shown,
+      choice25Triggered: game.choice25Triggered,
+      choice29Triggered: game.choice29Triggered,
+      lostPurist: game.lostPurist,
+    };
+    localStorage.setItem(SAVE_KEY, JSON.stringify(save));
+  } catch(e) {}
+}
+
+function loadGame() {
+  try {
+    const raw = localStorage.getItem(SAVE_KEY);
+    if (!raw) return false;
+    const save = JSON.parse(raw);
+    Object.assign(game, save);
+    // Re-hydrate towers/houses/walls with required runtime fields
+    game.miniTowers = (save.miniTowers || []).map(mt => ({ x: mt.x, y: mt.y, cooldown: 0 }));
+    game.houses = (save.houses || []).map(h => ({
+      x: h.x, y: h.y, hp: h.hp, maxHp: h.maxHp,
+      incomeTimer: 0, smokePhase: Math.random() * Math.PI * 2,
+    }));
+    game.walls = (save.walls || []).map(w => ({ x: w.x, y: w.y, hx: w.hx, hy: w.hy }));
+    return true;
+  } catch(e) { return false; }
+}
+
+function clearSavedGame() {
+  try { localStorage.removeItem(SAVE_KEY); } catch(e) {}
+}
+
+function saveAchievements() {
+  try {
+    localStorage.setItem(ACH_KEY, JSON.stringify(game.achievements));
+  } catch(e) {}
+}
+
+function loadAchievementsFromStorage() {
+  try {
+    const raw = localStorage.getItem(ACH_KEY);
+    if (!raw) return;
+    const stored = JSON.parse(raw);
+    for (const id in stored) {
+      if (stored[id] && game.achievements.hasOwnProperty(id)) {
+        game.achievements[id] = true;
+      }
+    }
+  } catch(e) {}
+}
+
+function applyAchievementsToDOM() {
+  for (const id in game.achievements) {
+    const el = document.querySelector(`.badge[data-id="${id}"]`);
+    if (!el) continue;
+    if (game.achievements[id]) el.classList.add('unlocked');
+    else el.classList.remove('unlocked');
+  }
+}
+
+function checkAchievements() {
+  if (!game.achievements.wave100 && game.wave >= 100) unlockAchievement('wave100');
+  if (!game.achievements.pure50 && game.wave >= 50 && !game.lostPurist) unlockAchievement('pure50');
+  if (!game.achievements.powerPlant && game.perks && game.perks.houseBoost && game.houses.length >= 15) {
+    unlockAchievement('powerPlant');
+  }
 }
 
 function update(dt) {
@@ -716,6 +1414,35 @@ function update(dt) {
       game.waveActive = false;
       game.waveTimer = 0;
       game.money += 25 + game.wave * 5;
+      // Persist progress
+      saveGame();
+      // Small (0.5%) chance to trigger a bonus balloon wave after wave 10
+      if (game.wave >= 10 && Math.random() < 0.005 && !game.bonusWaveActive) {
+        game.bonusWaveActive = true;
+        game.bonusSpawned = 0;
+        game.bonusTotal = 22;
+        game.bonusSpawnTimer = 0.5;
+        game.floatTexts.push({
+          x: W/2, y: 60,
+          text: '🎈 BONUS BALLOON WAVE 🎈',
+          life: 3.5, maxLife: 3.5,
+          color: '#ff5f7f',
+        });
+      }
+    }
+  } else if (game.bonusWaveActive) {
+    // Bonus balloon wave: spawn balloons periodically, hold the next regular wave
+    game.bonusSpawnTimer -= dt;
+    if (game.bonusSpawnTimer <= 0 && game.bonusSpawned < game.bonusTotal) {
+      spawnBalloon();
+      game.bonusSpawned++;
+      game.bonusSpawnTimer = 0.55;
+    }
+    // Wave ends when all balloons have spawned and been resolved
+    if (game.bonusSpawned >= game.bonusTotal && game.enemies.length === 0) {
+      game.bonusWaveActive = false;
+      game.waveTimer = 0;
+      unlockAchievement('balloons');
     }
   } else {
     game.waveTimer += dt;
@@ -737,23 +1464,61 @@ function update(dt) {
           color: '#ffb35f',
         });
       }
+
+      // Wave 29: spawn two heavy tanks from left & right
+      if (game.wave === 29) {
+        spawnTank(-40, H/2 - 60);
+        spawnTank(W + 40, H/2 + 60);
+        game.floatTexts.push({
+          x: W/2, y: 60,
+          text: 'Tanks rolling in!',
+          life: 3, maxLife: 3,
+          color: '#9ad07f',
+        });
+      }
     }
   }
 
   // Move enemies toward nearest target (main tower OR house)
   for (const en of game.enemies) {
-    // Find nearest target
-    let tgt = { kind: 'main', x: game.tower.x, y: game.tower.y, ref: null };
-    let bestD = Math.hypot(game.tower.x - en.x, game.tower.y - en.y);
-    for (const h of game.houses) {
-      const d = Math.hypot(h.x - en.x, h.y - en.y);
-      if (d < bestD) { bestD = d; tgt = { kind: 'house', x: h.x, y: h.y, ref: h }; }
+    // Balloons follow a predefined snake path and just bob along it
+    if (en.type === 'balloon') {
+      en.bobPhase += dt * 5;
+      if (en.wpIndex >= en.path.length) {
+        game.lives--;
+        en.hp = 0;
+        continue;
+      }
+      const target = en.path[en.wpIndex];
+      const ddx = target.x - en.x;
+      const ddy = target.y - en.y;
+      const dd = Math.sqrt(ddx*ddx + ddy*ddy);
+      if (dd < 6) {
+        en.wpIndex++;
+      } else {
+        en.x += (ddx/dd) * en.speed * dt;
+        en.y += (ddy/dd) * en.speed * dt;
+      }
+      continue;
+    }
+
+    // Find target. Tanks always target the main tower; others pick nearest of main/houses.
+    let tgt;
+    if (en.type === 'tank') {
+      tgt = { kind: 'main', x: game.tower.x, y: game.tower.y, ref: null };
+    } else {
+      tgt = { kind: 'main', x: game.tower.x, y: game.tower.y, ref: null };
+      let bestD = Math.hypot(game.tower.x - en.x, game.tower.y - en.y);
+      for (const h of game.houses) {
+        const d = Math.hypot(h.x - en.x, h.y - en.y);
+        if (d < bestD) { bestD = d; tgt = { kind: 'house', x: h.x, y: h.y, ref: h }; }
+      }
     }
 
     const dx = tgt.x - en.x;
     const dy = tgt.y - en.y;
     const d = Math.sqrt(dx*dx + dy*dy);
-    const attackDist = tgt.kind === 'house' ? 28 : 20;
+    const attackDist = en.type === 'tank' ? 40 : (tgt.kind === 'house' ? 28 : 20);
 
     if (d > attackDist) {
       // Sand-patch slow + optional barbed-wire damage
@@ -771,20 +1536,82 @@ function update(dt) {
           });
         }
       }
-      const mvx = (dx / d) * en.speed * slowMul * dt;
-      const mvy = (dy / d) * en.speed * slowMul * dt;
-      en.x += mvx;
-      en.y += mvy;
-      // Track facing direction for horses
-      if (en.type === 'horse') {
-        if (Math.abs(mvx) > 0.05) en.facing = mvx > 0 ? 1 : -1;
-        en.wheelPhase = (en.wheelPhase || 0) + Math.hypot(mvx, mvy) * 0.25;
+
+      if (en.type === 'tank') {
+        // Barrel rotates independently to keep aiming at the main tower
+        en.barrelAngle = Math.atan2(dy, dx);
+        en.facing = dx > 0 ? 1 : -1;
+        en.treadPhase = (en.treadPhase || 0) + dt;
+
+        const fwd = en.speed * slowMul;
+        const orbitRadius = 260;
+
+        // Phase transition: once we get close enough, start orbiting
+        if (en.phase === 'approach' && d <= orbitRadius + 12) {
+          en.phase = 'orbit';
+        }
+
+        let mvx, mvy;
+        if (en.phase === 'approach') {
+          // Drive straight in toward the tower
+          mvx = (dx / d) * fwd * dt;
+          mvy = (dy / d) * fwd * dt;
+        } else {
+          // Orbit: tangential motion around the tower, with spring correction toward orbit radius
+          const rx = en.x - game.tower.x;
+          const ry = en.y - game.tower.y;
+          const rd = Math.sqrt(rx*rx + ry*ry) || 1;
+          // Perpendicular tangent (yields opposite visual direction for left vs right tanks)
+          const tanX = -ry / rd;
+          const tanY = rx / rd;
+          // Radial pull toward orbitRadius
+          const radError = rd - orbitRadius;
+          const pullSpeed = Math.max(-fwd * 0.7, Math.min(fwd * 0.7, -radError * 2.2));
+          const pullX = (rx / rd) * pullSpeed;
+          const pullY = (ry / rd) * pullSpeed;
+          mvx = (tanX * fwd + pullX) * dt;
+          mvy = (tanY * fwd + pullY) * dt;
+        }
+        en.x += mvx;
+        en.y += mvy;
+
+        // Body angle follows actual movement direction (smoothly interpolated)
+        if (Math.hypot(mvx, mvy) > 0.05) {
+          const target = Math.atan2(mvy, mvx);
+          if (en.bodyAngle === undefined) {
+            en.bodyAngle = target;
+          } else {
+            let delta = target - en.bodyAngle;
+            while (delta > Math.PI) delta -= 2 * Math.PI;
+            while (delta < -Math.PI) delta += 2 * Math.PI;
+            en.bodyAngle += delta * Math.min(1, dt * 6);
+          }
+        }
+
+        // Tank keeps firing while in orbit until killed
+        en.shootTimer = (en.shootTimer ?? 4) - dt;
+        if (en.shootTimer <= 0 && d > 60) {
+          fireTankShell(en);
+          en.shootTimer = en.phase === 'orbit' ? 7 : 10;
+          en.shotsFired = (en.shotsFired || 0) + 1;
+        }
+      } else {
+        const mvx = (dx / d) * en.speed * slowMul * dt;
+        const mvy = (dy / d) * en.speed * slowMul * dt;
+        en.x += mvx;
+        en.y += mvy;
+        // Track facing direction for horses
+        if (en.type === 'horse') {
+          if (Math.abs(mvx) > 0.05) en.facing = mvx > 0 ? 1 : -1;
+          en.wheelPhase = (en.wheelPhase || 0) + Math.hypot(mvx, mvy) * 0.25;
+        }
       }
     } else {
       if (tgt.kind === 'main') {
         if (en.type === 'horse') {
-          // Horse hits tower — does big damage (multiple lives) then dies
           game.lives -= 3;
+        } else if (en.type === 'tank') {
+          game.lives -= 5;
         } else {
           game.lives--;
         }
@@ -865,6 +1692,7 @@ function update(dt) {
     for (const [a, b] of game.teslaLinks) {
       for (const en of game.enemies) {
         if (!isAttackable(en)) continue;
+        if (en.type === 'balloon') continue; // balloons are only popped by player clicks
         const px = en.x - a.x, py = en.y - a.y;
         const lx = b.x - a.x, ly = b.y - a.y;
         const len2 = lx*lx + ly*ly;
@@ -894,6 +1722,12 @@ function update(dt) {
     showChoiceModal();
   }
 
+  // Trigger second choice once at wave 30 (after wave 29 tanks)
+  if (!game.choice29Triggered && game.wave >= 30) {
+    game.choice29Triggered = true;
+    showChoiceModal();
+  }
+
   // Mini-tower firing (uses shared mini upgrade stats)
   const mu = game.upgrades.mini;
   for (const mt of game.miniTowers) {
@@ -902,6 +1736,7 @@ function update(dt) {
       let target = null, bestD = mu.rng;
       for (const en of game.enemies) {
         if (!isAttackable(en)) continue;
+        if (en.type === 'balloon') continue; // balloons are only popped by player clicks
         const dx = en.x - mt.x, dy = en.y - mt.y;
         const d = Math.sqrt(dx*dx + dy*dy);
         if (d < bestD) { bestD = d; target = en; }
@@ -929,9 +1764,43 @@ function update(dt) {
       if (e.type === 'knight') {
         game.money += 18 + Math.floor(game.wave * 0.8);
         game.score += 35;
+      } else if (e.type === 'balloon') {
+        game.money += 6;
+        game.score += 15;
+        // Pop! Red confetti burst
+        for (let p = 0; p < 14; p++) {
+          game.particles.push({
+            x: e.x + (Math.random() - 0.5) * 8,
+            y: e.y + (Math.random() - 0.5) * 8,
+            vx: (Math.random() - 0.5) * 220,
+            vy: (Math.random() - 0.5) * 220 - 60,
+            life: 0.5, maxLife: 0.5,
+            color: Math.random() < 0.5 ? '#ff5f5f' : '#ffe066',
+          });
+        }
       } else if (e.type === 'shadow') {
         game.money += 8 + Math.floor(game.wave * 0.6);
         game.score += 20;
+      } else if (e.type === 'tank') {
+        game.money += 220;
+        game.score += 400;
+        // Big explosion
+        for (let p = 0; p < 50; p++) {
+          game.particles.push({
+            x: e.x + (Math.random() - 0.5) * 40,
+            y: e.y + (Math.random() - 0.5) * 30,
+            vx: (Math.random() - 0.5) * 320,
+            vy: (Math.random() - 0.5) * 320 - 40,
+            life: 0.9, maxLife: 0.9,
+            color: Math.random() < 0.5 ? '#ff8030' : (Math.random() < 0.5 ? '#ffd95f' : '#404040'),
+          });
+        }
+        game.floatTexts.push({
+          x: e.x, y: e.y - 30,
+          text: 'Tank destroyed!',
+          life: 1.6, maxLife: 1.6,
+          color: '#ffd95f',
+        });
       } else if (e.type === 'horse') {
         game.money += 120;
         game.score += 250;
@@ -977,6 +1846,32 @@ function update(dt) {
     if (game.autoBolts[i].life <= 0) game.autoBolts.splice(i, 1);
   }
 
+  // Update tank shells
+  for (let i = game.tankShells.length - 1; i >= 0; i--) {
+    const s = game.tankShells[i];
+    const sdx = s.tx - s.x, sdy = s.ty - s.y;
+    const sd = Math.sqrt(sdx*sdx + sdy*sdy);
+    if (sd < 14) {
+      // Impact on tower
+      game.lives -= s.damage;
+      // Big explosion at impact
+      for (let p = 0; p < 22; p++) {
+        game.particles.push({
+          x: s.x + (Math.random()-0.5)*8,
+          y: s.y + (Math.random()-0.5)*8,
+          vx: (Math.random()-0.5)*220,
+          vy: (Math.random()-0.5)*220 - 30,
+          life: 0.5, maxLife: 0.5,
+          color: Math.random() < 0.5 ? '#ff8030' : '#ffd95f',
+        });
+      }
+      game.tankShells.splice(i, 1);
+      continue;
+    }
+    s.x += (sdx/sd) * s.speed * dt;
+    s.y += (sdy/sd) * s.speed * dt;
+  }
+
   // Particles
   for (let i = game.particles.length - 1; i >= 0; i--) {
     const p = game.particles[i];
@@ -992,6 +1887,7 @@ function update(dt) {
     game.gameOver = true;
     document.getElementById('msgText').innerHTML = `Game Over!<br>Reached wave ${game.wave}<br>Score: ${game.score}`;
     document.getElementById('message').style.display = 'block';
+    clearSavedGame();
   }
 }
 
@@ -1045,11 +1941,15 @@ function buyUpgrade(type) {
   if (game.money < up.cost || game.gameOver) return;
   game.money -= up.cost;
   up.lvl++;
+  // Pure Tower achievement: tracking damage/range/energy purchases
+  if (type === 'damage' || type === 'range' || type === 'energy') {
+    game.lostPurist = true;
+  }
   if (type === 'damage') {
     up.value += 12;
     up.cost = Math.floor(up.cost * 1.5);
   } else if (type === 'range') {
-    up.value += 9;
+    up.value += 5;
     up.cost = Math.floor(up.cost * 1.5);
   } else if (type === 'energy') {
     up.value += 25;
@@ -1058,7 +1958,7 @@ function buyUpgrade(type) {
     up.cost = Math.floor(up.cost * 1.5);
   } else if (type === 'mini') {
     up.dmg += 3;
-    up.rng += 12;
+    up.rng += 5;
     up.rate = Math.max(0.2, up.rate * 0.92);
     up.cost = Math.floor(up.cost * 1.5);
   }
@@ -1066,10 +1966,11 @@ function buyUpgrade(type) {
 
 function togglePause() {
   if (game.gameOver) return;
-  // Don't allow toggling while the choice modal or unlock notice is open
+  // Don't allow toggling while any blocking modal is open
   const choiceOpen = document.getElementById('choiceModal').style.display === 'block';
   const noticeOpen = document.getElementById('unlockNotice').style.display === 'block';
-  if (choiceOpen || noticeOpen) return;
+  const introOpen = document.getElementById('introModal').style.display === 'block';
+  if (choiceOpen || noticeOpen || introOpen) return;
   game.paused = !game.paused;
   document.getElementById('pauseOverlay').style.display = game.paused ? 'block' : 'none';
   document.getElementById('pauseBtn').innerHTML = game.paused ? '▶ Resume' : '⏸ Pause';
@@ -1097,32 +1998,56 @@ function getBoltColor() {
   return palette[Math.min(tier, palette.length - 1)];
 }
 
-function startPlacingTower() {
-  if (game.money < game.towerCost || game.gameOver) return;
-  game.placingTower = true;
-  game.placingHouse = false;
-  document.getElementById('upBuyTower').classList.add('active');
-  document.getElementById('upBuyHouse').classList.remove('active');
-}
-
-function startPlacingHouse() {
-  if (game.wave < 15 || game.money < game.houseCost || game.gameOver) return;
-  game.placingHouse = true;
-  game.placingTower = false;
-  game.placingWall = false;
-  document.getElementById('upBuyHouse').classList.add('active');
+function clearPlacementUI() {
   document.getElementById('upBuyTower').classList.remove('active');
+  document.getElementById('upBuyHouse').classList.remove('active');
   document.getElementById('upBuyWall').classList.remove('active');
 }
 
+function startPlacingTower() {
+  if (game.gameOver) return;
+  // Clicking the same shop icon again cancels placement
+  if (game.placingTower) {
+    game.placingTower = false;
+    clearPlacementUI();
+    return;
+  }
+  if (game.money < game.towerCost) return;
+  game.placingTower = true;
+  game.placingHouse = false;
+  game.placingWall = false;
+  clearPlacementUI();
+  document.getElementById('upBuyTower').classList.add('active');
+}
+
+function startPlacingHouse() {
+  if (game.gameOver) return;
+  if (game.placingHouse) {
+    game.placingHouse = false;
+    clearPlacementUI();
+    return;
+  }
+  if (game.wave < 15 || game.money < game.houseCost) return;
+  game.placingHouse = true;
+  game.placingTower = false;
+  game.placingWall = false;
+  clearPlacementUI();
+  document.getElementById('upBuyHouse').classList.add('active');
+}
+
 function startPlacingWall() {
-  if (game.wave < 15 || game.money < game.wallCost || game.gameOver) return;
+  if (game.gameOver) return;
+  if (game.placingWall) {
+    game.placingWall = false;
+    clearPlacementUI();
+    return;
+  }
+  if (game.wave < 15 || game.money < game.wallCost) return;
   game.placingWall = true;
   game.placingTower = false;
   game.placingHouse = false;
+  clearPlacementUI();
   document.getElementById('upBuyWall').classList.add('active');
-  document.getElementById('upBuyTower').classList.remove('active');
-  document.getElementById('upBuyHouse').classList.remove('active');
 }
 
 function dismissUnlockNotice() {
@@ -1133,19 +2058,39 @@ function dismissUnlockNotice() {
   }
 }
 
+function dismissIntro() {
+  document.getElementById('introModal').style.display = 'none';
+  introSeen = true;
+  try { localStorage.setItem(INTRO_KEY, '1'); } catch(e) {}
+  game.paused = false;
+}
+
 function showChoiceModal() {
   game.paused = true;
+  game.choosing = true;
+  // Mark already-picked perks as taken (grayed out)
+  const cards = document.querySelectorAll('#choiceModal .choiceCard');
+  for (const card of cards) {
+    const oc = card.getAttribute('onclick') || '';
+    const m = oc.match(/pickUpgrade\('(\w+)'\)/);
+    if (m && game.perks[m[1]]) {
+      card.classList.add('taken');
+    } else {
+      card.classList.remove('taken');
+    }
+  }
   document.getElementById('choiceModal').style.display = 'block';
 }
 
 function pickUpgrade(which) {
-  if (game.choice25Made) return;
-  game.choice25Made = true;
+  if (!game.choosing) return;
+  if (game.perks[which]) return; // already taken
+  game.choosing = false;
   game.perks[which] = true;
 
   if (which === 'houseBoost') {
-    game.houseIncome = Math.round(game.houseIncome * 1.7); // 3 -> 5
-    game.houseIncomeInterval = Math.max(2, game.houseIncomeInterval - 0.5);
+    // Double the income, keep the same 3.5s interval
+    game.houseIncome = game.houseIncome * 2;
     const newMax = Math.round(game.houseMaxHp * 1.75); // 200 -> 350
     const hpAdd = newMax - game.houseMaxHp;
     game.houseMaxHp = newMax;
@@ -1223,8 +2168,19 @@ function restart() {
   document.getElementById('message').style.display = 'none';
   document.getElementById('unlockNotice').style.display = 'none';
   document.getElementById('choiceModal').style.display = 'none';
+  document.getElementById('introModal').style.display = 'none';
   document.getElementById('pauseOverlay').style.display = 'none';
   document.getElementById('pauseBtn').innerHTML = '⏸ Pause';
+  // Reset modal card states
+  for (const card of document.querySelectorAll('#choiceModal .choiceCard')) {
+    card.classList.remove('taken');
+  }
+  // Achievements persist across restarts; reapply unlocked state from localStorage
+  loadAchievementsFromStorage();
+  applyAchievementsToDOM();
+  document.getElementById('achievementToast').style.display = 'none';
+  document.getElementById('achievementsModal').style.display = 'none';
+  clearSavedGame();
 }
 
 // Drawing
@@ -1313,7 +2269,9 @@ function draw() {
   for (const mt of game.miniTowers) drawables.push({ y: mt.y + 12, fn: () => drawMiniTower(mt.x, mt.y, 1) });
   for (const h of game.houses) drawables.push({ y: h.y + 18, fn: () => drawHouse(h, 1) });
   for (const en of game.enemies) {
-    const groundOffset = en.type === 'horse' ? 18 : 12;
+    let groundOffset = 12;
+    if (en.type === 'horse') groundOffset = 18;
+    else if (en.type === 'tank') groundOffset = 16;
     drawables.push({ y: en.y + groundOffset, fn: () => drawStickman(en) });
   }
   drawables.sort((a, b) => a.y - b.y);
@@ -1347,12 +2305,39 @@ function draw() {
     ctx.stroke();
   }
 
-  // Auto bolts
+  // Tank shells with trails
+  for (const s of game.tankShells) {
+    const sdx = s.tx - s.x, sdy = s.ty - s.y;
+    const sd = Math.sqrt(sdx*sdx + sdy*sdy) || 1;
+    const ux = sdx / sd, uy = sdy / sd;
+    // Smoky trail
+    ctx.strokeStyle = 'rgba(255,160,80,0.45)';
+    ctx.lineWidth = 3;
+    ctx.lineCap = 'round';
+    ctx.beginPath();
+    ctx.moveTo(s.x - ux * 12, s.y - uy * 12);
+    ctx.lineTo(s.x, s.y);
+    ctx.stroke();
+    // Bright streak core
+    ctx.strokeStyle = 'rgba(255,230,150,0.85)';
+    ctx.lineWidth = 1.5;
+    ctx.stroke();
+    // Shell body
+    ctx.fillStyle = '#383832';
+    ctx.strokeStyle = '#0a0a08';
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.arc(s.x, s.y, 3.5, 0, Math.PI*2);
+    ctx.fill(); ctx.stroke();
+  }
+
+  // Auto bolts (mini-tower lightning) — color matches the current mini-boost tier
+  const miniTints = getMiniTints();
   for (const b of game.autoBolts) {
     const alpha = b.life / b.maxLife;
-    ctx.strokeStyle = `rgba(150,255,200,${alpha})`;
+    ctx.strokeStyle = `rgba(${miniTints.arcRgba},${alpha})`;
     ctx.lineWidth = 2;
-    ctx.shadowColor = '#5fffaa';
+    ctx.shadowColor = miniTints.glow;
     ctx.shadowBlur = 8;
     ctx.beginPath();
     for (const s of b.segments) {
@@ -1383,8 +2368,8 @@ function draw() {
     ctx.fillRect(game.mouseX - 25, game.mouseY + 18, 50 * pct, 6);
   }
 
-  // Wave countdown
-  if (!game.waveActive && !game.gameOver) {
+  // Wave countdown (hidden during bonus wave so it doesn't conflict with the popup)
+  if (!game.waveActive && !game.gameOver && !game.bonusWaveActive) {
     ctx.fillStyle = 'rgba(255,224,102,0.9)';
     ctx.font = 'bold 26px Arial';
     ctx.textAlign = 'center';
@@ -1505,6 +2490,20 @@ function drawMainTower(x, y) {
   ctx.shadowBlur = 0;
 }
 
+// Mini-tower color tints, scaling with mini-boost level (same sequence as main tower)
+function getMiniTints() {
+  const tier = Math.floor((game.upgrades.mini.lvl - 1) / 5);
+  const palette = [
+    { sphere: '#5fa8ff', glow: '#5fa8ff', arcRgba: '170,200,255', body: '#3a5a8a', stroke: '#5f8acc', base: '#2a3a5a' }, // blue
+    { sphere: '#5fffaa', glow: '#5fffaa', arcRgba: '150,255,200', body: '#3a6a6a', stroke: '#5fc8aa', base: '#2a4a4a' }, // green
+    { sphere: '#ff7373', glow: '#ff7373', arcRgba: '255,180,180', body: '#6a3a3a', stroke: '#cc6060', base: '#4a2a2a' }, // red
+    { sphere: '#b07fff', glow: '#b07fff', arcRgba: '200,170,255', body: '#5a3a8a', stroke: '#9a7fcc', base: '#3a2a5a' }, // purple
+    { sphere: '#ffd95f', glow: '#ffd95f', arcRgba: '255,235,150', body: '#8a6a3a', stroke: '#cc9f5f', base: '#5a4a2a' }, // gold
+    { sphere: '#ff7fcc', glow: '#ff7fcc', arcRgba: '255,180,220', body: '#8a3a6a', stroke: '#cc5fa8', base: '#5a2a4a' }, // pink
+  ];
+  return palette[Math.min(tier, palette.length - 1)];
+}
+
 // Sphere fill tints matching the bolt color tier
 function getSphereTints() {
   const tier = Math.floor((game.upgrades.damage.lvl - 1) / 5);
@@ -1525,15 +2524,16 @@ function drawMiniTower(x, y, alpha) {
   const tier = Math.floor((game.upgrades.mini.lvl - 1) / 5);
   const bulk = 1 + tier * 0.28;
   const heightBoost = tier * 5;
+  const tints = getMiniTints();
 
   // Base
-  ctx.fillStyle = '#2a4a4a';
+  ctx.fillStyle = tints.base;
   ctx.beginPath();
   ctx.arc(x, y + 12, 12 * bulk, 0, Math.PI*2);
   ctx.fill();
 
   // Body
-  ctx.fillStyle = '#3a6a6a';
+  ctx.fillStyle = tints.body;
   ctx.beginPath();
   ctx.moveTo(x - 7 * bulk, y + 12);
   ctx.lineTo(x - 3 * bulk, y - 10 - heightBoost);
@@ -1542,14 +2542,14 @@ function drawMiniTower(x, y, alpha) {
   ctx.closePath();
   ctx.fill();
   if (tier > 0) {
-    ctx.strokeStyle = '#5fc8aa';
+    ctx.strokeStyle = tints.stroke;
     ctx.lineWidth = 1.2;
     ctx.stroke();
   }
 
   // Support rings for upgraded versions
   if (tier > 0) {
-    ctx.strokeStyle = '#5fc8aa';
+    ctx.strokeStyle = tints.stroke;
     ctx.lineWidth = 1.2;
     for (let i = 1; i <= tier && i <= 3; i++) {
       const t = i / (tier + 1);
@@ -1564,8 +2564,8 @@ function drawMiniTower(x, y, alpha) {
 
   // Coil top
   const pulse = 1 + Math.sin(game.time * 6 + x) * 0.15;
-  ctx.fillStyle = '#5fffaa';
-  ctx.shadowColor = '#5fffaa';
+  ctx.fillStyle = tints.sphere;
+  ctx.shadowColor = tints.glow;
   ctx.shadowBlur = 10;
   ctx.beginPath();
   ctx.arc(x, y - 14 - heightBoost, 5 * bulk * pulse, 0, Math.PI*2);
@@ -1574,7 +2574,7 @@ function drawMiniTower(x, y, alpha) {
 
   // Extra arcs for upgraded
   if (tier > 0) {
-    ctx.strokeStyle = `rgba(150,255,200,${0.4 + Math.sin(game.time * 8 + x) * 0.3})`;
+    ctx.strokeStyle = `rgba(${tints.arcRgba},${0.4 + Math.sin(game.time * 8 + x) * 0.3})`;
     ctx.lineWidth = 1;
     const numArcs = 2 + tier;
     for (let i = 0; i < numArcs; i++) {
@@ -1843,6 +2843,14 @@ function drawStickman(en) {
   }
   if (en.type === 'horse') {
     drawHorse(en);
+    return;
+  }
+  if (en.type === 'tank') {
+    drawTank(en);
+    return;
+  }
+  if (en.type === 'balloon') {
+    drawBalloon(en);
     return;
   }
   const x = en.x, y = en.y;
@@ -2265,6 +3273,195 @@ function drawHorse(en) {
   ctx.font = 'bold 10px Arial';
   ctx.textAlign = 'center';
   ctx.fillText('TROJAN HORSE', x, y - 32);
+}
+
+function drawTank(en) {
+  const x = en.x, y = en.y;
+  const hpPct = en.hp / en.maxHp;
+  const treadPhase = en.treadPhase || 0;
+  const treadOffset = (treadPhase * 14) % 6;
+  const bodyAngle = en.bodyAngle || 0;
+
+  // Ground shadow (not rotated)
+  ctx.fillStyle = 'rgba(0,0,0,0.5)';
+  ctx.beginPath();
+  ctx.ellipse(x, y + 14, 30, 7, 0, 0, Math.PI*2);
+  ctx.fill();
+
+  // Body group (rotates with movement direction)
+  ctx.save();
+  ctx.translate(x, y);
+  ctx.rotate(bodyAngle);
+
+  // Treads on each side of the body (perpendicular to forward direction)
+  function drawTread(ty) {
+    ctx.fillStyle = '#181a14';
+    ctx.fillRect(-24, ty, 48, 7);
+    ctx.strokeStyle = '#080806';
+    ctx.lineWidth = 1;
+    ctx.strokeRect(-24, ty, 48, 7);
+    ctx.strokeStyle = '#3a3a2e';
+    ctx.lineWidth = 1;
+    for (let i = -1; i < 10; i++) {
+      const tx = -24 + i * 6 + treadOffset;
+      ctx.beginPath();
+      ctx.moveTo(tx, ty);
+      ctx.lineTo(tx, ty + 7);
+      ctx.stroke();
+    }
+  }
+  drawTread(6);
+  drawTread(-13);
+
+  // Main body
+  const grad = ctx.createLinearGradient(0, -10, 0, 10);
+  grad.addColorStop(0, '#6a7a4a');
+  grad.addColorStop(0.5, '#52623a');
+  grad.addColorStop(1, '#2e3e22');
+  ctx.fillStyle = grad;
+  ctx.strokeStyle = '#1a2010';
+  ctx.lineWidth = 1.5;
+  ctx.fillRect(-22, -9, 44, 18);
+  ctx.strokeRect(-22, -9, 44, 18);
+
+  // Sloped front-armor cue (small triangle at the front of the body)
+  ctx.fillStyle = '#52623a';
+  ctx.strokeStyle = '#1a2010';
+  ctx.beginPath();
+  ctx.moveTo(22, -6);
+  ctx.lineTo(28, 0);
+  ctx.lineTo(22, 6);
+  ctx.closePath();
+  ctx.fill();
+  ctx.stroke();
+
+  // Side hatch panels
+  ctx.strokeStyle = 'rgba(20,28,12,0.6)';
+  ctx.lineWidth = 1;
+  ctx.beginPath();
+  ctx.moveTo(-14, -9); ctx.lineTo(-14, 9);
+  ctx.moveTo(14, -9); ctx.lineTo(14, 9);
+  ctx.stroke();
+
+  // Rivets
+  ctx.fillStyle = '#2a3520';
+  for (const [rx2, ry2] of [[-19, -6], [-19, 6], [19, -6], [19, 6]]) {
+    ctx.beginPath(); ctx.arc(rx2, ry2, 1.4, 0, Math.PI*2); ctx.fill();
+  }
+
+  // Turret base (round, rides on top of body)
+  ctx.fillStyle = '#52623a';
+  ctx.strokeStyle = '#1a2010';
+  ctx.lineWidth = 1.5;
+  ctx.beginPath();
+  ctx.arc(0, 0, 10, 0, Math.PI*2);
+  ctx.fill(); ctx.stroke();
+  ctx.strokeStyle = 'rgba(20,28,12,0.7)';
+  ctx.lineWidth = 1;
+  ctx.beginPath();
+  ctx.arc(0, 0, 6, 0, Math.PI*2);
+  ctx.stroke();
+  ctx.fillStyle = '#1a2010';
+  ctx.beginPath(); ctx.arc(0, 0, 1.6, 0, Math.PI*2); ctx.fill();
+
+  ctx.restore();
+
+  // Barrel (rotates independently of body, aims at the tower)
+  const bAng = en.barrelAngle || 0;
+  ctx.save();
+  ctx.translate(x, y);
+  ctx.rotate(bAng);
+  // Barrel base ring
+  ctx.fillStyle = '#3a4a28';
+  ctx.strokeStyle = '#1a2010';
+  ctx.lineWidth = 1.2;
+  ctx.fillRect(5, -3.5, 4, 7);
+  ctx.strokeRect(5, -3.5, 4, 7);
+  // Barrel
+  ctx.fillStyle = '#3a4a28';
+  ctx.fillRect(8, -2.4, 20, 4.8);
+  ctx.strokeStyle = '#1a2010';
+  ctx.lineWidth = 1;
+  ctx.strokeRect(8, -2.4, 20, 4.8);
+  // Muzzle
+  ctx.fillStyle = '#15140e';
+  ctx.fillRect(27, -3.2, 3.5, 6.4);
+  ctx.strokeRect(27, -3.2, 3.5, 6.4);
+  ctx.restore();
+
+  // HP bar (always upright)
+  ctx.fillStyle = 'rgba(0,0,0,0.75)';
+  ctx.fillRect(x - 28, y - 32, 56, 6);
+  ctx.fillStyle = hpPct > 0.5 ? '#5fff7f' : hpPct > 0.25 ? '#ffd95f' : '#ff5f5f';
+  ctx.fillRect(x - 28, y - 32, 56 * hpPct, 6);
+  ctx.strokeStyle = 'rgba(255,255,255,0.45)';
+  ctx.lineWidth = 0.8;
+  ctx.strokeRect(x - 28, y - 32, 56, 6);
+  ctx.fillStyle = '#ffd95f';
+  ctx.font = 'bold 10px Arial';
+  ctx.textAlign = 'center';
+  ctx.fillText('TANK', x, y - 36);
+}
+
+function drawBalloon(en) {
+  const bob = Math.sin(en.bobPhase) * 2.5;
+  const x = en.x;
+  const y = en.y + bob;
+  const hpPct = en.hp / en.maxHp;
+  const swing = Math.sin(en.bobPhase * 1.5) * 2;
+
+  // String (hanging slightly, swaying)
+  ctx.strokeStyle = '#8a8a8a';
+  ctx.lineWidth = 1;
+  ctx.beginPath();
+  ctx.moveTo(x, y + 11);
+  ctx.quadraticCurveTo(x + swing, y + 18, x + swing * 1.2, y + 24);
+  ctx.stroke();
+
+  // Knot (small triangle at base of balloon)
+  ctx.fillStyle = '#9a0e0e';
+  ctx.beginPath();
+  ctx.moveTo(x - 2.5, y + 10);
+  ctx.lineTo(x + 2.5, y + 10);
+  ctx.lineTo(x, y + 14);
+  ctx.closePath();
+  ctx.fill();
+
+  // Balloon body — radial gradient red
+  const grad = ctx.createRadialGradient(x - 3, y - 4, 1, x, y, 13);
+  grad.addColorStop(0, '#ff8a8a');
+  grad.addColorStop(0.5, '#dc1f1f');
+  grad.addColorStop(1, '#7a0606');
+  ctx.fillStyle = grad;
+  ctx.strokeStyle = '#5a0505';
+  ctx.lineWidth = 1.4;
+  ctx.beginPath();
+  // Slightly egg-shaped (taller than wide)
+  ctx.ellipse(x, y, 10, 12, 0, 0, Math.PI*2);
+  ctx.fill();
+  ctx.stroke();
+
+  // White highlight crescent (top-left)
+  ctx.strokeStyle = 'rgba(255,255,255,0.85)';
+  ctx.lineWidth = 2.2;
+  ctx.lineCap = 'round';
+  ctx.beginPath();
+  ctx.arc(x - 3.5, y - 3.5, 4.5, -Math.PI * 0.85, -Math.PI * 0.25);
+  ctx.stroke();
+
+  // Tiny secondary highlight dot
+  ctx.fillStyle = 'rgba(255,255,255,0.7)';
+  ctx.beginPath();
+  ctx.arc(x + 2, y - 5, 1.2, 0, Math.PI*2);
+  ctx.fill();
+
+  // HP bar (only when damaged)
+  if (hpPct < 1) {
+    ctx.fillStyle = 'rgba(0,0,0,0.6)';
+    ctx.fillRect(x - 12, y - 20, 24, 3);
+    ctx.fillStyle = hpPct > 0.5 ? '#5fff7f' : hpPct > 0.25 ? '#ffd95f' : '#ff5f5f';
+    ctx.fillRect(x - 12, y - 20, 24 * hpPct, 3);
+  }
 }
 
 requestAnimationFrame(loop);
