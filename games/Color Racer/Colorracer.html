@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<title>Color Racer — Let's (st)art</title>
+<style>
+  html, body {
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background: #ffffff;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    height: 100%;
+  }
+  canvas { display: block; }
+  #trail, #ball {
+    position: fixed;
+    top: 0;
+    left: 0;
+  }
+  #ball { pointer-events: none; }
+
+  #startScreen {
+    position: fixed;
+    inset: 0;
+    background: #ffffff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 20;
+    transition: opacity 0.4s ease;
+  }
+  #startScreen.hidden {
+    opacity: 0;
+    pointer-events: none;
+  }
+  #title {
+    font-size: 84px;
+    font-weight: 800;
+    margin: 0 0 8px 0;
+    background: linear-gradient(90deg,#ff1744,#f50057,#d500f9,#651fff,#3d5afe,#00b0ff,#1de9b6,#00e676,#ffea00,#ff9100,#ff1744);
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: shimmer 6s linear infinite;
+    letter-spacing: -2px;
+  }
+  #subtitle {
+    color: #888;
+    font-size: 16px;
+    margin-bottom: 36px;
+  }
+  @keyframes shimmer {
+    to { background-position: 200% center; }
+  }
+  #startBtn {
+    font-size: 32px;
+    font-weight: 700;
+    padding: 18px 48px;
+    border: none;
+    border-radius: 14px;
+    cursor: pointer;
+    color: white;
+    background: linear-gradient(135deg, #ff4081, #7c4dff, #00bcd4);
+    background-size: 200% 200%;
+    box-shadow: 0 10px 30px rgba(124, 77, 255, 0.35);
+    transition: transform 0.15s ease, box-shadow 0.15s ease, background-position 0.6s ease;
+  }
+  #startBtn:hover {
+    transform: translateY(-2px) scale(1.03);
+    box-shadow: 0 14px 40px rgba(124, 77, 255, 0.45);
+    background-position: 100% 100%;
+  }
+  #startBtn:active { transform: translateY(0) scale(0.99); }
+
+  #instructions {
+    margin-top: 32px;
+    font-size: 15px;
+    color: #555;
+    text-align: center;
+    max-width: 560px;
+    line-height: 1.7;
+  }
+  #instructions .row { margin: 4px 0; }
+  .key {
+    display: inline-block;
+    padding: 2px 9px;
+    background: #f4f4f7;
+    border: 1px solid #d8d8de;
+    border-bottom-width: 2px;
+    border-radius: 5px;
+    font-family: ui-monospace, "SF Mono", Menlo, monospace;
+    font-size: 13px;
+    color: #333;
+  }
+
+  #hud {
+    position: fixed;
+    bottom: 12px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 13px;
+    color: #777;
+    z-index: 5;
+    pointer-events: none;
+    background: rgba(255,255,255,0.7);
+    backdrop-filter: blur(6px);
+    padding: 8px 16px;
+    border-radius: 999px;
+    border: 1px solid #eee;
+    white-space: nowrap;
+  }
+  #hud .sep { color: #ccc; margin: 0 8px; }
+
+  #penStatus {
+    position: fixed;
+    top: 14px;
+    right: 14px;
+    z-index: 5;
+    pointer-events: none;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 6px 12px;
+    border-radius: 999px;
+    background: rgba(0,0,0,0.04);
+    color: #555;
+    transition: all 0.2s ease;
+  }
+  #penStatus.lifted {
+    background: rgba(255, 152, 0, 0.15);
+    color: #d97706;
+  }
+
+  /* ---------- Side panel ---------- */
+  #panel {
+    position: fixed;
+    top: 50%;
+    right: 16px;
+    transform: translateY(-50%);
+    z-index: 6;
+    background: rgba(255,255,255,0.85);
+    backdrop-filter: blur(8px);
+    border: 1px solid #ececf2;
+    border-radius: 18px;
+    padding: 14px 12px;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.08);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 14px;
+    user-select: none;
+  }
+  #panel .label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    color: #888;
+    text-transform: uppercase;
+  }
+  #panel .group {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+  }
+  #panel .divider {
+    width: 28px;
+    height: 1px;
+    background: #ececf2;
+  }
+  .size-dot, .color-dot {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 999px;
+    cursor: pointer;
+    background: #f4f4f7;
+    border: 2px solid transparent;
+    transition: transform 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+  }
+  .size-dot { width: 34px; height: 34px; }
+  .size-dot .inner {
+    background: #333;
+    border-radius: 999px;
+  }
+  .size-dot[data-size="small"]  .inner { width: 6px;  height: 6px; }
+  .size-dot[data-size="medium"] .inner { width: 12px; height: 12px; }
+  .size-dot[data-size="large"]  .inner { width: 20px; height: 20px; }
+  .size-dot:hover { transform: scale(1.08); }
+  .size-dot.active {
+    border-color: #333;
+    background: white;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  }
+
+  .color-dot {
+    width: 28px;
+    height: 28px;
+  }
+  .color-dot:hover { transform: scale(1.12); }
+  .color-dot.active {
+    border-color: #333;
+    box-shadow: 0 0 0 2px white, 0 0 0 4px #333;
+  }
+  .color-dot.rainbow {
+    background: conic-gradient(from 0deg,
+      hsl(0,90%,55%), hsl(40,90%,55%), hsl(80,90%,55%),
+      hsl(140,80%,50%), hsl(190,90%,55%), hsl(230,90%,60%),
+      hsl(280,80%,60%), hsl(320,90%,60%), hsl(360,90%,55%));
+  }
+</style>
+</head>
+<body>
+  <canvas id="trail"></canvas>
+  <canvas id="ball"></canvas>
+
+  <div id="hud">
+    <span class="key">↑</span> vooruit · <span class="key">↓</span> achteruit
+    <span class="sep">·</span>
+    <span class="key">←</span> <span class="key">→</span> vloeiend sturen
+    <span class="sep">·</span>
+    <span class="key">Shift</span> + <span class="key">←</span><span class="key">→</span> 90°
+    <span class="sep">·</span>
+    <span class="key">Space</span> pen op/neer
+    <span class="sep">·</span>
+    <span class="key">C</span> wissen
+    <span class="sep">·</span>
+    <span class="key">R</span> regenboog
+  </div>
+
+  <div id="penStatus">Pen: tekent</div>
+
+  <div id="panel">
+    <div class="group">
+      <div class="label">Grootte</div>
+      <div class="size-dot" data-size="small"  title="Klein"><div class="inner"></div></div>
+      <div class="size-dot active" data-size="medium" title="Middel"><div class="inner"></div></div>
+      <div class="size-dot" data-size="large"  title="Groot"><div class="inner"></div></div>
+    </div>
+    <div class="divider"></div>
+    <div class="group">
+      <div class="label">Kleur</div>
+      <div class="color-dot rainbow active" data-color="rainbow" title="Regenboog"></div>
+      <div class="color-dot" data-color="#ff1744" style="background:#ff1744" title="Rood"></div>
+      <div class="color-dot" data-color="#ff9100" style="background:#ff9100" title="Oranje"></div>
+      <div class="color-dot" data-color="#ffea00" style="background:#ffea00" title="Geel"></div>
+      <div class="color-dot" data-color="#00e676" style="background:#00e676" title="Groen"></div>
+      <div class="color-dot" data-color="#00b0ff" style="background:#00b0ff" title="Blauw"></div>
+      <div class="color-dot" data-color="#651fff" style="background:#651fff" title="Paars"></div>
+      <div class="color-dot" data-color="#f50057" style="background:#f50057" title="Roze"></div>
+      <div class="color-dot" data-color="#111111" style="background:#111111" title="Zwart"></div>
+    </div>
+  </div>
+
+  <div id="startScreen">
+    <h1 id="title">Color Racer</h1>
+    <div id="subtitle">Een Tron-achtig tekenspel — laat je bolletje zijn ding doen</div>
+    <button id="startBtn">Let's (st)art</button>
+    <div id="instructions">
+      <div class="row"><span class="key">↑</span> vooruit · <span class="key">↓</span> achteruit &nbsp;— trekt soepel op en remt af</div>
+      <div class="row"><span class="key">←</span> <span class="key">→</span> &nbsp;— vloeiende bochten naar links of rechts</div>
+      <div class="row"><span class="key">Shift</span> + <span class="key">←</span> / <span class="key">→</span> &nbsp;— directe hoek van 90°</div>
+      <div class="row"><span class="key">Space</span> &nbsp;— pen omhoog (stop met kleuren) of weer omlaag</div>
+      <div class="row"><span class="key">C</span> wissen &nbsp;·&nbsp; <span class="key">R</span> regenboog aan/uit</div>
+    </div>
+  </div>
+
+<script>
+(() => {
+  const trail = document.getElementById('trail');
+  const ball = document.getElementById('ball');
+  const tctx = trail.getContext('2d');
+  const bctx = ball.getContext('2d');
+  const startScreen = document.getElementById('startScreen');
+  const startBtn = document.getElementById('startBtn');
+  const penStatus = document.getElementById('penStatus');
+
+  function resize() {
+    // Preserve trail when resizing
+    const tmp = document.createElement('canvas');
+    tmp.width = trail.width || window.innerWidth;
+    tmp.height = trail.height || window.innerHeight;
+    tmp.getContext('2d').drawImage(trail, 0, 0);
+
+    trail.width = ball.width = window.innerWidth;
+    trail.height = ball.height = window.innerHeight;
+
+    tctx.fillStyle = '#ffffff';
+    tctx.fillRect(0, 0, trail.width, trail.height);
+    tctx.drawImage(tmp, 0, 0);
+  }
+  window.addEventListener('resize', resize);
+  resize();
+
+  // -------- Game state --------
+  let x = trail.width / 2;
+  let y = trail.height / 2;
+  let lastX = x, lastY = y;          // for line drawing
+  let angle = 0;                     // 0 = facing right
+  let targetAngle = 0;               // smoothly approached for 90° snaps
+  const MAX_SPEED = 2.8;             // top forward / reverse speed
+  const ACCEL = 0.06;                // how fast we approach target speed when key held
+  const DECEL = 0.035;               // how fast we coast to a stop when no key
+  let velocity = 0;                  // signed: + forward, - reverse
+  let drawing = true;
+  let running = false;
+  let rainbow = true;
+  let hue = 0;
+  let manualColor = '#3f51b5';
+
+  // Size presets: ball radius and line thickness
+  const SIZES = {
+    small:  { ball: 5,  line: 2 },
+    medium: { ball: 8,  line: 4 },
+    large:  { ball: 14, line: 9 }
+  };
+  let sizeKey = 'medium';
+
+  const keys = Object.create(null);
+
+  // -------- Input --------
+  document.addEventListener('keydown', (e) => {
+    if (!running) return;
+
+    // Stop browser scrolling
+    if ([' ', 'ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown'].includes(e.key)) {
+      e.preventDefault();
+    }
+
+    keys[e.key] = true;
+
+    // 90° snap when SHIFT IS held (only fire on initial press, not auto-repeat)
+    if (e.shiftKey && !e.repeat) {
+      if (e.key === 'ArrowLeft')  { targetAngle -= Math.PI / 2; angle = targetAngle; }
+      if (e.key === 'ArrowRight') { targetAngle += Math.PI / 2; angle = targetAngle; }
+    }
+
+    if (e.key === ' ' && !e.repeat) {
+      drawing = !drawing;
+      penStatus.textContent = drawing ? 'Pen: tekent' : 'Pen: omhoog';
+      penStatus.classList.toggle('lifted', !drawing);
+    }
+
+    if ((e.key === 'c' || e.key === 'C') && !e.repeat) {
+      tctx.fillStyle = '#ffffff';
+      tctx.fillRect(0, 0, trail.width, trail.height);
+    }
+
+    if ((e.key === 'r' || e.key === 'R') && !e.repeat) {
+      rainbow = !rainbow;
+      if (!rainbow) manualColor = `hsl(${Math.floor(hue)}, 85%, 50%)`;
+    }
+  });
+
+  document.addEventListener('keyup', (e) => {
+    keys[e.key] = false;
+  });
+
+  // -------- Loop --------
+  function step() {
+    if (!running) return;
+
+    const isShift = !!(keys['Shift'] || keys['ShiftLeft'] || keys['ShiftRight']);
+    const turnRate = 0.06; // radians per frame for smooth curve turns
+
+    // Smooth curve turns when SHIFT IS NOT held
+    if (!isShift) {
+      if (keys['ArrowLeft'])  { angle -= turnRate; targetAngle = angle; }
+      if (keys['ArrowRight']) { angle += turnRate; targetAngle = angle; }
+    }
+
+    // Determine target speed based on input
+    let targetVel = 0;
+    if (keys['ArrowUp'])   targetVel =  MAX_SPEED;
+    if (keys['ArrowDown']) targetVel = -MAX_SPEED * 0.7; // reverse is a bit slower
+
+    // Smoothly accelerate toward target, decelerate to 0 when no key
+    if (targetVel !== 0) {
+      // accelerate
+      if (velocity < targetVel) velocity = Math.min(velocity + ACCEL, targetVel);
+      else if (velocity > targetVel) velocity = Math.max(velocity - ACCEL, targetVel);
+    } else {
+      // coast to a stop
+      if (velocity > 0)      velocity = Math.max(velocity - DECEL, 0);
+      else if (velocity < 0) velocity = Math.min(velocity + DECEL, 0);
+    }
+
+    // Move
+    if (velocity !== 0) {
+      x += Math.cos(angle) * velocity;
+      y += Math.sin(angle) * velocity;
+    }
+
+    // Wrap around edges (and skip drawing the wrap segment)
+    let wrapped = false;
+    if (x < -2)              { x += trail.width;  wrapped = true; }
+    if (x > trail.width + 2) { x -= trail.width;  wrapped = true; }
+    if (y < -2)              { y += trail.height; wrapped = true; }
+    if (y > trail.height + 2){ y -= trail.height; wrapped = true; }
+
+    // Color
+    hue = (hue + 0.6) % 360;
+    const color = rainbow ? `hsl(${hue}, 90%, 52%)` : manualColor;
+
+    // Draw trail segment
+    if (drawing && !wrapped) {
+      tctx.strokeStyle = color;
+      tctx.lineWidth = SIZES[sizeKey].line;
+      tctx.lineCap = 'round';
+      tctx.lineJoin = 'round';
+      tctx.beginPath();
+      tctx.moveTo(lastX, lastY);
+      tctx.lineTo(x, y);
+      tctx.stroke();
+    }
+
+    lastX = x;
+    lastY = y;
+
+    // Draw ball overlay
+    bctx.clearRect(0, 0, ball.width, ball.height);
+
+    const ballR = SIZES[sizeKey].ball;
+    const glowR = ballR * 2.5;
+
+    // soft glow
+    const grd = bctx.createRadialGradient(x, y, 2, x, y, glowR);
+    grd.addColorStop(0, color);
+    grd.addColorStop(1, 'rgba(255,255,255,0)');
+    bctx.fillStyle = grd;
+    bctx.beginPath();
+    bctx.arc(x, y, glowR, 0, Math.PI * 2);
+    bctx.fill();
+
+    // ball body
+    bctx.fillStyle = drawing ? color : '#888';
+    bctx.beginPath();
+    bctx.arc(x, y, ballR, 0, Math.PI * 2);
+    bctx.fill();
+
+    bctx.strokeStyle = '#ffffff';
+    bctx.lineWidth = 2;
+    bctx.stroke();
+
+    // tiny direction tick
+    bctx.strokeStyle = 'rgba(0,0,0,0.35)';
+    bctx.lineWidth = 2;
+    bctx.beginPath();
+    bctx.moveTo(x, y);
+    bctx.lineTo(x + Math.cos(angle) * (ballR + 6), y + Math.sin(angle) * (ballR + 6));
+    bctx.stroke();
+
+    requestAnimationFrame(step);
+  }
+
+  startBtn.addEventListener('click', () => {
+    startScreen.classList.add('hidden');
+    setTimeout(() => { startScreen.style.display = 'none'; }, 400);
+    running = true;
+    // Reset position on a fresh start
+    x = trail.width / 2;
+    y = trail.height / 2;
+    lastX = x; lastY = y;
+    angle = 0; targetAngle = 0;
+    requestAnimationFrame(step);
+  });
+
+  // Allow pressing Enter / Space on the start screen too
+  document.addEventListener('keydown', (e) => {
+    if (!running && (e.key === 'Enter' || e.key === ' ')) {
+      e.preventDefault();
+      startBtn.click();
+    }
+  });
+
+  // -------- Side panel: size + color --------
+  document.querySelectorAll('.size-dot').forEach(el => {
+    el.addEventListener('click', () => {
+      document.querySelectorAll('.size-dot').forEach(s => s.classList.remove('active'));
+      el.classList.add('active');
+      sizeKey = el.dataset.size;
+    });
+  });
+
+  document.querySelectorAll('.color-dot').forEach(el => {
+    el.addEventListener('click', () => {
+      document.querySelectorAll('.color-dot').forEach(c => c.classList.remove('active'));
+      el.classList.add('active');
+      const c = el.dataset.color;
+      if (c === 'rainbow') {
+        rainbow = true;
+      } else {
+        rainbow = false;
+        manualColor = c;
+      }
+    });
+  });
+})();
+</script>
+</body>
+</html>

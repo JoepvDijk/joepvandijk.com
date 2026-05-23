@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<!--
+  PROJECT CASE STUDY TEMPLATE
+  ============================================================
+  Dupliceer dit bestand voor elk project (bv. project-cyber-nexus.html).
+  Pas dan in portfolio.html het `url` veld van het project aan zodat
+  het naar de juiste pagina linkt.
+
+  Wat je per project aanpast:
+   1. <title> bovenaan
+   2. Project header: title, lead-tekst, meta (role/timeline/etc.)
+   3. Content: secties + paragrafen
+   4. Gallery: afbeeldingen
+   5. Takeaways: 3 punten
+   6. Documentation: downloadlinks (of weghalen)
+-->
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cyber Nexus | JDesign Studio</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: #0a0a0f;
+    color: #fff;
+    min-height: 100vh;
+    overflow-x: hidden;
+    position: relative;
+  }
+
+  /* Mouse-follow glow als chain — 8 overlappende punten vormen een vloeiende sliert */
+  .bg-glow {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    pointer-events: none; z-index: 0;
+    background:
+      radial-gradient(290px circle at var(--x0, 50%) var(--y0, 50%),
+        rgba(155, 140, 255, 0.20), transparent 65%),
+      radial-gradient(265px circle at var(--x1, 50%) var(--y1, 50%),
+        rgba(150, 135, 255, 0.15), transparent 65%),
+      radial-gradient(240px circle at var(--x2, 50%) var(--y2, 50%),
+        rgba(145, 130, 255, 0.11), transparent 65%),
+      radial-gradient(215px circle at var(--x3, 50%) var(--y3, 50%),
+        rgba(140, 125, 255, 0.08), transparent 65%),
+      radial-gradient(190px circle at var(--x4, 50%) var(--y4, 50%),
+        rgba(135, 120, 255, 0.05), transparent 65%);
+  }
+
+  /* TOP NAV */
+  .top-nav {
+    position: relative; z-index: 2;
+    padding: 24px 50px;
+    max-width: 1280px; margin: 0 auto;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .back-link {
+    color: #a09bff; text-decoration: none; font-size: 14px; font-weight: 600;
+    display: inline-flex; align-items: center; gap: 8px;
+    transition: gap 0.2s;
+  }
+  .back-link:hover { gap: 14px; }
+  .brand { font-weight: 800; letter-spacing: 1px; font-size: 14px; }
+
+  /* PROJECT HEADER */
+  .project-header {
+    position: relative; z-index: 1;
+    max-width: 1100px; margin: 0 auto;
+    padding: 40px 50px 60px;
+  }
+  .project-meta-top {
+    color: #6a6a7a;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 3px;
+    margin-bottom: 24px;
+    display: flex; align-items: center; gap: 14px;
+  }
+  .project-meta-top .divider {
+    width: 60px; height: 1px; background: #2a2a3a;
+  }
+  .project-header h1 {
+    font-size: 72px;
+    font-weight: 800;
+    letter-spacing: -2px;
+    line-height: 1.05;
+    margin-bottom: 22px;
+  }
+  .project-lead {
+    color: #c0c0d0;
+    font-size: 17px;
+    line-height: 1.6;
+    max-width: 640px;
+    margin-bottom: 40px;
+  }
+  .project-meta-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 28px;
+    padding-top: 28px;
+    border-top: 1px solid #1f1f2e;
+  }
+  .meta-label {
+    color: #6a6a7a;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    margin-bottom: 6px;
+  }
+  .meta-value {
+    color: #fff;
+    font-size: 15px;
+    font-weight: 600;
+  }
+
+  /* CONTENT SECTION */
+  .project-content {
+    position: relative; z-index: 1;
+    max-width: 1100px; margin: 0 auto;
+    padding: 40px 50px 60px;
+  }
+  .content-grid {
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    gap: 60px;
+  }
+  .content-side h2 {
+    font-size: 26px;
+    font-weight: 700;
+    line-height: 1.2;
+    margin-bottom: 14px;
+    position: sticky;
+    top: 30px;
+  }
+  .content-side .side-bar {
+    width: 50px; height: 3px;
+    background: #8b7fff;
+    border-radius: 2px;
+    position: sticky;
+    top: 90px;
+  }
+  .content-body h3 {
+    color: #a09bff;
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 18px;
+    margin-top: 36px;
+  }
+  .content-body h3:first-child { margin-top: 0; }
+  .content-body p {
+    color: #b0b0c0;
+    font-size: 15px;
+    line-height: 1.75;
+    margin-bottom: 18px;
+  }
+
+  .pull-quote {
+    background: #15151f;
+    border: 1px solid #1f1f2e;
+    border-left: 3px solid #8b7fff;
+    border-radius: 12px;
+    padding: 22px 26px;
+    margin: 32px 0;
+    color: #d0d0e0;
+    font-size: 16px;
+    font-style: italic;
+    line-height: 1.6;
+  }
+  .pull-quote cite {
+    display: block;
+    margin-top: 12px;
+    color: #a09bff;
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 600;
+    letter-spacing: 1px;
+  }
+
+  /* GALLERY */
+  .project-gallery {
+    position: relative; z-index: 1;
+    max-width: 1100px; margin: 0 auto;
+    padding: 20px 50px 60px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+  }
+  .gallery-img {
+    width: 100%;
+    aspect-ratio: 16 / 10;
+    object-fit: cover;
+    border-radius: 14px;
+    border: 1px solid #1f1f2e;
+    background: linear-gradient(135deg, #1a1a2e, #0f0f1a);
+  }
+
+  /* TAKEAWAYS */
+  .takeaways-section {
+    position: relative; z-index: 1;
+    max-width: 1100px; margin: 0 auto;
+    padding: 60px 50px;
+    text-align: center;
+  }
+  .takeaways-title {
+    font-size: 30px;
+    font-weight: 700;
+    margin-bottom: 40px;
+  }
+  .takeaways-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 18px;
+    text-align: left;
+  }
+  .takeaway-card {
+    background: #15151f;
+    border: 1px solid #1f1f2e;
+    border-radius: 16px;
+    padding: 26px;
+    transition: border-color 0.2s, transform 0.2s;
+  }
+  .takeaway-card:hover {
+    border-color: #2f2f4e;
+    transform: translateY(-4px);
+  }
+  .takeaway-icon {
+    width: 44px; height: 44px;
+    border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 18px;
+  }
+  .takeaway-icon svg { width: 22px; height: 22px; }
+  .icon-purple { background: rgba(139, 127, 255, 0.15); color: #a09bff; }
+  .icon-blue { background: rgba(80, 160, 255, 0.15); color: #6ab0ff; }
+  .icon-orange { background: rgba(255, 140, 80, 0.15); color: #ff9a6a; }
+
+  .takeaway-card h4 {
+    font-size: 17px;
+    font-weight: 700;
+    margin-bottom: 10px;
+  }
+  .takeaway-card p {
+    color: #8a8a9a;
+    font-size: 13px;
+    line-height: 1.55;
+  }
+
+  /* DOCUMENTATION */
+  .documentation-section {
+    position: relative; z-index: 1;
+    max-width: 1100px; margin: 0 auto;
+    padding: 20px 50px 60px;
+  }
+  .doc-inner {
+    background: #15151f;
+    border: 1px solid #1f1f2e;
+    border-radius: 18px;
+    padding: 32px;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 28px;
+    align-items: center;
+  }
+  .doc-text h2 {
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+  .doc-text p {
+    color: #8a8a9a;
+    font-size: 13px;
+    line-height: 1.5;
+    max-width: 380px;
+  }
+  .doc-buttons {
+    display: flex; gap: 12px;
+  }
+  .doc-btn {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 18px;
+    background: #1a1a26;
+    border: 1px solid #2a2a3a;
+    border-radius: 12px;
+    text-decoration: none;
+    color: #fff;
+    transition: all 0.2s;
+  }
+  .doc-btn:hover {
+    border-color: #8b7fff;
+    background: rgba(139, 127, 255, 0.08);
+    transform: translateY(-2px);
+  }
+  .doc-btn svg {
+    width: 22px; height: 22px;
+    color: #a09bff;
+    flex-shrink: 0;
+  }
+  .doc-btn-title { font-size: 13px; font-weight: 600; }
+  .doc-btn-size { font-size: 11px; color: #6a6a7a; }
+
+  /* FOOTER */
+  .footer {
+    position: relative; z-index: 1;
+    border-top: 1px solid #1a1a2a;
+    background: rgba(10, 10, 15, 0.6);
+    padding: 22px 50px;
+    margin-top: 40px;
+  }
+  .footer-inner {
+    max-width: 1280px; margin: 0 auto;
+    display: grid; grid-template-columns: 1fr auto 1fr;
+    align-items: center; gap: 40px;
+  }
+  .footer-brand h3 { font-size: 14px; font-weight: 800; letter-spacing: 1px; margin-bottom: 2px; }
+  .footer-brand p { color: #6a6a7a; font-size: 11px; }
+  .footer-links { display: flex; gap: 28px; justify-content: center; }
+  .footer-links a { color: #c0c0d0; font-size: 12px; font-weight: 500; text-decoration: none; transition: color 0.2s; }
+  .footer-links a:hover { color: #a09bff; }
+  .footer-status { display: flex; align-items: center; gap: 8px; justify-content: flex-end; color: #c0c0d0; font-size: 12px; font-weight: 500; }
+  .status-dot { width: 7px; height: 7px; border-radius: 50%; background: #2ecc71; box-shadow: 0 0 8px rgba(46, 204, 113, 0.6); animation: pulse 2s ease-in-out infinite; }
+  @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+
+  /* RESPONSIVE */
+  @media (max-width: 900px) {
+    .top-nav, .project-header, .project-content, .project-gallery,
+    .takeaways-section, .documentation-section, .footer { padding-left: 24px; padding-right: 24px; }
+    .project-header h1 { font-size: 44px; }
+    .project-meta-grid { grid-template-columns: repeat(2, 1fr); gap: 20px; }
+    .content-grid { grid-template-columns: 1fr; gap: 24px; }
+    .content-side h2, .content-side .side-bar { position: static; }
+    .project-gallery { grid-template-columns: 1fr; }
+    .takeaways-grid { grid-template-columns: 1fr; }
+    .doc-inner { grid-template-columns: 1fr; }
+    .doc-buttons { flex-direction: column; }
+    .footer-inner { grid-template-columns: 1fr; text-align: center; gap: 24px; }
+    .footer-status { justify-content: center; }
+  }
+
+  /* ============================================================
+     THEME TOGGLE + LIGHT MODE
+     ============================================================ */
+  .theme-toggle {
+    position: fixed; top: 20px; right: 20px; z-index: 100;
+    width: 42px; height: 42px; border-radius: 50%;
+    border: 1px solid #2a2a3a;
+    background: rgba(15, 15, 25, 0.85);
+    backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+    color: #fff; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: background-color 0.3s, border-color 0.3s, color 0.3s, transform 0.2s;
+  }
+  .theme-toggle:hover { border-color: #8b7fff; transform: scale(1.08); }
+  .theme-toggle svg { width: 18px; height: 18px; }
+  .theme-icon-sun { display: none; }
+  body.light .theme-icon-sun { display: block; }
+  body.light .theme-icon-moon { display: none; }
+  body.light .theme-toggle {
+    background: rgba(255, 255, 255, 0.9);
+    border-color: #d0d0db; color: #1a1a2a;
+  }
+
+  body { transition: background-color 0.4s, color 0.4s; }
+  body.light { background: #f5f5fa; color: #1a1a2a; }
+  body.light .brand { color: #1a1a2a; }
+  body.light .project-meta-top { color: #8a8a9a; }
+  body.light .project-meta-top .divider { background: #d0d0db; }
+  body.light .project-header h1 { color: #1a1a2a; }
+  body.light .project-lead { color: #4a4a5a; }
+  body.light .project-meta-grid { border-top-color: #e2e2eb; }
+  body.light .meta-label { color: #8a8a9a; }
+  body.light .meta-value { color: #1a1a2a; }
+  body.light .content-side h2 { color: #1a1a2a; }
+  body.light .content-body p { color: #4a4a5a; }
+  body.light .pull-quote {
+    background: #ffffff; border-color: #e2e2eb;
+    border-left-color: #8b7fff; color: #4a4a5a;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  }
+  body.light .gallery-img { border-color: #e2e2eb; }
+  body.light .takeaways-title { color: #1a1a2a; }
+  body.light .takeaway-card {
+    background: #ffffff; border-color: #e2e2eb;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  }
+  body.light .takeaway-card:hover { border-color: #c0c0d8; }
+  body.light .takeaway-card h4 { color: #1a1a2a; }
+  body.light .takeaway-card p { color: #6a6a7a; }
+  body.light .doc-inner {
+    background: #ffffff; border-color: #e2e2eb;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  }
+  body.light .doc-text h2 { color: #1a1a2a; }
+  body.light .doc-text p { color: #6a6a7a; }
+  body.light .doc-btn {
+    background: #f5f5fa; border-color: #d0d0db; color: #1a1a2a;
+  }
+  body.light .doc-btn:hover { background: rgba(139, 127, 255, 0.08); border-color: #8b7fff; }
+  body.light .doc-btn-size { color: #8a8a9a; }
+  body.light .footer {
+    background: rgba(245, 245, 250, 0.7); border-top-color: #e2e2eb;
+  }
+  body.light .footer-brand h3 { color: #1a1a2a; }
+  body.light .footer-brand p { color: #8a8a9a; }
+  body.light .footer-links a { color: #4a4a5a; }
+  body.light .footer-status { color: #4a4a5a; }
+
+  /* ============================================================
+     ENTRY ANIMATIONS
+     ============================================================ */
+
+  /* Project header (case-study top) staggered fade-in op page load */
+  .project-header > * {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.75s cubic-bezier(0.22, 1, 0.36, 1),
+                transform 0.75s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .project-header.loaded > * {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .project-header.loaded .project-meta-top  { transition-delay: 0s; }
+  .project-header.loaded h1                 { transition-delay: 0.15s; }
+  .project-header.loaded .project-lead      { transition-delay: 0.3s; }
+  .project-header.loaded .project-meta-grid { transition-delay: 0.45s; }
+
+  /* Sections fade + slide van onder bij scrollen in beeld */
+  .project-content,
+  .project-gallery,
+  .takeaways-section,
+  .documentation-section {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.8s cubic-bezier(0.22, 1, 0.36, 1),
+                transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .project-content.in-view,
+  .project-gallery.in-view,
+  .takeaways-section.in-view,
+  .documentation-section.in-view {
+    opacity: 1;
+    transform: translateY(0);
+  }
+</style>
+</head>
+<body>
+
+<button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+  <svg class="theme-icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="12" cy="12" r="4"/>
+    <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/>
+  </svg>
+  <svg class="theme-icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+  </svg>
+</button>
+
+<div class="bg-glow" id="bgGlow"></div>
+
+<nav class="top-nav">
+  <a href="../../portfolio.html" class="back-link">← Back to projects</a>
+  <span class="brand">JDESIGN STUDIO</span>
+</nav>
+
+<!-- ============== HEADER ============== -->
+<header class="project-header">
+  <div class="project-meta-top">
+    <span>CASE STUDY</span>
+    <span class="divider"></span>
+    <span>2024</span>
+  </div>
+  <h1>Cyber Nexus</h1>
+  <p class="project-lead">A deep-dive into the design and development of an immersive cyberpunk RPG environment, bridging high-fidelity aesthetics with seamless player interaction models.</p>
+
+  <div class="project-meta-grid">
+    <div>
+      <div class="meta-label">ROLE</div>
+      <div class="meta-value">Lead UI/UX Designer</div>
+    </div>
+    <div>
+      <div class="meta-label">TIMELINE</div>
+      <div class="meta-value">6 Months</div>
+    </div>
+    <div>
+      <div class="meta-label">PLATFORM</div>
+      <div class="meta-value">Desktop / VR</div>
+    </div>
+    <div>
+      <div class="meta-label">FOCUS</div>
+      <div class="meta-value">Immersive UI</div>
+    </div>
+  </div>
+</header>
+
+<!-- ============== CHALLENGE & PROCESS ============== -->
+<section class="project-content">
+  <div class="content-grid">
+    <aside class="content-side">
+      <h2>The Challenge &amp; Process</h2>
+      <div class="side-bar"></div>
+    </aside>
+    <div class="content-body">
+      <h3>Establishing the Core Identity</h3>
+      <p>The primary goal was to create a user interface that didn't just sit on top of the world, but felt integrated within the 'Cyber Nexus' lore. We began with extensive user research into the mental models of RPG players, specifically focusing on how information density affects immersion during high-stakes combat and exploration.</p>
+      <p>Our iterative process involved over 50 prototype variants, testing everything from diegetic menus that appear as holographic projections from the player's wrist to minimal HUDs that respond to eye-tracking movements.</p>
+
+      <blockquote class="pull-quote">
+        "The interface shouldn't feel like a layer. It should feel like the nervous system of the world itself."
+        <cite>Project Vision Statement</cite>
+      </blockquote>
+
+      <h3>Iterative Design &amp; Testing</h3>
+      <p>Using Figma and Unity, we developed a living design system. Every button press, window transition, and data visualization was stress-tested against different environmental lighting conditions to ensure accessibility remained a priority without sacrificing the neon-soaked cyberpunk aesthetic.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============== GALLERY ============== -->
+<section class="project-gallery">
+  <img class="gallery-img" src="https://images.unsplash.com/photo-1614680376573-df3480f0c6ff?w=1000&q=80" alt="Project visual 1">
+  <img class="gallery-img" src="https://images.unsplash.com/photo-1542751371-adc38448a05e?w=1000&q=80" alt="Project visual 2">
+</section>
+
+<!-- ============== TAKEAWAYS ============== -->
+<section class="takeaways-section">
+  <h2 class="takeaways-title">Technical &amp; Creative Takeaways</h2>
+  <div class="takeaways-grid">
+    <div class="takeaway-card">
+      <div class="takeaway-icon icon-purple">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.5 5 5 1.5-5 1.5L12 16l-1.5-5L5.5 9.5 10.5 8z"/><path d="M19 3v4M21 5h-4M5 17v4M7 19H3"/></svg>
+      </div>
+      <h4>Spatial Design</h4>
+      <p>Mastered the transition from 2D screen-based layouts to 3D spatial UI that respects player depth perception.</p>
+    </div>
+    <div class="takeaway-card">
+      <div class="takeaway-icon icon-blue">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><line x1="9" y1="2" x2="9" y2="4"/><line x1="15" y1="2" x2="15" y2="4"/><line x1="9" y1="20" x2="9" y2="22"/><line x1="15" y1="20" x2="15" y2="22"/><line x1="20" y1="9" x2="22" y2="9"/><line x1="20" y1="15" x2="22" y2="15"/><line x1="2" y1="9" x2="4" y2="9"/><line x1="2" y1="15" x2="4" y2="15"/></svg>
+      </div>
+      <h4>Optimization</h4>
+      <p>Developed custom shader workflows in Unity to render complex UI glows without impacting frame rates.</p>
+    </div>
+    <div class="takeaway-card">
+      <div class="takeaway-icon icon-orange">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="5" r="2"/><path d="M12 7v4M5 11h14M9 11l-1 10M15 11l1 10"/></svg>
+      </div>
+      <h4>Accessibility</h4>
+      <p>Implemented a high-contrast mode that preserves the cyberpunk vibe while ensuring readability for all users.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============== DOCUMENTATION ============== -->
+<section class="documentation-section">
+  <div class="doc-inner">
+    <div class="doc-text">
+      <h2>Project Documentation</h2>
+      <p>Detailed technical specifications and design systems are available for peer review and professional inquiries.</p>
+    </div>
+    <div class="doc-buttons">
+      <a href="#" class="doc-btn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="9" y1="13" x2="15" y2="13"/><line x1="9" y1="17" x2="15" y2="17"/></svg>
+        <div>
+          <div class="doc-btn-title">Case Study PDF</div>
+          <div class="doc-btn-size">4.2 MB</div>
+        </div>
+      </a>
+      <a href="#" class="doc-btn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+        <div>
+          <div class="doc-btn-title">Design Specs</div>
+          <div class="doc-btn-size">12.8 MB</div>
+        </div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ============== FOOTER ============== -->
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <h3>JDESIGN STUDIO</h3>
+      <p>&copy; 2026 JDesign Studio. All rights reserved.</p>
+    </div>
+    <div class="footer-links">
+      <a href="https://www.instagram.com/joep_vdijk/" target="_blank" rel="noopener">Instagram</a>
+      <a href="https://www.linkedin.com/in/joep-van-dijk-778884210/" target="_blank" rel="noopener">LinkedIn</a>
+      <a href="https://github.com/JoepvDijk" target="_blank" rel="noopener">GitHub</a>
+    </div>
+    <div class="footer-status">
+      <span class="status-dot"></span>
+      <span>Available for new projects</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // Mouse-follow glow als chain met lavalamp-wobble per schakel.
+  const bgGlow = document.getElementById('bgGlow');
+  const NUM_POINTS = 5;
+  const points = [];
+  for (let i = 0; i < NUM_POINTS; i++) {
+    points.push({ x: window.innerWidth / 2, y: window.innerHeight / 2 });
+  }
+  let targetX = window.innerWidth / 2, targetY = window.innerHeight / 2;
+  let t = 0;
+  document.addEventListener('mousemove', (e) => { targetX = e.clientX; targetY = e.clientY; });
+
+  function animateGlow() {
+    t += 0.016;
+    points[0].x += (targetX - points[0].x) * 0.30;
+    points[0].y += (targetY - points[0].y) * 0.30;
+    for (let i = 1; i < NUM_POINTS; i++) {
+      points[i].x += (points[i - 1].x - points[i].x) * 0.40;
+      points[i].y += (points[i - 1].y - points[i].y) * 0.40;
+    }
+    for (let i = 0; i < NUM_POINTS; i++) {
+      const phase = i * 0.9;
+      const wx = Math.sin(t * 2.8 + phase) * 22 + Math.cos(t * 1.6 + phase * 1.7) * 14;
+      const wy = Math.cos(t * 2.4 + phase * 1.2) * 22 + Math.sin(t * 1.8 + phase * 0.9) * 14;
+      bgGlow.style.setProperty(`--x${i}`, (points[i].x + wx) + 'px');
+      bgGlow.style.setProperty(`--y${i}`, (points[i].y + wy) + 'px');
+    }
+    const brightness = 0.65 + Math.sin(t * 0.9) * 0.25 + Math.cos(t * 1.4) * 0.10;
+    bgGlow.style.opacity = brightness;
+    requestAnimationFrame(animateGlow);
+  }
+  animateGlow();
+
+  // === THEME TOGGLE ===
+  (function() {
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme === 'light') document.body.classList.add('light');
+    const themeToggle = document.getElementById('themeToggle');
+    if (themeToggle) {
+      themeToggle.addEventListener('click', () => {
+        document.body.classList.toggle('light');
+        localStorage.setItem('theme', document.body.classList.contains('light') ? 'light' : 'dark');
+      });
+    }
+  })();
+
+  // === ENTRY ANIMATIONS ===
+  (function() {
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        const header = document.querySelector('.project-header');
+        if (header) header.classList.add('loaded');
+      });
+    });
+
+    if ('IntersectionObserver' in window) {
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('in-view');
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.15, rootMargin: '0px 0px -50px 0px' });
+      document.querySelectorAll('.project-content, .project-gallery, .takeaways-section, .documentation-section')
+        .forEach(el => observer.observe(el));
+    } else {
+      document.querySelectorAll('.project-content, .project-gallery, .takeaways-section, .documentation-section')
+        .forEach(el => el.classList.add('in-view'));
+    }
+  })();
+</script>
+
+</body>
+</html>

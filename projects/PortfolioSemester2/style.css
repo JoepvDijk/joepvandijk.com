@@ -1,0 +1,296 @@
+/*BODY*/
+body{
+    color: white;                            /* Zorgt ervoor dat alle tekst in de body wit is */
+    font-family: 'Montserrat', Helvetica, sans-serif; /* Zorgt ervoor dat in de hele body de Montserrat font word gebruikt */
+    margin: 0;
+    padding: 0;        /* Deze padding/margin zorgt ervoor dat de hele body goed aansluit op de linker en bovenkant van het scherm */
+}
+h1{
+    font-family: 'Poppins', Helvetica, sans-serif;
+}
+.hometextcrop {
+    padding: 0 15% 0 15%;
+}
+
+.homepage{             /*Zorgt ervoor dat de body van .homepage de afbeelding krijgt*/
+    background-image: url("images/backgroundjoep2.jpg");
+    background-position: center top;
+    background-size: cover;           /* Behoudt de juiste proporties, geen samengeknepen foto */
+    background-repeat: no-repeat;
+}
+
+
+
+/*NAVIGATIE*/
+nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 60px 0 0;       /* Ruimte aan de rechterkant van de nav */
+}
+
+nav ul {
+    list-style: none;
+    margin: 0;
+    padding: 25px 0 0 0;
+    font-size: 20px;
+    display: flex;
+    gap: 10px;
+}
+
+nav ul li {
+    padding: 0;
+}
+
+nav ul li a {
+    color: white;
+    text-decoration: none;
+    text-transform: uppercase;
+    padding: 8px 14px;
+    border-radius: 4px;
+    transition: background-color 0.2s ease;
+}
+
+nav ul li a:hover {
+    background-color: rgba(223, 150, 102, 0.85);
+    text-decoration: none;
+}
+
+a:hover {                       /* Word actief wanneer je muis over een link zweeft of hovert */
+    text-decoration: underline; /* Er komt nu een lijntje onder een linkje als je muis erboven zweeft */
+}
+
+.logo img{
+  height: 9vw;
+  max-height: 130px;
+  padding: 5px;
+  filter: drop-shadow(0 0 6px rgba(0,0,0,0.75)) drop-shadow(0 0 3px rgba(0,0,0,0.6));
+  /* Zwarte gloed rondom het witte logo voor contrast tegen lichte achtergrond */
+}
+
+
+
+/*SIDEMENU*/
+.sidemenu{
+    position: fixed;
+    right: 0;
+    top: 20%;
+    text-align: right;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: none; /*Deze staat verborgen totdat je naar beneder scrollt, dit word gedaan met Javascript*/
+}
+.sidemenulink{
+    padding: 6px 10px;
+}
+.sidemenulink a{
+    display: inline-block;
+    color: white;
+    text-decoration: none;
+    text-transform: uppercase;
+    background-color: rgb(223, 150, 102);
+    padding: 8px 14px;
+    border-radius: 4px;
+    font-size: 14px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.25);
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+.sidemenulink a:hover{
+    transform: translateX(-4px);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.35);
+    text-decoration: none;
+}
+
+
+
+
+/*ABOUT ME*/
+.aboutme {
+    padding: 18% 0 0 8%;
+    max-width: 600px;
+}
+.aboutme h1 {
+    margin: 0;
+    color: black;
+    text-shadow: 0 0 30px rgba(255,255,255,0.95), 0 0 50px rgba(255,255,255,0.9), 0 0 70px rgba(255,255,255,0.7);
+    /* Grote zachte witte gloed rondom de hele kop in plaats van per letter */
+}
+
+.aboutme p {
+    margin: 10px 0 0 0;
+    color: black;
+    max-width: 400px;
+    text-shadow: 0 0 25px rgba(255,255,255,0.95), 0 0 45px rgba(255,255,255,0.85), 0 0 65px rgba(255,255,255,0.6);
+}
+
+.aboutmelink, .aboutme .aboutmelink {
+    text-shadow: none;   /* Knop heeft eigen achtergrond, geen gloed nodig */
+}
+.aboutmelink {
+    display: inline-block;
+    border-radius: 6px;
+    background-color: rgb(223, 150, 102);
+    border: none;
+    color: #FFFFFF;
+    text-align: center;
+    padding: 10px 18px;
+    margin-top: 8px;
+    cursor: pointer; /*Zorgt ervoor dat de cursor een pointer word als die erover komt*/
+    text-decoration: none;
+    font-weight: 600;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.25);
+    transition: transform 0.15s ease, box-shadow 0.15s ease, background-color 0.15s ease;
+}
+.aboutmelink:hover {
+    background-color: rgb(206, 132, 84);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.35);
+    text-decoration: none;
+}
+
+
+
+
+/*GENERAL STYLING*/
+.tussenruimtediv{
+    padding: 100px 0 0 0;
+
+}
+
+.hometitle{
+    margin: 0;
+    text-align: center;
+    text-transform: uppercase;
+    font-size: 80px;
+}
+
+.hometext{
+    text-align: center;
+    font-size: 30px;
+    padding: 20px 0 50px 0;
+    margin: 0;
+}
+
+.homecontent {
+    display: flex;                /* Zorgt ervoor dat op de section met klassnaam feautures flexbox kan worden gebruikt */
+    flex-direction: row;          /* Zet de divs in de section container in een row */
+    text-align: center;           /* Zet alles in .feautures in het midden. De afbeeldingen staan nu dus mooi gecenterd */
+    font-size: 25px;
+    flex-wrap: wrap;  /* Dit zorgt ervoor dat je website responsive word. Als je scherm nu kleiner word zullen de afbeeldingen */
+                      /* automatisch zichzelf onder elkaar zetten, maar niet netjes in het midden*/
+    justify-content: center;      /* Zet alle children in het midden van de container */
+                                  /* Dus alle figures in de feautures section worden nu mooi gecentered */
+    padding: 0 12% 0 12%;         /* Smallere rij zodat de plaatjes dichter bij elkaar staan en niet onder het zijmenu vallen */
+  /* Nu heb je dus je website al responsive gemaakt zonder media query's te gebruiken, door een slim design is dit dus niet altijd nodig! */
+}
+
+.homecontent figure {
+    width: 30%;                    /* Maximaal 3 figures per rij — zo vallen ze niet onder het zijmenu */
+    margin: 15px 0;
+    text-transform: uppercase; /* Verandert de tekst naar hoofdletters, doe dit in css omdat je in html schrijft maar niet designed */
+}
+
+.homecontent figure img {
+    height: 250px;  /*Verandert de grootte van de afbeeldingen, kan nog verandert worden voor verschillende beeldschermen*/
+    width: 250px;
+    border-radius: 5%; /* Zorgt ervoor dat je afbeelding een cirkel wordt. Bijv. 10px ipv 50% geeft de afbeelding wat rondere hoeken */
+    box-shadow: black 0px 0px 10px; /* Hiermee geef je een schaduw aan je box*/
+    /* box-shadow heeft 4 waardes nodig, eerst de kleur, dan lengte horizontaal, dan lengte verticaal, dan hoeveel blur */
+    border: 5px solid rgba(0, 0, 0, 0);        /* Dit zorgt voor een border die ontzichtbaar is  */
+    transition: border-color 0.2s ease, transform 0.15s ease;
+    box-sizing: border-box;
+}
+
+.homecontent figure img:hover{
+    border: 5px solid rgb(223, 150, 102);        /* Dit zorgt voor een border  */
+    transform: scale(1.02);
+}
+
+
+
+
+/*achievements*/
+.achievementdiv{
+    padding: 650px 0 0 0; /*Deze padding moet apart worden toegevoegd omdat de scroll to naar het bovenste gedeelte van een element scrollt*/
+}                         /*Als ik deze padding bij de titel had gezet zou er niet naar de juiste plek worden gescrollt*/
+.achievementcontent {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    padding: 0 2% !important;          /* Overschrijft de 15% van .hometextcrop zodat alle badges op één rij passen */
+}
+.achievementcontent div {
+    padding: 15px;
+}
+.achievementcontent img {
+    height: 130px;                     /* Iets kleiner zodat 7 badges naast elkaar passen op normale schermen */
+    transition: transform 0.15s ease;
+}
+.achievementcontent a:hover img {
+    transform: scale(1.06);
+}
+
+
+
+
+/*FOOTER*/
+footer {
+    background-color: black;
+    color: gray;
+    font-size: 15px;                  /* Verandert de grootte van je tekst */
+    padding: 30px;
+    margin-top: 200px;
+    text-align: center;
+}
+
+
+
+/*SCROLL TO ELEMENT*/
+html {
+    scroll-behavior: smooth;
+  }
+
+
+
+  .loader-wrapper {
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-color: #242f3f;
+    display:flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 15;
+  }
+  .loader {
+    display: inline-block;
+    width: 30px;
+    height: 30px;
+    position: relative;
+    border: 4px solid #Fff;
+    animation: loader 2s infinite ease;
+  }
+  .loader-inner {
+    vertical-align: top;
+    display: inline-block;
+    width: 100%;
+    background-color: #fff;
+    animation: loader-inner 2s infinite ease-in;
+  }
+  @keyframes loader {
+    0% { transform: rotate(0deg);}
+    25% { transform: rotate(180deg);}
+    50% { transform: rotate(180deg);}
+    75% { transform: rotate(360deg);}
+    100% { transform: rotate(360deg);}
+  }
+  @keyframes loader-inner {
+    0% { height: 0%;}
+    25% { height: 0%;}
+    50% { height: 100%;}
+    75% { height: 100%;}
+    100% { height: 0%;}
+  }
