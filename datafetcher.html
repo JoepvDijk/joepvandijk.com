@@ -1,0 +1,858 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bonaire Data Fetcher</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+      background: #e8eef5;
+      min-height: 100vh;
+      padding: 30px 16px 60px;
+    }
+
+    .card {
+      background: #fff;
+      border-radius: 14px;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.10);
+      padding: 32px 36px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .header { display: flex; align-items: center; gap: 12px; margin-bottom: 6px; }
+    h1 { font-size: 22px; color: #1a3a5c; font-weight: 700; }
+    .subtitle { color: #666; font-size: 14px; margin-bottom: 20px; }
+
+    /* ---- Tabs ---- */
+    .tabs {
+      display: flex;
+      gap: 4px;
+      border-bottom: 2px solid #dce8f5;
+      margin-bottom: 24px;
+    }
+    .tab-btn {
+      background: none;
+      border: none;
+      padding: 9px 20px;
+      font-size: 14px;
+      font-weight: 600;
+      color: #6688aa;
+      cursor: pointer;
+      border-radius: 8px 8px 0 0;
+      position: relative;
+      bottom: -2px;
+      border-bottom: 2px solid transparent;
+      transition: color .15s;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .tab-btn:hover { color: #1a6faf; }
+    .tab-btn.active {
+      color: #1a3a5c;
+      border-bottom: 2px solid #1a6faf;
+      background: #f0f6ff;
+    }
+    .tab-badge {
+      background: #1a6faf;
+      color: #fff;
+      font-size: 10px;
+      font-weight: 700;
+      padding: 1px 6px;
+      border-radius: 10px;
+      min-width: 18px;
+      text-align: center;
+      display: none;
+    }
+    .tab-badge.visible { display: inline-block; }
+
+    /* ---- Fetch tab ---- */
+    .fetch-btn {
+      background: linear-gradient(135deg, #1a6faf, #1a3a5c);
+      color: #fff;
+      border: none;
+      padding: 12px 28px;
+      font-size: 15px;
+      font-weight: 600;
+      border-radius: 8px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: opacity .2s;
+    }
+    .fetch-btn:hover { opacity: .88; }
+    .fetch-btn:disabled { opacity: .5; cursor: not-allowed; }
+
+    .status-bar {
+      margin-top: 14px;
+      padding: 9px 14px;
+      border-radius: 7px;
+      font-size: 13px;
+      display: none;
+    }
+    .status-bar.loading { background: #fff8e1; color: #7a5c00; border: 1px solid #ffe082; }
+    .status-bar.success { background: #e8f5e9; color: #1b5e20; border: 1px solid #a5d6a7; }
+    .status-bar.error   { background: #fde8e8; color: #7f1d1d; border: 1px solid #f9a8a8; }
+
+    .results { margin-top: 26px; display: none; }
+
+    /* ---- Data groups ---- */
+    .data-groups { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px; margin-bottom: 20px; }
+    .group {
+      background: #f5f8fc;
+      border: 1px solid #dce8f5;
+      border-radius: 10px;
+      padding: 14px 16px;
+    }
+    .group-title {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      color: #4a7aaa;
+      margin-bottom: 10px;
+    }
+    .kv-row { display: flex; justify-content: space-between; align-items: center; padding: 3px 0; border-bottom: 1px solid #e5edf5; }
+    .kv-row:last-child { border-bottom: none; }
+    .kv-label { font-size: 12px; color: #667; }
+    .kv-value { font-size: 14px; font-weight: 600; color: #1a2e42; }
+    .kv-calc { font-size: 12px; font-weight: 500; color: #2a7a4a; font-style: italic; }
+
+    /* ---- Excel preview table (shared) ---- */
+    .copy-section { margin-top: 8px; }
+    .copy-label { font-size: 12px; font-weight: 700; color: #4a7aaa; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; }
+
+    .excel-wrap {
+      overflow-x: auto;
+      border: 1px solid #c5d8ee;
+      border-radius: 8px;
+      margin-bottom: 10px;
+    }
+    .excel-table {
+      border-collapse: collapse;
+      white-space: nowrap;
+      font-size: 12px;
+      width: 100%;
+    }
+    .excel-table thead tr { background: #dce8f5; }
+    .excel-table thead th {
+      padding: 6px 10px;
+      font-weight: 600;
+      color: #2a4a6a;
+      border-right: 1px solid #c5d8ee;
+      text-align: left;
+      font-size: 11px;
+    }
+    .excel-table tbody tr { background: #f8fafd; }
+    .excel-table tbody tr:nth-child(even) { background: #f0f5fb; }
+    .excel-table tbody td {
+      padding: 7px 10px;
+      border-right: 1px solid #dce8f5;
+      font-weight: 600;
+      color: #1a2e42;
+      font-size: 13px;
+    }
+    .excel-table thead th:last-child,
+    .excel-table tbody td:last-child { border-right: none; }
+
+    /* Date cell in history */
+    .excel-table td.date-cell {
+      font-weight: 700;
+      color: #1a6faf;
+      white-space: nowrap;
+      font-size: 12px;
+    }
+    .excel-table td.action-cell {
+      text-align: center;
+      white-space: nowrap;
+    }
+
+    /* Hidden raw copy text */
+    .copy-raw { position: absolute; left: -9999px; white-space: pre; }
+
+    .copy-actions { display: flex; align-items: center; gap: 12px; margin-top: 2px; }
+    .copy-btn {
+      background: #1a9a4a;
+      color: #fff;
+      border: none;
+      padding: 9px 20px;
+      font-size: 14px;
+      font-weight: 600;
+      border-radius: 7px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .copy-btn:hover { background: #157a3c; }
+    .copy-feedback { font-size: 13px; color: #1a9a4a; font-weight: 600; display: none; }
+
+    /* Icon buttons used in history table */
+    .icon-btn {
+      border: none;
+      background: none;
+      cursor: pointer;
+      padding: 4px 7px;
+      border-radius: 5px;
+      font-size: 14px;
+      transition: background .15s;
+    }
+    .icon-btn.copy  { color: #1a9a4a; }
+    .icon-btn.copy:hover  { background: #e8f5e9; }
+    .icon-btn.del   { color: #c0392b; }
+    .icon-btn.del:hover   { background: #fde8e8; }
+
+    /* ---- History tab ---- */
+    #tab-history { display: none; }
+
+    .history-toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 14px;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .history-title { font-size: 14px; font-weight: 700; color: #1a3a5c; }
+    .clear-btn {
+      background: none;
+      border: 1px solid #e0b0b0;
+      color: #c0392b;
+      padding: 6px 14px;
+      font-size: 12px;
+      font-weight: 600;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background .15s;
+    }
+    .clear-btn:hover { background: #fde8e8; }
+
+    .history-empty {
+      text-align: center;
+      padding: 40px 20px;
+      color: #aaa;
+      font-size: 14px;
+    }
+
+    /* ---- Sources ---- */
+    .sources { margin-top: 28px; font-size: 11px; color: #999; }
+    .sources a { color: #5599cc; text-decoration: none; }
+    .sources a:hover { text-decoration: underline; }
+
+    .spinner {
+      display: inline-block; width: 14px; height: 14px;
+      border: 2px solid rgba(255,255,255,.4);
+      border-top-color: #fff; border-radius: 50%;
+      animation: spin .7s linear infinite; vertical-align: middle;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+  </style>
+</head>
+<body>
+<div class="card">
+
+  <div class="header">
+    <h1>Bonaire Data Fetcher</h1>
+  </div>
+  <p class="subtitle">Collects live data from multiple sources, ready to paste into Excel.</p>
+
+  <!-- Tab navigation -->
+  <div class="tabs">
+    <button class="tab-btn active" id="tabBtnFetch" onclick="showTab('fetch')">📡 Fetch Data</button>
+    <button class="tab-btn" id="tabBtnHistory" onclick="showTab('history')">
+      🕒 History
+      <span class="tab-badge" id="historyBadge">0</span>
+    </button>
+  </div>
+
+  <!-- ===== FETCH TAB ===== -->
+  <div id="tab-fetch">
+
+    <button class="fetch-btn" id="fetchBtn" onclick="fetchAllData()">
+      <span id="btnIcon">📡</span>
+      <span id="btnText">Fetch Data</span>
+    </button>
+
+    <div class="status-bar" id="statusBar"></div>
+
+    <div class="results" id="results">
+
+      <div class="data-groups">
+        <!-- Moon -->
+        <div class="group">
+          <div class="group-title">🌙 Moon</div>
+          <div class="kv-row"><span class="kv-label">Moon %</span><span class="kv-value" id="v-moonpct">—</span></div>
+          <div class="kv-row"><span class="kv-label">Days since full moon</span><span class="kv-value" id="v-daysvm">—</span></div>
+          <div class="kv-row"><span class="kv-label">Moonrise time</span><span class="kv-value" id="v-moonrise">—</span></div>
+          <div class="kv-row"><span class="kv-label">Moonset time</span><span class="kv-value" id="v-moonset">—</span></div>
+          <div class="kv-row"><span class="kv-label">Moonlight hours</span><span class="kv-calc" id="v-moonlight">—</span></div>
+        </div>
+
+        <!-- Waves -->
+        <div class="group">
+          <div class="group-title">🌊 Waves & Wind</div>
+          <div class="kv-row"><span class="kv-label">Wave height</span><span class="kv-value" id="v-waveheight">—</span></div>
+          <div class="kv-row"><span class="kv-label">Wave period</span><span class="kv-value" id="v-waveperiod">—</span></div>
+          <div class="kv-row"><span class="kv-label">Wind km/h</span><span class="kv-value" id="v-wind">—</span></div>
+          <div class="kv-row"><span class="kv-label">Wind direction</span><span class="kv-value" id="v-winddir">—</span></div>
+          <div class="kv-row"><span class="kv-label">Cloud cover / weather</span><span class="kv-value" id="v-weather">—</span></div>
+          <div class="kv-row"><span class="kv-label">Rainfall mm</span><span class="kv-value" id="v-rain">—</span></div>
+        </div>
+
+        <!-- Tide -->
+        <div class="group">
+          <div class="group-title">🌊 Tides</div>
+          <div class="kv-row"><span class="kv-label">Highest tide time</span><span class="kv-value" id="v-hitidetime">—</span></div>
+          <div class="kv-row"><span class="kv-label">Highest tide height</span><span class="kv-value" id="v-hitideheight">—</span></div>
+          <div class="kv-row"><span class="kv-label">Lowest tide time</span><span class="kv-value" id="v-lotidetime">—</span></div>
+          <div class="kv-row"><span class="kv-label">Lowest tide height</span><span class="kv-value" id="v-lotideheight">—</span></div>
+          <div class="kv-row"><span class="kv-label">Tidal range</span><span class="kv-calc" id="v-tidalrange">—</span></div>
+        </div>
+
+        <!-- Sun & UV -->
+        <div class="group">
+          <div class="group-title">☀️ Sun & UV</div>
+          <div class="kv-row"><span class="kv-label">Sunrise time</span><span class="kv-value" id="v-sunrise">—</span></div>
+          <div class="kv-row"><span class="kv-label">Sunset time</span><span class="kv-value" id="v-sunset">—</span></div>
+          <div class="kv-row"><span class="kv-label">Daylight hours</span><span class="kv-calc" id="v-daylight">—</span></div>
+          <div class="kv-row"><span class="kv-label">UV 08:00</span><span class="kv-value" id="v-uv08">—</span></div>
+          <div class="kv-row"><span class="kv-label">UV 09:00</span><span class="kv-value" id="v-uv09">—</span></div>
+          <div class="kv-row"><span class="kv-label">UV 10:00</span><span class="kv-value" id="v-uv10">—</span></div>
+        </div>
+      </div>
+
+      <!-- Copy area -->
+      <div class="copy-section">
+        <div class="copy-label">📋 Copy to Excel (tab-separated)</div>
+        <div class="excel-wrap">
+          <table class="excel-table" id="excelTable">
+            <thead><tr id="excelHeaders"></tr></thead>
+            <tbody><tr id="excelValues"></tr></tbody>
+          </table>
+        </div>
+        <textarea class="copy-raw" id="copyRaw" readonly></textarea>
+        <div class="copy-actions">
+          <button class="copy-btn" onclick="copyRow()">📋 Copy row</button>
+          <span class="copy-feedback" id="copyFeedback">✓ Copied! Paste directly into Excel (Ctrl+V).</span>
+        </div>
+      </div>
+
+    </div><!-- /results -->
+  </div><!-- /tab-fetch -->
+
+  <!-- ===== HISTORY TAB ===== -->
+  <div id="tab-history">
+    <div class="history-toolbar">
+      <span class="history-title">Saved rows — click 📋 to copy any row into Excel</span>
+      <button class="clear-btn" onclick="clearHistory()">🗑 Clear all history</button>
+    </div>
+    <div id="historyContent"></div>
+  </div><!-- /tab-history -->
+
+  <div class="sources">
+    Sources:
+    <a href="https://www.kalender-365.nl/maan/maankalender.html" target="_blank">kalender-365.nl</a> ·
+    <a href="https://www.tide-forecast.com/tide/Kralendijk-Bonaire/sea-conditions" target="_blank">tide-forecast.com/sea-conditions</a> ·
+    <a href="https://www.tide-forecast.com/tide/Kralendijk-Bonaire/tide-times" target="_blank">tide-forecast.com/tide-times</a> ·
+    <a href="https://www.weerenradar.nl/uv-index/bonaire/27044887" target="_blank">weerenradar.nl/uv-index</a>
+  </div>
+
+</div><!-- /card -->
+
+<script>
+// ── Column headers (shared between fetch preview and history) ──────────────
+const HEADERS = [
+  'Moon%','Days since FM','Wave height','Wave period',
+  'Highest tide time','Highest tide height',
+  'Lowest tide time','Lowest tide height',
+  'Tidal range','Sunrise','Sunset','Daylight hrs',
+  'Moonrise time','Moonset time','Moonlight hrs',
+  'UV 08:00','UV 09:00','UV 10:00',
+  'Wind km/h','Wind direction','Cloud cover / weather','Rainfall mm'
+];
+
+const HISTORY_KEY = 'bonaire_history';
+
+// ── Tab navigation ─────────────────────────────────────────────────────────
+function showTab(name) {
+  document.getElementById('tab-fetch').style.display   = name === 'fetch'   ? 'block' : 'none';
+  document.getElementById('tab-history').style.display = name === 'history' ? 'block' : 'none';
+  document.getElementById('tabBtnFetch').classList.toggle('active',   name === 'fetch');
+  document.getElementById('tabBtnHistory').classList.toggle('active', name === 'history');
+  if (name === 'history') renderHistory();
+}
+
+// ── History storage ────────────────────────────────────────────────────────
+function loadHistory() {
+  try { return JSON.parse(localStorage.getItem(HISTORY_KEY) || '[]'); }
+  catch(e) { return []; }
+}
+
+function saveHistory(entries) {
+  localStorage.setItem(HISTORY_KEY, JSON.stringify(entries));
+}
+
+function addHistoryEntry(dataDate, fetchedAt, cols) {
+  const entries = loadHistory();
+  // Replace existing entry for the same date (keep only the latest fetch per day)
+  const idx = entries.findIndex(e => e.dataDate === dataDate);
+  const entry = { dataDate, fetchedAt, cols, tabText: cols.join('\t') };
+  if (idx >= 0) entries[idx] = entry;
+  else entries.unshift(entry); // newest first
+  // Keep max 60 entries
+  if (entries.length > 60) entries.splice(60);
+  saveHistory(entries);
+  updateBadge();
+}
+
+function deleteHistoryEntry(dataDate) {
+  const entries = loadHistory().filter(e => e.dataDate !== dataDate);
+  saveHistory(entries);
+  updateBadge();
+  renderHistory();
+}
+
+function clearHistory() {
+  if (!confirm('Delete all saved history?')) return;
+  localStorage.removeItem(HISTORY_KEY);
+  updateBadge();
+  renderHistory();
+}
+
+function updateBadge() {
+  const n = loadHistory().length;
+  const badge = document.getElementById('historyBadge');
+  badge.textContent = n;
+  badge.classList.toggle('visible', n > 0);
+}
+
+// ── History rendering ──────────────────────────────────────────────────────
+function renderHistory() {
+  const entries = loadHistory();
+  const container = document.getElementById('historyContent');
+  if (entries.length === 0) {
+    container.innerHTML = '<div class="history-empty">No saved rows yet.<br>Fetch data and it will be stored here automatically.</div>';
+    return;
+  }
+
+  // Build table: Date | all 22 cols | Copy | Delete
+  let html = '<div class="excel-wrap"><table class="excel-table"><thead><tr>';
+  html += '<th></th><th>Date</th><th>Fetched at</th>';
+  HEADERS.forEach(h => { html += `<th>${esc(h)}</th>`; });
+  html += '</tr></thead><tbody>';
+
+  entries.forEach(entry => {
+    const escapedTabText = esc(entry.tabText).replace(/"/g, '&quot;');
+    html += '<tr>';
+    html += `<td class="action-cell">
+      <button class="icon-btn copy" title="Copy row" onclick="copyHistoryRow('${escapedTabText}', this)">📋</button>
+      <button class="icon-btn del"  title="Delete" onclick="deleteHistoryEntry('${esc(entry.dataDate)}')">🗑</button>
+    </td>`;
+    html += `<td class="date-cell">${esc(entry.dataDate)}</td>`;
+    html += `<td class="date-cell" style="color:#888;font-weight:500">${esc(entry.fetchedAt)}</td>`;
+    entry.cols.forEach(v => { html += `<td>${esc(v)}</td>`; });
+    html += '</tr>';
+  });
+
+  html += '</tbody></table></div>';
+  container.innerHTML = html;
+}
+
+function esc(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/'/g,'&#39;');
+}
+
+function copyHistoryRow(tabText, btn) {
+  // Decode HTML entities back to plain text before copying
+  const txt = tabText.replace(/&quot;/g, '"').replace(/&#39;/g, "'").replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>');
+  navigator.clipboard.writeText(txt).then(() => {
+    const orig = btn.textContent;
+    btn.textContent = '✓';
+    setTimeout(() => { btn.textContent = orig; }, 2000);
+  }).catch(() => {
+    const ta = document.createElement('textarea');
+    ta.value = txt;
+    ta.style.position = 'fixed'; ta.style.left = '-9999px';
+    document.body.appendChild(ta); ta.select();
+    document.execCommand('copy');
+    document.body.removeChild(ta);
+    const orig = btn.textContent;
+    btn.textContent = '✓';
+    setTimeout(() => { btn.textContent = orig; }, 2000);
+  });
+}
+
+// ── Helpers ────────────────────────────────────────────────────────────────
+function setStatus(msg, type) {
+  const el = document.getElementById('statusBar');
+  el.style.display = 'block';
+  el.className = 'status-bar ' + type;
+  el.innerHTML = msg;
+}
+
+const PROXIES = [
+  {
+    name: 'corsproxy.io',
+    build: (url) => 'https://corsproxy.io/?' + encodeURIComponent(url),
+    extract: async (res) => { if (!res.ok) throw new Error(res.status); return res.text(); }
+  },
+  {
+    name: 'allorigins.win',
+    build: (url) => 'https://api.allorigins.win/get?url=' + encodeURIComponent(url),
+    extract: async (res) => {
+      if (!res.ok) throw new Error(res.status);
+      const j = await res.json();
+      if (!j.contents) throw new Error('leeg');
+      return j.contents;
+    }
+  },
+  {
+    name: 'codetabs.com',
+    build: (url) => 'https://api.codetabs.com/v1/proxy?quest=' + encodeURIComponent(url),
+    extract: async (res) => { if (!res.ok) throw new Error(res.status); return res.text(); }
+  },
+];
+
+async function fetchWithTimeout(url, ms = 12000) {
+  const ctrl = new AbortController();
+  const id = setTimeout(() => ctrl.abort(), ms);
+  try {
+    const r = await fetch(url, { signal: ctrl.signal });
+    clearTimeout(id);
+    return r;
+  } catch(e) {
+    clearTimeout(id);
+    throw e;
+  }
+}
+
+async function fetchHTML(url) {
+  let lastErr = '';
+  for (const proxy of PROXIES) {
+    try {
+      const res = await fetchWithTimeout(proxy.build(url), 12000);
+      return await proxy.extract(res);
+    } catch(e) {
+      lastErr = proxy.name + ': ' + e.message;
+    }
+  }
+  throw new Error('All proxies failed (' + lastErr + ')');
+}
+
+function amPmTo24h(str) {
+  if (!str) return '?';
+  str = str.trim();
+  const m = str.match(/^(\d{1,2}):(\d{2})(AM|PM)$/i);
+  if (!m) return str;
+  let h = parseInt(m[1]), min = m[2], period = m[3].toUpperCase();
+  if (period === 'AM') { if (h === 12) h = 0; }
+  else { if (h !== 12) h += 12; }
+  return String(h).padStart(2, '0') + ':' + min;
+}
+
+function timeDiffHours(t1, t2) {
+  if (t1 === '?' || t2 === '?') return '?';
+  const [h1, m1] = t1.split(':').map(Number);
+  const [h2, m2] = t2.split(':').map(Number);
+  let diff = (h2 * 60 + m2) - (h1 * 60 + m1);
+  if (diff < 0) diff += 1440;
+  return (diff / 60).toFixed(1);
+}
+
+function roundTo2(numStr) {
+  const n = parseFloat(numStr);
+  if (isNaN(n)) return numStr;
+  return n.toFixed(2);
+}
+
+function toNL(val) {
+  if (val === '?' || val === undefined || val === null) return val;
+  return String(val).replace(/(\d)\.(\d)/g, '$1,$2');
+}
+
+function bonaireDate() {
+  try {
+    return new Intl.DateTimeFormat('en-CA', { timeZone: 'America/Kralendijk', year: 'numeric', month: '2-digit', day: '2-digit' }).format(new Date());
+  } catch(e) {
+    const d = new Date(Date.now() - 4 * 3600000);
+    return d.toISOString().split('T')[0];
+  }
+}
+
+function localTimeShort() {
+  // e.g. "13 May 2026, 14:32"
+  return new Date().toLocaleString('en-GB', { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+}
+
+// ── Data fetchers ──────────────────────────────────────────────────────────
+async function getMoonData() {
+  const html = await fetchHTML('https://www.kalender-365.nl/maan/maankalender.html');
+  const todayMatch = html.match(/vandaag_moon_calendar[\s\S]{1,400}?title="(\d+)% van maan zichtbaar"/);
+  const moonPct = todayMatch ? todayMatch[1] : '?';
+  const today = new Date(); today.setHours(0,0,0,0);
+  const months = { januari:0,februari:1,maart:2,april:3,mei:4,juni:5,juli:6,augustus:7,september:8,oktober:9,november:10,december:11 };
+  const re = /Volle maan - (\d+) (\w+) (\d{4})/g;
+  let lastFM = null, m;
+  while ((m = re.exec(html)) !== null) {
+    const mo = months[m[2].toLowerCase()];
+    if (mo === undefined) continue;
+    const d = new Date(parseInt(m[3]), mo, parseInt(m[1]));
+    d.setHours(0,0,0,0);
+    if (d <= today) lastFM = d;
+  }
+  const daysSince = lastFM ? Math.round((today - lastFM) / 86400000) : '?';
+  return { moonPct, daysSince };
+}
+
+async function getSeaConditionsData() {
+  const html = await fetchHTML('https://www.tide-forecast.com/tide/Kralendijk-Bonaire/sea-conditions');
+  const swellIdx = html.indexOf('data-row="swell"');
+  if (swellIdx === -1) throw new Error('Wave data not found (sea-conditions)');
+  const swellSec = html.substring(swellIdx, swellIdx + 8000);
+  const waveHeight = (swellSec.match(/data-height="([^"]+)"/) || [])[1] || '?';
+  const wavePeriod = (
+    (swellSec.match(/forecast-table__swell-period"[^>]*>(\d+)</) || [])[1] ||
+    (swellSec.match(/swell-period"[^>]*>(\d+)</)               || [])[1] ||
+    '?'
+  );
+  const windIdx = html.indexOf('data-row="wind"');
+  const windSec = windIdx > -1 ? html.substring(windIdx, windIdx + 2000) : '';
+  const windSpeed = (windSec.match(/wind-icon__val"[^>]*>(\d+)</) || [])[1] || '?';
+  const windDir = (windSec.match(/wind-icon__tooltip">([^<]+)</) || [])[1] || '?';
+  const phrasesIdx = html.indexOf('data-row="phrases"');
+  const phrasesSec = phrasesIdx > -1 ? html.substring(phrasesIdx, phrasesIdx + 500) : '';
+  const phraseRaw = (phrasesSec.match(/forecast-table__phrase--en">([^<]+)</) || [])[1] || '?';
+  const weather = phraseRaw !== '?' ? phraseRaw.charAt(0).toUpperCase() + phraseRaw.slice(1) : '?';
+  const rainIdx = html.indexOf('data-row="rain"');
+  const rainSec = rainIdx > -1 ? html.substring(rainIdx, rainIdx + 600) : '';
+  const rainRaw = (rainSec.match(/<span>([^<]+)<\/span>/) || [])[1] || '?';
+  const rainfall = (rainRaw === '—' || rainRaw === '') ? '0' : rainRaw;
+  return { waveHeight, wavePeriod, windSpeed, windDir, weather, rainfall };
+}
+
+async function getTideTimesData() {
+  const html = await fetchHTML('https://www.tide-forecast.com/tide/Kralendijk-Bonaire/tide-times');
+
+  // HIGH TIDE: collect first 2 high-tide entries (the page lists today first,
+  // so these will always be today's — Bonaire has at most 2 high tides per day).
+  // Pick the one with the greatest height.
+  const hiRe = /tide-time__time--high[^>]*>\s*([^<]+?)\s*<\/span>[\s\S]{0,300}?tide-time__height[^>]*>\s*([^<]+?)\s*<\/span>/g;
+  let hiMatch = null, hiMaxH = -Infinity, hm, hiCount = 0;
+  while ((hm = hiRe.exec(html)) !== null && hiCount < 2) {
+    hiCount++;
+    const h = parseFloat(hm[2]);
+    if (!isNaN(h) && h > hiMaxH) { hiMaxH = h; hiMatch = hm; }
+  }
+  const hiTime   = hiMatch ? amPmTo24h(hiMatch[1].trim()) : '?';
+  const hiHeight = hiMatch ? hiMatch[2].trim() : '?';
+
+  // LOW TIDE: collect first 2 low-tide entries, pick the one with the least height.
+  const loRe = /tide-time__time--low[^>]*>\s*([^<]+?)\s*<\/span>[\s\S]{0,300}?tide-time__height[^>]*>\s*([^<]+?)\s*<\/span>/g;
+  let loMatch = null, loMinH = Infinity, lm, loCount = 0;
+  while ((lm = loRe.exec(html)) !== null && loCount < 2) {
+    loCount++;
+    const h = parseFloat(lm[2]);
+    if (!isNaN(h) && h < loMinH) { loMinH = h; loMatch = lm; }
+  }
+  const loTime   = loMatch ? amPmTo24h(loMatch[1].trim()) : '?';
+  const loHeight = loMatch ? loMatch[2].trim() : '?';
+
+  // SUNRISE / SUNSET
+  const sunriseMatch = html.match(/sunrise-[^"]+\.svg"[^>]*\/><div>\s*([^<]+)<\/div>/);
+  const sunrise = sunriseMatch ? amPmTo24h(sunriseMatch[1]) : '?';
+  const sunsetMatch = html.match(/sunset-[^"]+\.svg"[^>]*\/><div>\s*([^<]+)<\/div>/);
+  const sunset = sunsetMatch ? amPmTo24h(sunsetMatch[1]) : '?';
+
+  // MOON TIMES
+  const moonsetIconMatch  = html.match(/moonset-[^"]+\.svg"[^>]*\/><div>\s*([^<]+)<\/div>/);
+  const moonriseIconMatch = html.match(/moonrise-[^"]+\.svg"[^>]*\/><div>\s*([^<]+)<\/div>/);
+
+  let moonEvent1 = moonsetIconMatch  ? amPmTo24h(moonsetIconMatch[1].trim())  : '?';
+  let moonEvent2 = moonriseIconMatch ? amPmTo24h(moonriseIconMatch[1].trim()) : '?';
+  let moonEvent2IsNextDay = false;
+
+  // Only search for after-midnight moonrise when the moonrise SVG was NOT found.
+  // When moonrise falls after midnight it appears as plain text (no icon) in
+  // tomorrow's column — that case is different from moonrise early today which
+  // DOES have an SVG icon and is already in moonEvent2.
+  if (moonEvent2 === '?') {
+    const moonSearchStart = moonsetIconMatch
+      ? html.indexOf(moonsetIconMatch[0]) + moonsetIconMatch[0].length
+      : 0;
+    const moonSearchArea = html.substring(moonSearchStart, moonSearchStart + 12000);
+
+    const earlyAmRe = /<div>\s*(\d{1,2}:\d{2}AM)\s*<\/div>/gi;
+    let earlyHit = null, earlyM;
+    while ((earlyM = earlyAmRe.exec(moonSearchArea)) !== null) {
+      const converted = amPmTo24h(earlyM[1].trim());
+      const h24 = parseInt(converted.split(':')[0]);
+      if (h24 < 7) { earlyHit = converted; break; }
+    }
+    if (earlyHit) {
+      moonEvent2 = earlyHit;
+      moonEvent2IsNextDay = true; // confirmed: this time is from the next calendar day
+    } else {
+      const moonCellMatch = moonSearchArea.match(
+        /tide-table__part--moon[^>]*>[\s\S]{0,600}?<div>\s*(\d{1,2}:\d{2}(?:AM|PM))\s*<\/div>/i
+      );
+      if (moonCellMatch) moonEvent2 = amPmTo24h(moonCellMatch[1].trim());
+    }
+  }
+
+  // Sort the two events chronologically.
+  // When moonEvent2 is a confirmed next-day value (isNextDay flag), shift it by
+  // +1440 min so it always sorts after moonEvent1, regardless of clock time.
+  // Otherwise sort by raw clock time only (handles early-morning moonrise today).
+  function sortMoonTimes(t1, t2, t2IsNextDay) {
+    if (t1 === '?' || t2 === '?') return [t1, t2];
+    const toMins = t => { const [h,m] = t.split(':').map(Number); return h*60+m; };
+    const m1 = toMins(t1);
+    const m2 = toMins(t2) + (t2IsNextDay ? 1440 : 0);
+    return m1 <= m2 ? [t1, t2] : [t2, t1];
+  }
+
+  const [moonriseCol, moonsetCol] = sortMoonTimes(moonEvent1, moonEvent2, moonEvent2IsNextDay);
+  return { hiTime, hiHeight, loTime, loHeight, sunrise, sunset, moonriseCol, moonsetCol };
+}
+
+async function getUVData() {
+  const html = await fetchHTML('https://www.weerenradar.nl/uv-index/bonaire/27044887');
+  const today = bonaireDate();
+  function getUV(hour) {
+    const idx = html.indexOf(`"date":"${today}T${hour}:00`);
+    if (idx === -1) return '?';
+    const m = html.substring(idx, idx + 200).match(/"value":(\d+)/);
+    return m ? m[1] : '?';
+  }
+  return { uv08: getUV('08'), uv09: getUV('09'), uv10: getUV('10') };
+}
+
+// ── Main fetch ─────────────────────────────────────────────────────────────
+async function fetchAllData() {
+  const btn = document.getElementById('fetchBtn');
+  btn.disabled = true;
+  document.getElementById('btnIcon').innerHTML = '<span class="spinner"></span>';
+  document.getElementById('btnText').textContent = 'Loading…';
+  document.getElementById('results').style.display = 'none';
+  document.getElementById('copyFeedback').style.display = 'none';
+
+  const errors = [];
+
+  try {
+    setStatus('🌙 Fetching moon data (kalender-365.nl)…', 'loading');
+    let moon = { moonPct: '?', daysSince: '?' };
+    try { moon = await getMoonData(); } catch(e) { errors.push('Moon: ' + e.message); }
+
+    setStatus('🌊 Fetching wave data (tide-forecast.com)…', 'loading');
+    let sea = { waveHeight:'?', wavePeriod:'?', windSpeed:'?', windDir:'?', weather:'?', rainfall:'?' };
+    try { sea = await getSeaConditionsData(); } catch(e) { errors.push('Waves: ' + e.message); }
+
+    setStatus('📅 Fetching tide data (tide-forecast.com/tide-times)…', 'loading');
+    let tide = { hiTime:'?', hiHeight:'?', loTime:'?', loHeight:'?', sunrise:'?', sunset:'?', moonriseCol:'?', moonsetCol:'?' };
+    try { tide = await getTideTimesData(); } catch(e) { errors.push('Tides: ' + e.message); }
+
+    setStatus('☀️ Fetching UV data (weerenradar.nl)…', 'loading');
+    let uv = { uv08:'?', uv09:'?', uv10:'?' };
+    try { uv = await getUVData(); } catch(e) { errors.push('UV: ' + e.message); }
+
+    // Calculations
+    const tidalRange    = (tide.hiHeight !== '?' && tide.loHeight !== '?') ? roundTo2(parseFloat(tide.hiHeight) - parseFloat(tide.loHeight)) : '?';
+    const daylightHours  = timeDiffHours(tide.sunrise, tide.sunset);
+    const moonlightHours = timeDiffHours(tide.moonriseCol, tide.moonsetCol);
+
+    // Update display cards
+    set('v-moonpct',       toNL(moon.moonPct));
+    set('v-daysvm',        toNL(moon.daysSince));
+    set('v-moonrise',      tide.moonriseCol);
+    set('v-moonset',       tide.moonsetCol);
+    set('v-moonlight',     toNL(moonlightHours) + 'h (calculated)');
+    set('v-waveheight',    toNL(sea.waveHeight) + ' m');
+    set('v-waveperiod',    toNL(sea.wavePeriod) + ' s');
+    set('v-wind',          toNL(sea.windSpeed));
+    set('v-winddir',       sea.windDir);
+    set('v-weather',       sea.weather);
+    set('v-rain',          toNL(sea.rainfall) + ' mm');
+    set('v-hitidetime',    tide.hiTime);
+    set('v-hitideheight',  toNL(tide.hiHeight) + ' m');
+    set('v-lotidetime',    tide.loTime);
+    set('v-lotideheight',  toNL(tide.loHeight) + ' m');
+    set('v-tidalrange',    toNL(tidalRange) + ' m (calculated)');
+    set('v-sunrise',       tide.sunrise);
+    set('v-sunset',        tide.sunset);
+    set('v-daylight',      toNL(daylightHours) + 'h (calculated)');
+    set('v-uv08',          uv.uv08);
+    set('v-uv09',          uv.uv09);
+    set('v-uv10',          uv.uv10);
+
+    // Build cols array
+    const cols = [
+      toNL(moon.moonPct), toNL(moon.daysSince),
+      toNL(sea.waveHeight), toNL(sea.wavePeriod),
+      tide.hiTime, toNL(tide.hiHeight),
+      tide.loTime, toNL(tide.loHeight),
+      toNL(tidalRange),
+      tide.sunrise, tide.sunset, toNL(daylightHours),
+      tide.moonriseCol, tide.moonsetCol, toNL(moonlightHours),
+      uv.uv08, uv.uv09, uv.uv10,
+      toNL(sea.windSpeed), sea.windDir, sea.weather, toNL(sea.rainfall),
+    ];
+
+    // Populate preview table
+    const headTr = document.getElementById('excelHeaders');
+    headTr.innerHTML = '';
+    HEADERS.forEach(h => { const th = document.createElement('th'); th.textContent = h; headTr.appendChild(th); });
+    const valTr = document.getElementById('excelValues');
+    valTr.innerHTML = '';
+    cols.forEach(v => { const td = document.createElement('td'); td.textContent = v; valTr.appendChild(td); });
+    document.getElementById('copyRaw').value = cols.join('\t');
+    document.getElementById('results').style.display = 'block';
+
+    // ── Save to history ──────────────────────────────────────────────────
+    addHistoryEntry(bonaireDate(), localTimeShort(), cols);
+
+    if (errors.length > 0) {
+      setStatus('⚠️ Partially successful. Errors: ' + errors.join(' | '), 'loading');
+    } else {
+      setStatus('✅ All data fetched and saved to history!', 'success');
+    }
+
+  } catch (err) {
+    setStatus('❌ Error: ' + err.message, 'error');
+  } finally {
+    btn.disabled = false;
+    document.getElementById('btnIcon').textContent = '📡';
+    document.getElementById('btnText').textContent = 'Fetch Data';
+  }
+}
+
+function set(id, val) {
+  const el = document.getElementById(id);
+  if (el) el.textContent = val;
+}
+
+function copyRow() {
+  const text = document.getElementById('copyRaw').value;
+  navigator.clipboard.writeText(text).then(showFeedback).catch(() => {
+    const el = document.getElementById('copyRaw');
+    el.select();
+    document.execCommand('copy');
+    showFeedback();
+  });
+}
+
+function showFeedback() {
+  const fb = document.getElementById('copyFeedback');
+  fb.style.display = 'inline';
+  setTimeout(() => { fb.style.display = 'none'; }, 3000);
+}
+
+// ── Init ───────────────────────────────────────────────────────────────────
+updateBadge();
+</script>
+</body>
+</html>
