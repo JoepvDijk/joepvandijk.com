@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Creative Portfolio</title>
+<link rel="icon" type="image/svg+xml" href="assets/earth-icon.svg">
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -418,15 +419,18 @@
   }
   .card-logo .card-image img {
     object-fit: contain;
-    padding: 28px;
+    padding: 4px;
     box-sizing: border-box;
+    transform: scale(1.35);
+    transform-origin: center;
   }
-  .card-logo:hover .card-image img {
-    transform: scale(1.02);
-  }
-
   .card:hover .card-image img {
     transform: scale(1.05);
+  }
+
+  /* Specificiteit moet hoger zijn dan .card:hover, anders overschrijft die de logo-scale */
+  .card.card-logo:hover .card-image img {
+    transform: scale(1.45);
   }
 
   .card-tag {
@@ -785,7 +789,7 @@
   <p>Crafting immersive digital experiences where high-end minimalism meets functional artistry. Elevating brands through sophisticated UI/UX and avant-garde motion.</p>
   <div class="hero-buttons">
     <button class="btn btn-primary" onclick="document.getElementById('projects').scrollIntoView({behavior:'smooth'})">View Projects</button>
-    <a href="#" class="btn btn-secondary" style="text-decoration:none; display:inline-block;" onclick="event.preventDefault();">About me</a>
+    <a href="about.html" class="btn btn-secondary" style="text-decoration:none; display:inline-block;">About me</a>
   </div>
   <div class="socials">
     <a href="https://www.instagram.com/joep_vdijk/" target="_blank" rel="noopener" class="social-link" aria-label="Instagram">
@@ -885,10 +889,25 @@
   const projects = [
     {
       title: "Printshark",
-      tag: "Web / Founder",
-      description: "My own 3D printing business. I designed it, built it, and currently maintain the storefront.",
+      tag: "Founder",
+      description: "My own 3D printing business. I designed it, built it, and currently maintain the storefront and social media.",
       image: "projects/Printshark/Printsharknl%20Logo.png",
       url: "https://printshark.nl/"
+    },
+    {
+      title: "CardSliders.nl",
+      tag: "Web Design",
+      description: "Built the full front-end from scratch and hooked it up to Shopify for checkout, so the site stays fast and custom while sales run smoothly.",
+      image: "projects/Cardsliders/Cardsliderslogo.png",
+      url: "https://cardsliders.nl/",
+      logo: true
+    },
+    {
+      title: "3D Print Cost Calculator",
+      tag: "Web Tool",
+      description: "An in-browser tool that calculates the true cost and ideal sell price of a 3D print based on filament, time and overhead.",
+      image: "projects/3D%20Print%20calculator/3D%20print%20calculator%20image.png",
+      url: "projects/3D%20Print%20calculator/index.html"
     },
     {
       title: "DvH Coaching",
@@ -909,7 +928,7 @@
       tag: "Research",
       description: "Bioinformatics tools built during my marine biology internship: a data fetcher and a fish egg catalogue for ocean research.",
       image: "projects/Internship%20RoffaReefs/Fish%20Egg%20Catalogue/Fish%20Catalogue.png",
-      url: "projects/Internship%20RoffaReefs/Fish%20Egg%20Catalogue/fish.html"
+      url: "projects/Internship%20RoffaReefs/casestudyroffareefs.html"
     }
   ];
 

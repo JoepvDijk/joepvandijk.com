@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>NookPrint Pro — Prints Library</title>
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link crossorigin href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@700;800&amp;family=Quicksand:wght@500;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+  tailwind.config = {
+    darkMode: "class",
+    theme: { extend: {
+      "colors": {
+        "tertiary-fixed-dim": "#8ad0f1", "on-secondary": "#ffffff", "background": "#fff8f5",
+        "secondary-fixed-dim": "#cec6ad", "surface-dim": "#edd6c5", "on-primary-fixed-variant": "#2c5000",
+        "on-tertiary-fixed-variant": "#004d65", "surface-variant": "#f6decd",
+        "surface-container-high": "#fce4d2", "surface-tint": "#3c6a00", "tertiary-container": "#6ab0d0",
+        "on-surface": "#25190f", "surface-container-highest": "#f6decd",
+        "surface-container-low": "#fff1e8", "outline-variant": "#c2c9b3", "inverse-surface": "#3c2e22",
+        "tertiary-fixed": "#bee9ff", "primary": "#3c6a00", "on-tertiary": "#ffffff",
+        "surface-container-lowest": "#ffffff", "outline": "#727a67", "error-container": "#ffdad6",
+        "on-secondary-fixed": "#1f1c0b", "on-background": "#25190f", "surface-bright": "#fff8f5",
+        "on-tertiary-fixed": "#001f2a", "on-surface-variant": "#424938", "on-primary": "#ffffff",
+        "secondary-container": "#e8dfc5", "on-primary-fixed": "#0e2000",
+        "on-secondary-container": "#68634d", "on-error": "#ffffff", "primary-fixed-dim": "#96d951",
+        "inverse-primary": "#96d951", "secondary-fixed": "#ebe2c8", "on-secondary-fixed-variant": "#4c4733",
+        "primary-fixed": "#b1f66a", "on-primary-container": "#254400", "inverse-on-surface": "#ffeee2",
+        "primary-container": "#78b833", "on-tertiary-container": "#004257", "error": "#ba1a1a",
+        "secondary": "#645e49", "tertiary": "#0d6683", "on-error-container": "#93000a",
+        "surface-container": "#ffeadb", "surface": "#fff8f5"
+      },
+      "borderRadius": { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" },
+      "spacing": { "xl": "64px", "md": "24px", "gutter": "24px", "base": "8px",
+        "margin-mobile": "16px", "xs": "4px", "margin-desktop": "48px", "lg": "40px", "sm": "12px" },
+      "fontFamily": {
+        "label-sm": ["Quicksand"], "label-md": ["Quicksand"], "headline-md": ["Plus Jakarta Sans"],
+        "body-lg": ["Quicksand"], "body-md": ["Quicksand"], "headline-lg": ["Plus Jakarta Sans"],
+        "headline-lg-mobile": ["Plus Jakarta Sans"]
+      },
+      "fontSize": {
+        "label-sm": ["12px", {"lineHeight": "1.4", "fontWeight": "700"}],
+        "label-md": ["14px", {"lineHeight": "1.4", "letterSpacing": "0.05em", "fontWeight": "700"}],
+        "headline-md": ["28px", {"lineHeight": "1.3", "fontWeight": "700"}],
+        "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "500"}],
+        "body-md": ["16px", {"lineHeight": "1.6", "fontWeight": "500"}],
+        "headline-lg": ["40px", {"lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "800"}],
+        "headline-lg-mobile": ["32px", {"lineHeight": "1.2", "fontWeight": "800"}]
+      }
+    } }
+  }
+</script>
+<style>
+  .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+  .nook-card-stitching { position: relative; }
+  .nook-card-stitching::after {
+    content: ''; position: absolute;
+    top: 4px; left: 4px; right: 4px; bottom: 4px;
+    border: 1px dashed #645e49; opacity: 0.2;
+    border-radius: inherit; pointer-events: none;
+  }
+  .squishy-press:active { transform: scale(0.96) translateY(2px); box-shadow: none !important; }
+  body { min-height: max(884px, 100dvh); }
+  /* Settings modal */
+  .dashed-border { border: 2px dashed #727a67; border-radius: 1.25rem; }
+  .nook-card-shadow { box-shadow: 0 10px 0 0 rgba(60, 46, 34, 0.05); }
+  .nook-shadow { box-shadow: 0 10px 25px -5px rgba(60, 46, 34, 0.1), 0 8px 10px -6px rgba(60, 46, 34, 0.1); }
+  .squishy-button:active { transform: scale(0.95); box-shadow: inset 0 4px 4px rgba(0, 0, 0, 0.1); }
+  .modal-overlay { background-color: rgba(37, 25, 15, 0.4); backdrop-filter: blur(8px); }
+  @keyframes np-modal-in {
+    from { opacity: 0; transform: scale(0.92); }
+    to   { opacity: 1; transform: scale(1); }
+  }
+  .modal-card-anim { animation: np-modal-in 0.22s ease-out; }
+  /* Toast */
+  .toast {
+    position: fixed; bottom: 110px; left: 50%;
+    transform: translateX(-50%) translateY(20px);
+    background: #3c6a00; color: #fff;
+    padding: 12px 22px; border-radius: 9999px;
+    font-family: Quicksand, sans-serif; font-weight: 700; font-size: 14px;
+    box-shadow: 0 6px 16px rgba(0,0,0,0.18);
+    z-index: 100; opacity: 0; pointer-events: none;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+  }
+  .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+  @media (min-width: 768px) { .toast { bottom: 32px; } }
+</style>
+</head>
+<body class="bg-background text-on-background font-body-md text-body-md min-h-screen flex flex-col selection:bg-primary-container selection:text-on-primary-container">
+
+<!-- Header -->
+<header class="bg-surface-container shadow-sm flex justify-between items-center w-full px-margin-mobile md:px-margin-desktop py-4 z-50">
+  <div class="flex items-center gap-3">
+    <h1 class="font-headline-md text-headline-md font-extrabold text-primary">NookPrint Pro</h1>
+  </div>
+  <div class="flex items-center gap-4">
+    <div class="hidden md:flex gap-6 items-center">
+      <a class="text-on-surface-variant hover:text-primary transition-all" href="index.html">Calculator</a>
+      <a class="text-primary font-bold transition-all hover:scale-105" href="prints.html">Prints</a>
+      <button type="button" class="text-on-surface-variant hover:text-primary transition-all bg-transparent p-0" onclick="NP.openSettingsModal()">Settings</button>
+    </div>
+    <div class="w-10 h-10 rounded-full bg-surface-variant overflow-hidden border-2 border-primary/20 grid place-items-center text-primary" aria-label="3D Printer">
+      <span class="material-symbols-outlined" style="font-size: 22px;">precision_manufacturing</span>
+    </div>
+  </div>
+</header>
+
+<!-- Main -->
+<main class="flex-grow w-full max-w-6xl mx-auto px-margin-mobile md:px-margin-desktop pt-base pb-32">
+
+  <!-- Search -->
+  <section class="mt-md mb-lg">
+    <div class="relative group max-w-xl">
+      <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant/60 group-focus-within:text-primary transition-colors">search</span>
+      <input id="search" class="w-full h-14 pl-12 pr-4 bg-surface-container-low border-none rounded-full font-label-md text-label-md focus:ring-2 focus:ring-primary/20 placeholder:text-on-surface-variant/50 shadow-inner" placeholder="Search your library..." type="text" autocomplete="off">
+    </div>
+  </section>
+
+  <!-- Bento Print Grid -->
+  <section id="print-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-gutter"></section>
+
+</main>
+
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-gutter pb-safe h-20 bg-surface-container border-t border-dashed border-outline-variant shadow-[0_-4px_10px_rgba(0,0,0,0.05)] rounded-t-xl md:hidden">
+  <a class="flex flex-col items-center justify-center text-on-surface-variant px-4 py-1 active:scale-90 transition-all" href="index.html">
+    <span class="material-symbols-outlined">calculate</span>
+    <span class="font-label-sm text-label-sm">Calculator</span>
+  </a>
+  <a class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-full px-4 py-1 active:scale-90 transition-all" href="prints.html">
+    <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">view_in_ar</span>
+    <span class="font-label-sm text-label-sm">Prints</span>
+  </a>
+  <button type="button" class="flex flex-col items-center justify-center text-on-surface-variant px-4 py-1 active:scale-90 transition-all bg-transparent" onclick="NP.openSettingsModal()">
+    <span class="material-symbols-outlined">settings</span>
+    <span class="font-label-sm text-label-sm">Settings</span>
+  </button>
+</nav>
+
+<script src="app.js"></script>
+<script>
+  function escapeHtml(s) {
+    return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  }
+  function fmt(v, currencyCode) {
+    const sym = currencyCode === 'EUR' ? '€' : '$';
+    return `${sym}${(Number.isFinite(v) ? v : 0).toFixed(2)}`;
+  }
+  function fmtDate(ts) {
+    const months = ['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];
+    const d = new Date(ts);
+    if (isNaN(d.getTime())) return '';
+    return `${months[d.getMonth()]} ${d.getDate()}, ${d.getFullYear()}`;
+  }
+
+  function renderPrints(filterText = '') {
+    const grid = document.getElementById('print-grid');
+    const prints = NP.getPrints();
+    const q = filterText.trim().toLowerCase();
+    const filtered = q
+      ? prints.filter(p => (p.name || '').toLowerCase().includes(q))
+      : prints;
+
+    grid.innerHTML = '';
+
+    if (prints.length === 0) {
+      grid.innerHTML = `
+        <div class="col-span-full text-center py-16 text-on-surface-variant">
+          <span class="material-symbols-outlined text-6xl block mb-3 opacity-40">inventory_2</span>
+          <p class="font-bold text-lg mb-1">No prints saved yet</p>
+          <p class="text-sm opacity-70">Create one using the calculator 🌿</p>
+        </div>
+      `;
+      grid.appendChild(newCalcCard());
+      return;
+    }
+
+    if (filtered.length === 0) {
+      grid.innerHTML = `
+        <div class="col-span-full text-center py-12 text-on-surface-variant">
+          <p>No prints found for "<strong>${escapeHtml(filterText)}</strong>".</p>
+        </div>
+      `;
+      grid.appendChild(newCalcCard());
+      return;
+    }
+
+    filtered.forEach((p, idx) => {
+      // First card gets featured (span-2) treatment for that asymmetric bento look
+      const featured = (idx === 0 && filtered.length > 1);
+      grid.appendChild(renderPrintCard(p, featured));
+    });
+
+    // Always append the "+New Calculation" placeholder at the end
+    grid.appendChild(newCalcCard());
+  }
+
+  function renderPrintCard(p, featured) {
+    const currency = p.currency || NP.currencyCode();
+    const cost = p.result?.baseSubtotal ?? 0;
+    const sell = p.result?.sellPrice ?? 0;
+    const margin = p.inputs?.margin ?? 1;
+    const vatEnabled = !!p.inputs?.includeVat;
+    const vatPct = Math.round((p.inputs?.vatRate ?? 0.21) * 100);
+
+    const spanClass = featured ? 'md:col-span-2' : '';
+
+    const div = document.createElement('div');
+    div.className = `${spanClass} group nook-card-stitching bg-surface-container p-4 rounded-xl shadow-[0_10px_20px_rgba(37,25,15,0.05)] hover:translate-y-[-4px] transition-all cursor-pointer`;
+    div.setAttribute('role', 'button');
+    div.setAttribute('tabindex', '0');
+    div.innerHTML = `
+      <div class="flex flex-col gap-3 w-full">
+        <div class="flex justify-between items-start gap-2">
+          <div class="flex flex-col min-w-0 flex-1">
+            <h2 class="font-headline-md text-headline-md text-on-surface break-words pr-2">${escapeHtml(p.name)}</h2>
+            <span class="text-label-sm text-secondary tracking-wide mt-0.5">${fmtDate(p.createdAt)}</span>
+          </div>
+          <div class="flex items-center gap-1 shrink-0">
+            <button class="edit-btn text-on-surface-variant hover:text-primary hover:bg-primary-container/30 rounded-full p-1.5 transition-colors flex items-center justify-center"
+                    data-id="${p.id}" aria-label="Edit">
+              <span class="material-symbols-outlined" style="font-size: 20px;">build</span>
+            </button>
+            <button class="delete-btn text-on-surface-variant hover:text-error hover:bg-error-container/20 rounded-full p-1.5 transition-colors flex items-center justify-center"
+                    data-id="${p.id}" data-name="${escapeHtml(p.name)}" aria-label="Delete">
+              <span class="material-symbols-outlined" style="font-size: 20px;">delete</span>
+            </button>
+          </div>
+        </div>
+        <div class="grid grid-cols-4 gap-2 p-3 bg-surface-container-low rounded-lg border border-dashed border-outline-variant">
+          <div class="flex flex-col">
+            <span class="text-on-surface-variant text-[10px] uppercase font-bold">Cost</span>
+            <span class="font-bold text-on-surface text-base">${fmt(cost, currency)}</span>
+          </div>
+          <div class="flex flex-col">
+            <span class="text-on-surface-variant text-[10px] uppercase font-bold">Sell</span>
+            <span class="font-bold text-primary text-base">${fmt(sell, currency)}</span>
+          </div>
+          <div class="flex flex-col">
+            <span class="text-on-surface-variant text-[10px] uppercase font-bold">Margin</span>
+            <span class="font-bold text-secondary text-base">x${Number(margin).toFixed(margin % 1 === 0 ? 0 : 1)}</span>
+          </div>
+          <div class="flex flex-col">
+            <span class="text-on-surface-variant text-[10px] uppercase font-bold">Tax</span>
+            <span class="font-bold text-on-surface text-base">${vatEnabled ? vatPct + '%' : 'No'}</span>
+          </div>
+        </div>
+      </div>
+    `;
+    div.querySelector('.delete-btn').addEventListener('click', (e) => {
+      e.stopPropagation();
+      const id = e.currentTarget.getAttribute('data-id');
+      const name = e.currentTarget.getAttribute('data-name');
+      if (confirm(`Delete "${name}"?`)) {
+        NP.deletePrint(id);
+        renderPrints(document.getElementById('search').value);
+        NP.toast('Print deleted 🗑️');
+      }
+    });
+    div.querySelector('.edit-btn').addEventListener('click', (e) => {
+      e.stopPropagation();
+      openEditModal(p.id);
+    });
+    div.addEventListener('click', () => openViewModal(p.id));
+    div.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        openViewModal(p.id);
+      }
+    });
+    return div;
+  }
+
+  function newCalcCard() {
+    const a = document.createElement('a');
+    a.href = 'index.html';
+    a.className = 'group nook-card-stitching border-2 border-dashed border-outline-variant bg-transparent p-4 rounded-xl flex flex-col items-center justify-center min-h-[140px] hover:bg-surface-container/30 transition-all squishy-press cursor-pointer no-underline';
+    a.innerHTML = `
+      <div class="w-16 h-16 rounded-full bg-secondary-container flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+        <span class="material-symbols-outlined text-on-secondary-container" style="font-size: 32px;">add</span>
+      </div>
+      <span class="font-headline-md text-[18px] text-secondary">New Calculation</span>
+    `;
+    return a;
+  }
+
+  // Toast helper inline (in case app.js isn't loaded yet)
+  if (!NP.toast) {
+    NP.toast = function(msg) {
+      let t = document.querySelector('.toast');
+      if (!t) { t = document.createElement('div'); t.className = 'toast'; document.body.appendChild(t); }
+      t.textContent = msg; t.classList.add('show');
+      clearTimeout(NP._toastTimer);
+      NP._toastTimer = setTimeout(() => t.classList.remove('show'), 1800);
+    };
+  }
+
+  // Search wiring
+  document.getElementById('search').addEventListener('input', (e) => {
+    renderPrints(e.target.value);
+  });
+
+  // ---------- View modal ----------
+  function openViewModal(id) {
+    const p = NP.getPrint(id);
+    if (!p) return;
+    const modal = document.getElementById('np-view-modal');
+    const currency = p.currency || NP.currencyCode();
+    const sym = currency === 'EUR' ? '€' : '$';
+    const fmtV = (v) => `${sym}${(Number.isFinite(v) ? v : 0).toFixed(2)}`;
+
+    const inputs = p.inputs || {};
+    const result = p.result || {};
+    const vatPct = Math.round((inputs.vatRate ?? 0.21) * 100);
+
+    modal.querySelector('#view-name').textContent = p.name;
+    modal.querySelector('#view-date').textContent = fmtDate(p.createdAt);
+    modal.querySelector('#view-weight').textContent = (inputs.weightGrams ?? 0) + ' g';
+    modal.querySelector('#view-time').textContent = (inputs.printHours ?? 0) + ' hrs';
+    modal.querySelector('#view-watts').textContent = (inputs.printerWatts ?? 150) + ' W';
+    modal.querySelector('#view-roll').textContent = fmtV(inputs.rollPrice) + '/kg';
+    modal.querySelector('#view-kwh').textContent = fmtV(inputs.electricityRate) + '/kWh';
+    modal.querySelector('#view-margin').textContent = 'x' + (Number(inputs.margin).toFixed(inputs.margin % 1 === 0 ? 0 : 1));
+    modal.querySelector('#view-vat-on').textContent = inputs.includeVat ? `${vatPct}%` : 'No';
+
+    // Accessory cost (input + cost rows): only show if > 0
+    const accessory = Number(inputs.accessoryCost) || 0;
+    const accInputRow = modal.querySelector('#view-acc-input-row');
+    const accCostRow = modal.querySelector('#view-acc-cost-row');
+    if (accessory > 0) {
+      accInputRow.classList.remove('hidden');
+      accCostRow.classList.remove('hidden');
+      modal.querySelector('#view-acc-input').textContent = fmtV(accessory);
+      modal.querySelector('#view-acc-cost').textContent = fmtV(result.accessoryCost ?? accessory);
+    } else {
+      accInputRow.classList.add('hidden');
+      accCostRow.classList.add('hidden');
+    }
+
+    modal.querySelector('#view-filament').textContent = fmtV(result.filamentCost);
+    modal.querySelector('#view-energy').textContent = fmtV(result.energyCost);
+    modal.querySelector('#view-subtotal').textContent = fmtV(result.baseSubtotal);
+    modal.querySelector('#view-profit').textContent = fmtV(result.profitMargin);
+
+    const vatRow = modal.querySelector('#view-vat-row');
+    if (inputs.includeVat) {
+      vatRow.classList.remove('hidden');
+      modal.querySelector('#view-vat-label').textContent = `VAT (${vatPct}%)`;
+      modal.querySelector('#view-vat').textContent = fmtV(result.vatAmount);
+    } else {
+      vatRow.classList.add('hidden');
+    }
+    modal.querySelector('#view-total-currency').textContent = sym;
+    modal.querySelector('#view-total').textContent = (Number.isFinite(result.sellPrice) ? result.sellPrice : 0).toFixed(2);
+
+    // Edit button: jumps to edit modal for this print
+    modal.querySelector('#view-edit-btn').onclick = () => {
+      closeViewModal();
+      openEditModal(id);
+    };
+
+    modal.classList.remove('hidden');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeViewModal() {
+    document.getElementById('np-view-modal').classList.add('hidden');
+    document.body.style.overflow = '';
+  }
+
+  // ---------- Edit modal ----------
+  function openEditModal(id) {
+    const p = NP.getPrint(id);
+    if (!p) return;
+    const modal = document.getElementById('np-edit-modal');
+    modal.dataset.editingId = id;
+    const inputs = p.inputs || {};
+
+    modal.querySelector('#edit-name').value = p.name || '';
+    modal.querySelector('#edit-weight').value = inputs.weightGrams ?? '';
+    modal.querySelector('#edit-time').value = inputs.printHours ?? '';
+    modal.querySelector('#edit-roll').value = inputs.rollPrice ?? '';
+    modal.querySelector('#edit-accessory').value = inputs.accessoryCost ?? '';
+    modal.querySelector('#edit-margin').value = inputs.margin ?? '';
+    modal.querySelector('#edit-watts').value = inputs.printerWatts ?? 150;
+    modal.querySelector('#edit-vat').checked = !!inputs.includeVat;
+
+    modal.classList.remove('hidden');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeEditModal() {
+    document.getElementById('np-edit-modal').classList.add('hidden');
+    document.body.style.overflow = '';
+  }
+  function saveEditedPrint() {
+    const modal = document.getElementById('np-edit-modal');
+    const id = modal.dataset.editingId;
+    if (!id) return;
+    const original = NP.getPrint(id);
+    if (!original) return;
+
+    const name = (modal.querySelector('#edit-name').value || '').trim();
+    if (!name) { NP.toast('Give your print a name ✏️'); modal.querySelector('#edit-name').focus(); return; }
+
+    const accRaw = modal.querySelector('#edit-accessory').value;
+    const newInputs = {
+      weightGrams: parseFloat(modal.querySelector('#edit-weight').value),
+      printHours: parseFloat(modal.querySelector('#edit-time').value),
+      rollPrice: parseFloat(modal.querySelector('#edit-roll').value),
+      // Electricity rate is now a global setting — preserve the original rate from the print
+      // so historical numbers stay correct. Fall back to current setting if missing.
+      electricityRate: original.inputs?.electricityRate ?? NP.getSettings().electricityRate,
+      accessoryCost: accRaw === '' ? 0 : parseFloat(accRaw),
+      margin: parseFloat(modal.querySelector('#edit-margin').value),
+      includeVat: modal.querySelector('#edit-vat').checked,
+      vatRate: original.inputs?.vatRate ?? 0.21,
+      printerWatts: parseInt(modal.querySelector('#edit-watts').value, 10) || 150
+    };
+
+    const required = ['weightGrams','printHours','rollPrice','margin'];
+    for (const k of required) {
+      if (!Number.isFinite(newInputs[k]) || newInputs[k] < 0) {
+        NP.toast('Please fill in all fields 🌿');
+        return;
+      }
+    }
+    if (!Number.isFinite(newInputs.accessoryCost) || newInputs.accessoryCost < 0) {
+      NP.toast('Accessory cost must be a non-negative number');
+      return;
+    }
+    if (newInputs.margin < 1) { NP.toast('Margin must be at least 1.0'); return; }
+
+    const newResult = NP.calculate(newInputs);
+    NP.updatePrint(id, { name, inputs: newInputs, result: newResult });
+    NP.toast(`"${name}" updated ✨`);
+    closeEditModal();
+    renderPrints(document.getElementById('search').value);
+  }
+
+  // Wire up close buttons + overlay clicks + ESC
+  ['np-view-modal','np-edit-modal'].forEach(id => {
+    const modal = document.getElementById(id);
+    if (!modal) return;
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal) {
+        if (id === 'np-view-modal') closeViewModal(); else closeEditModal();
+      }
+    });
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key !== 'Escape') return;
+    const vm = document.getElementById('np-view-modal');
+    const em = document.getElementById('np-edit-modal');
+    if (em && !em.classList.contains('hidden')) closeEditModal();
+    else if (vm && !vm.classList.contains('hidden')) closeViewModal();
+  });
+
+  // Initial render
+  renderPrints();
+</script>
+
+<!-- =========== View Modal (bill-style, compact) =========== -->
+<div id="np-view-modal" class="hidden modal-overlay fixed inset-0 z-[100] flex items-center justify-center p-2 overflow-y-auto">
+  <div class="bg-white w-full max-w-sm rounded-3xl nook-shadow overflow-hidden relative modal-card-anim my-2">
+    <button type="button" aria-label="Close" onclick="closeViewModal()"
+            class="absolute top-2.5 right-2.5 w-8 h-8 rounded-full bg-tertiary hover:bg-tertiary-fixed z-10 flex items-center justify-center text-white hover:text-tertiary transition-colors">
+      <span class="material-symbols-outlined" style="font-size: 18px;">close</span>
+    </button>
+
+    <!-- Receipt header -->
+    <div class="px-5 py-2.5 flex justify-between items-center border-b-2 border-dashed border-tertiary/40 bg-tertiary-container/20 pr-12">
+      <span class="font-headline-md opacity-60 text-tertiary text-base">NookPrint</span>
+      <span class="text-[11px] text-secondary font-bold tracking-wide" id="view-date">—</span>
+    </div>
+
+    <div class="p-4 space-y-2.5">
+      <h3 id="view-name" class="font-headline-md text-xl font-extrabold text-center text-on-surface break-words leading-tight">—</h3>
+
+      <!-- Inputs -->
+      <div class="space-y-0.5 border-t-2 border-dashed border-outline-variant/30 pt-2">
+        <div class="text-[10px] text-secondary uppercase tracking-widest mb-1 text-center font-bold">Input Details</div>
+        <div class="flex justify-between text-[13px]"><span class="text-secondary">Filament Weight</span><span class="font-bold" id="view-weight">—</span></div>
+        <div class="flex justify-between text-[13px]"><span class="text-secondary">Print Time</span><span class="font-bold" id="view-time">—</span></div>
+        <div class="flex justify-between text-[13px]"><span class="text-secondary">Printer Wattage</span><span class="font-bold" id="view-watts">—</span></div>
+        <div class="flex justify-between text-[13px]"><span class="text-secondary">Filament Roll Price</span><span class="font-bold" id="view-roll">—</span></div>
+        <div class="flex justify-between text-[13px]"><span class="text-secondary">Electricity Rate</span><span class="font-bold" id="view-kwh">—</span></div>
+        <div class="flex justify-between text-[13px] hidden" id="view-acc-input-row"><span class="text-secondary">Accessory Cost</span><span class="font-bold" id="view-acc-input">—</span></div>
+        <div class="flex justify-between text-[13px]"><span class="text-secondary">Profit Margin</span><span class="font-bold" id="view-margin">—</span></div>
+        <div class="flex justify-between text-[13px]"><span class="text-secondary">Include VAT</span><span class="font-bold" id="view-vat-on">—</span></div>
+      </div>
+
+      <!-- Cost estimate -->
+      <div class="space-y-0.5 border-t-2 border-dashed border-outline-variant/30 pt-2">
+        <div class="text-[10px] text-secondary uppercase tracking-widest mb-1 text-center font-bold">Cost Estimate</div>
+        <div class="flex justify-between text-[13px]"><span class="text-secondary">Filament Cost</span><span class="font-bold" id="view-filament">—</span></div>
+        <div class="flex justify-between text-[13px]"><span class="text-secondary">Energy Usage</span><span class="font-bold" id="view-energy">—</span></div>
+        <div class="flex justify-between text-[13px] hidden" id="view-acc-cost-row"><span class="text-secondary">Accessories</span><span class="font-bold" id="view-acc-cost">—</span></div>
+        <div class="flex justify-between text-[13px] font-bold border-t border-dashed border-outline-variant/30 pt-1 text-on-surface"><span>Base Subtotal</span><span id="view-subtotal">—</span></div>
+      </div>
+
+      <!-- Sell price -->
+      <div class="space-y-0.5 border-t-2 border-dashed border-outline-variant/30 pt-2">
+        <div class="text-[10px] text-secondary uppercase tracking-widest mb-1 text-center font-bold">Bill of Sale</div>
+        <div class="flex justify-between text-[13px] text-primary"><span>Profit Margin</span><span class="font-bold" id="view-profit">—</span></div>
+        <div class="flex justify-between text-[13px]" id="view-vat-row"><span class="text-secondary" id="view-vat-label">VAT</span><span class="font-bold" id="view-vat">—</span></div>
+      </div>
+
+      <!-- Total -->
+      <div class="pt-2 border-t-2 border-dashed border-outline-variant/60">
+        <div class="text-center text-[10px] text-primary tracking-widest uppercase mb-0.5 font-bold">Total Bells To Charge</div>
+        <div class="text-center font-headline-lg text-3xl font-extrabold text-on-surface flex items-center justify-center gap-1.5 leading-none">
+          <span class="text-primary-container" id="view-total-currency">$</span>
+          <span id="view-total">—</span>
+        </div>
+      </div>
+
+      <!-- Edit button -->
+      <button id="view-edit-btn" type="button"
+              class="w-full mt-1 bg-primary-container hover:bg-primary text-on-primary-container hover:text-white py-2.5 rounded-full font-bold text-sm flex items-center justify-center gap-2 transition-colors squishy-press">
+        <span class="material-symbols-outlined" style="font-size: 18px;">build</span>
+        Edit Print
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- =========== Edit Modal =========== -->
+<div id="np-edit-modal" class="hidden modal-overlay fixed inset-0 z-[100] flex items-center justify-center p-4 overflow-y-auto">
+  <div class="bg-surface w-full max-w-md rounded-[2rem] nook-card-shadow overflow-hidden relative modal-card-anim my-4">
+    <button type="button" aria-label="Close" onclick="closeEditModal()"
+            class="absolute top-4 right-4 w-9 h-9 rounded-full bg-surface-container-high hover:bg-error-container z-10 flex items-center justify-center text-on-surface-variant hover:text-error transition-colors">
+      <span class="material-symbols-outlined" style="font-size: 20px;">close</span>
+    </button>
+    <div class="m-2 dashed-border p-6 flex flex-col gap-5">
+
+      <div class="text-center pr-8">
+        <h2 class="font-headline-md text-headline-md text-on-surface">Edit Print</h2>
+        <div class="h-1 w-12 bg-primary-container mx-auto mt-1 rounded-full"></div>
+      </div>
+
+      <!-- Name -->
+      <div class="space-y-1.5">
+        <label class="font-label-md text-label-md text-secondary" for="edit-name">Name</label>
+        <input id="edit-name" type="text" maxlength="60"
+               class="w-full bg-surface-container-low rounded-2xl border-2 border-outline-variant/40 p-3 font-bold focus:ring-4 focus:ring-primary/20 focus:border-primary transition-all outline-none">
+      </div>
+
+      <div class="grid grid-cols-2 gap-3">
+        <div class="space-y-1.5">
+          <label class="font-label-md text-label-md text-secondary" for="edit-weight">Weight (g)</label>
+          <input id="edit-weight" type="number" step="any" min="0"
+                 class="w-full bg-surface-container-low rounded-2xl border-2 border-outline-variant/40 p-3 font-bold focus:ring-4 focus:ring-primary/20 focus:border-primary transition-all outline-none">
+        </div>
+        <div class="space-y-1.5">
+          <label class="font-label-md text-label-md text-secondary" for="edit-time">Time (hrs)</label>
+          <input id="edit-time" type="number" step="any" min="0"
+                 class="w-full bg-surface-container-low rounded-2xl border-2 border-outline-variant/40 p-3 font-bold focus:ring-4 focus:ring-primary/20 focus:border-primary transition-all outline-none">
+        </div>
+        <div class="space-y-1.5">
+          <label class="font-label-md text-label-md text-secondary" for="edit-roll">Roll Price (/kg)</label>
+          <input id="edit-roll" type="number" step="any" min="0"
+                 class="w-full bg-surface-container-low rounded-2xl border-2 border-outline-variant/40 p-3 font-bold focus:ring-4 focus:ring-primary/20 focus:border-primary transition-all outline-none">
+        </div>
+        <div class="space-y-1.5">
+          <label class="font-label-md text-label-md text-secondary" for="edit-accessory">Accessories</label>
+          <input id="edit-accessory" type="number" step="any" min="0" placeholder="0.00"
+                 class="w-full bg-surface-container-low rounded-2xl border-2 border-outline-variant/40 p-3 font-bold focus:ring-4 focus:ring-primary/20 focus:border-primary transition-all outline-none placeholder:text-on-surface-variant/40">
+        </div>
+        <div class="space-y-1.5">
+          <label class="font-label-md text-label-md text-secondary" for="edit-margin">Margin (x)</label>
+          <input id="edit-margin" type="number" step="0.1" min="1"
+                 class="w-full bg-surface-container-low rounded-2xl border-2 border-outline-variant/40 p-3 font-bold focus:ring-4 focus:ring-primary/20 focus:border-primary transition-all outline-none">
+        </div>
+        <div class="space-y-1.5">
+          <label class="font-label-md text-label-md text-secondary" for="edit-watts">Wattage (W)</label>
+          <input id="edit-watts" type="number" step="1" min="1"
+                 class="w-full bg-surface-container-low rounded-2xl border-2 border-outline-variant/40 p-3 font-bold focus:ring-4 focus:ring-primary/20 focus:border-primary transition-all outline-none">
+        </div>
+      </div>
+
+      <!-- VAT toggle -->
+      <div class="flex items-center justify-between bg-surface-container-low rounded-2xl p-3 px-4">
+        <label class="font-label-md text-label-md text-secondary" for="edit-vat">Include VAT (21%)</label>
+        <label class="relative inline-flex items-center cursor-pointer">
+          <input id="edit-vat" type="checkbox" class="sr-only peer">
+          <div class="w-14 h-8 bg-surface-variant peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[4px] after:start-[4px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-6 after:w-6 after:transition-all peer-checked:bg-primary"></div>
+        </label>
+      </div>
+
+      <!-- Actions -->
+      <div class="flex gap-3">
+        <button type="button" onclick="closeEditModal()"
+                class="flex-1 bg-surface-container-high text-on-surface py-3 rounded-full font-bold hover:brightness-95 transition-all">
+          Cancel
+        </button>
+        <button type="button" onclick="saveEditedPrint()"
+                class="flex-1 bg-primary text-on-primary py-3 rounded-full font-bold hover:brightness-110 transition-all shadow-[0_3px_0_0_#2c5000] flex items-center justify-center gap-2">
+          <span class="material-symbols-outlined" style="font-size: 18px;">check</span>
+          Save Changes
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- =========== Settings Modal (compact) =========== -->
+<div id="np-settings-modal" class="hidden modal-overlay fixed inset-0 z-[100] flex items-center justify-center p-2 overflow-y-auto">
+  <div class="bg-surface w-full max-w-sm rounded-[2rem] nook-card-shadow overflow-hidden flex flex-col relative modal-card-anim my-2">
+    <button id="np-settings-close" type="button" aria-label="Close"
+            class="absolute top-2.5 right-2.5 w-8 h-8 rounded-full bg-surface-container-high hover:bg-error-container z-10 flex items-center justify-center text-on-surface-variant hover:text-error transition-colors">
+      <span class="material-symbols-outlined" style="font-size: 18px;">close</span>
+    </button>
+    <div class="m-1.5 dashed-border p-4 flex flex-col gap-3">
+
+      <div class="text-center">
+        <h2 class="font-headline-md text-2xl font-extrabold text-on-surface leading-tight">Settings</h2>
+        <div class="h-1 w-10 bg-primary-container mx-auto mt-1 rounded-full"></div>
+      </div>
+
+      <div class="space-y-2.5">
+        <div class="flex items-center gap-2">
+          <span class="material-symbols-outlined text-secondary" style="font-size: 16px;">settings_applications</span>
+          <h3 class="font-label-md text-[11px] text-secondary uppercase tracking-widest">Global Configuration</h3>
+        </div>
+
+        <div class="bg-surface-container-low rounded-2xl p-3 flex flex-col gap-2">
+          <div class="flex justify-between items-center">
+            <span class="font-label-md text-label-md">Currency Preference</span>
+            <span class="material-symbols-outlined text-primary" style="font-size: 18px;">payments</span>
+          </div>
+          <div class="bg-surface-variant rounded-full p-1 flex relative">
+            <button type="button" data-value="USD" class="np-currency-btn flex-1 py-1.5 text-sm font-bold rounded-full z-10 transition-all duration-300 squishy-button flex items-center justify-center gap-1.5">
+              <span class="material-symbols-outlined" style="font-size: 14px;">attach_money</span>
+              $ USD
+            </button>
+            <button type="button" data-value="EUR" class="np-currency-btn flex-1 py-1.5 text-sm font-bold rounded-full transition-all duration-300 squishy-button flex items-center justify-center gap-1.5">
+              <span class="material-symbols-outlined" style="font-size: 14px;">euro</span>
+              € EUR
+            </button>
+          </div>
+        </div>
+
+        <div class="bg-surface-container-low rounded-2xl p-3 flex flex-col gap-2">
+          <div class="flex justify-between items-center">
+            <span class="font-label-md text-label-md">Printer Wattage</span>
+            <span class="material-symbols-outlined text-primary" style="font-size: 18px;">bolt</span>
+          </div>
+          <div class="relative">
+            <input id="np-settings-watts" type="number" inputmode="numeric" min="1" step="1" placeholder="150"
+                   class="w-full bg-surface rounded-full border-2 border-outline-variant/40 px-4 py-2 pr-10 font-bold text-base focus:ring-4 focus:ring-primary/20 focus:border-primary transition-all outline-none">
+            <span class="absolute right-4 top-1/2 -translate-y-1/2 text-on-surface-variant font-bold text-sm">W</span>
+          </div>
+          <p class="text-[10px] text-on-surface-variant leading-snug">Typical 3D printer ≈ <strong>150 W</strong>. Adjust to your printer.</p>
+        </div>
+
+        <!-- Electricity Rate -->
+        <div class="bg-surface-container-low rounded-2xl p-3 flex flex-col gap-2">
+          <div class="flex justify-between items-center">
+            <span class="font-label-md text-label-md">Electricity Rate</span>
+            <span class="material-symbols-outlined text-primary" style="font-size: 18px;">flash_on</span>
+          </div>
+          <div class="relative">
+            <span id="np-settings-rate-prefix" class="absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant font-bold text-sm">€</span>
+            <input id="np-settings-rate" type="number" inputmode="decimal" min="0" step="any" placeholder="0.28"
+                   class="w-full bg-surface rounded-full border-2 border-outline-variant/40 px-4 py-2 pr-14 pl-8 font-bold text-base focus:ring-4 focus:ring-primary/20 focus:border-primary transition-all outline-none">
+            <span class="absolute right-4 top-1/2 -translate-y-1/2 text-on-surface-variant font-bold text-sm">/kWh</span>
+          </div>
+          <p class="text-[10px] text-on-surface-variant leading-snug">Cost per kWh from your energy provider.</p>
+        </div>
+      </div>
+
+      <button id="np-settings-ok" type="button"
+              class="w-full bg-primary text-on-primary py-2.5 rounded-full font-bold text-lg squishy-button shadow-[0_3px_0_0_#2c5000] transition-all hover:brightness-110 flex items-center justify-center gap-2">
+        <span class="material-symbols-outlined" style="font-size: 20px;">check_circle</span>
+        OK
+      </button>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

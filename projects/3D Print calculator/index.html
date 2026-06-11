@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>NookPrint Pro — Cozy 3D Printing Calculator</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@700;800&amp;family=Quicksand:wght@500;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<style>
+  .material-symbols-outlined {
+    font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    vertical-align: middle;
+  }
+  .leaf-pattern {
+    background-color: #fff8f5;
+    background-image: radial-gradient(#78b833 0.5px, transparent 0.5px), radial-gradient(#78b833 0.5px, #fff8f5 0.5px);
+    background-size: 40px 40px;
+    background-position: 0 0, 20px 20px;
+    opacity: 0.1;
+  }
+  .stitched-card { position: relative; }
+  .stitched-card::after {
+    content: ''; position: absolute;
+    top: 6px; left: 6px; right: 6px; bottom: 6px;
+    border: 2px dashed #727a67; pointer-events: none;
+    border-radius: inherit; opacity: 0.3;
+  }
+  .nook-shadow {
+    box-shadow: 0 10px 25px -5px rgba(60, 46, 34, 0.1), 0 8px 10px -6px rgba(60, 46, 34, 0.1);
+  }
+  .clicky-button:active { transform: scale(0.96) translateY(2px); box-shadow: none; }
+  .receipt-edge {
+    background: radial-gradient(circle, transparent, transparent 10px, #ffffff 10px);
+    background-size: 20px 20px;
+    background-position: -10px 0;
+    width: 100%; height: 10px;
+  }
+  /* Settings modal */
+  .dashed-border { border: 2px dashed #727a67; border-radius: 1.25rem; }
+  .nook-card-shadow { box-shadow: 0 10px 0 0 rgba(60, 46, 34, 0.05); }
+  .squishy-button:active { transform: scale(0.95); box-shadow: inset 0 4px 4px rgba(0, 0, 0, 0.1); }
+  .modal-overlay { background-color: rgba(37, 25, 15, 0.4); backdrop-filter: blur(8px); }
+  @keyframes np-modal-in {
+    from { opacity: 0; transform: scale(0.92); }
+    to   { opacity: 1; transform: scale(1); }
+  }
+  .modal-card-anim { animation: np-modal-in 0.22s ease-out; }
+  /* Toast */
+  .toast {
+    position: fixed; bottom: 110px; left: 50%;
+    transform: translateX(-50%) translateY(20px);
+    background: #3c6a00; color: #fff;
+    padding: 12px 22px; border-radius: 9999px;
+    font-family: Quicksand, sans-serif; font-weight: 700; font-size: 14px;
+    box-shadow: 0 6px 16px rgba(0,0,0,0.18);
+    z-index: 100; opacity: 0; pointer-events: none;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+  }
+  .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+  @media (min-width: 768px) {
+    .toast { bottom: 32px; }
+  }
+</style>
+<script id="tailwind-config">
+  tailwind.config = {
+    darkMode: "class",
+    theme: { extend: {
+      "colors": {
+        "on-tertiary-container": "#004257", "on-surface": "#25190f", "on-background": "#25190f",
+        "on-surface-variant": "#424938", "on-primary-fixed": "#0e2000", "outline-variant": "#c2c9b3",
+        "on-primary-fixed-variant": "#2c5000", "on-error": "#ffffff", "primary-container": "#78b833",
+        "inverse-on-surface": "#ffeee2", "primary-fixed-dim": "#96d951", "inverse-primary": "#96d951",
+        "surface-variant": "#f6decd", "inverse-surface": "#3c2e22", "surface-container-highest": "#f6decd",
+        "error-container": "#ffdad6", "surface": "#fff8f5", "background": "#fff8f5",
+        "on-secondary-container": "#68634d", "on-primary-container": "#254400", "on-secondary": "#ffffff",
+        "surface-dim": "#edd6c5", "surface-bright": "#fff8f5", "on-primary": "#ffffff",
+        "surface-container-lowest": "#ffffff", "tertiary-container": "#6ab0d0", "tertiary": "#0d6683",
+        "error": "#ba1a1a", "surface-container-high": "#fce4d2", "primary": "#3c6a00",
+        "outline": "#727a67", "on-secondary-fixed-variant": "#4c4733",
+        "on-tertiary-fixed-variant": "#004d65", "secondary": "#645e49", "on-secondary-fixed": "#1f1c0b",
+        "secondary-container": "#e8dfc5", "on-tertiary": "#ffffff", "on-tertiary-fixed": "#001f2a",
+        "tertiary-fixed": "#bee9ff", "surface-container": "#ffeadb", "secondary-fixed": "#ebe2c8",
+        "on-error-container": "#93000a", "primary-fixed": "#b1f66a", "tertiary-fixed-dim": "#8ad0f1",
+        "surface-container-low": "#fff1e8", "secondary-fixed-dim": "#cec6ad", "surface-tint": "#3c6a00"
+      },
+      "borderRadius": { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" },
+      "spacing": { "xs": "4px", "lg": "40px", "xl": "64px", "margin-desktop": "48px", "base": "8px",
+        "gutter": "24px", "md": "24px", "margin-mobile": "16px", "sm": "12px" },
+      "fontFamily": {
+        "body-lg": ["Quicksand"], "headline-md": ["Plus Jakarta Sans"], "label-md": ["Quicksand"],
+        "body-md": ["Quicksand"], "headline-lg-mobile": ["Plus Jakarta Sans"],
+        "headline-lg": ["Plus Jakarta Sans"], "label-sm": ["Quicksand"]
+      },
+      "fontSize": {
+        "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "500"}],
+        "headline-md": ["28px", {"lineHeight": "1.3", "fontWeight": "700"}],
+        "label-md": ["14px", {"lineHeight": "1.4", "letterSpacing": "0.05em", "fontWeight": "700"}],
+        "body-md": ["16px", {"lineHeight": "1.6", "fontWeight": "500"}],
+        "headline-lg-mobile": ["32px", {"lineHeight": "1.2", "fontWeight": "800"}],
+        "headline-lg": ["40px", {"lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "800"}],
+        "label-sm": ["12px", {"lineHeight": "1.4", "fontWeight": "700"}]
+      }
+    } }
+  }
+</script>
+<style>
+  body { min-height: max(884px, 100dvh); }
+</style>
+</head>
+<body class="bg-surface font-body-md text-on-surface min-h-screen flex flex-col relative overflow-x-hidden">
+
+<div class="fixed inset-0 pointer-events-none leaf-pattern z-0"></div>
+
+<!-- Header -->
+<header class="bg-surface-container shadow-sm flex justify-between items-center w-full px-margin-mobile md:px-margin-desktop py-4 z-50">
+  <div class="flex items-center gap-3">
+    <h1 class="font-headline-md text-headline-md font-extrabold text-primary">NookPrint Pro</h1>
+  </div>
+  <div class="flex items-center gap-4">
+    <div class="hidden md:flex gap-6 items-center">
+      <a class="text-primary font-bold transition-all hover:scale-105" href="index.html">Calculator</a>
+      <a class="text-on-surface-variant hover:text-primary transition-all" href="prints.html">Prints</a>
+      <button type="button" class="text-on-surface-variant hover:text-primary transition-all bg-transparent p-0" onclick="NP.openSettingsModal()">Settings</button>
+    </div>
+    <div class="w-10 h-10 rounded-full bg-surface-variant overflow-hidden border-2 border-primary/20 grid place-items-center text-primary" aria-label="3D Printer">
+      <span class="material-symbols-outlined" style="font-size: 22px;">precision_manufacturing</span>
+    </div>
+  </div>
+</header>
+
+<main class="flex-grow flex flex-col items-center px-4 pt-10 pb-32 z-10 w-full max-w-6xl mx-auto">
+  <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 w-full">
+
+    <!-- Left column: Inputs -->
+    <div class="lg:col-span-7 space-y-8">
+
+      <!-- Print Details -->
+      <section class="bg-surface-container-low rounded-3xl p-8 stitched-card nook-shadow border-2 border-outline-variant/30">
+        <div class="flex items-center gap-3 mb-6">
+          <div class="bg-tertiary-container p-2 rounded-xl text-on-tertiary-container shadow-sm">
+            <span class="material-symbols-outlined">assignment</span>
+          </div>
+          <h2 class="font-headline-md text-headline-md text-on-surface">Print Details</h2>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div class="space-y-2">
+            <label class="font-label-md text-label-md flex items-center gap-2 text-secondary" for="weight">
+              <span class="material-symbols-outlined text-lg">scale</span>
+              Filament Weight (g)
+            </label>
+            <input class="w-full bg-surface rounded-2xl border-2 border-outline-variant/50 p-4 font-bold text-lg focus:ring-4 focus:ring-primary/20 focus:border-primary transition-all outline-none placeholder:text-on-surface-variant/40 placeholder:font-medium" id="weight" placeholder="150" type="number">
+          </div>
+          <div class="space-y-2">
+            <label class="font-label-md text-label-md flex items-center gap-2 text-secondary" for="time">
+              <span class="material-symbols-outlined text-lg">schedule</span>
+              Print Time (hrs)
+            </label>
+            <input class="w-full bg-surface rounded-2xl border-2 border-outline-variant/50 p-4 font-bold text-lg focus:ring-4 focus:ring-primary/20 focus:border-primary transition-all outline-none placeholder:text-on-surface-variant/40 placeholder:font-medium" id="time" placeholder="8" type="number">
+          </div>
+        </div>
+      </section>
+
+      <!-- Materials -->
+      <section class="bg-surface-container rounded-3xl p-8 border-b-8 border-r-4 border-surface-dim/40 nook-shadow">
+        <div class="flex items-center gap-3 mb-6">
+          <div class="bg-primary-container p-2 rounded-xl text-on-primary-container shadow-sm">
+            <span class="material-symbols-outlined">settings_input_component</span>
+          </div>
+          <h2 class="font-headline-md text-headline-md text-on-surface">Materials</h2>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div class="space-y-2">
+            <label class="font-label-md text-label-md flex items-center gap-2 text-secondary" for="rollPrice">
+              <span class="material-symbols-outlined text-lg">payments</span>
+              Filament Roll Price (1kg)
+            </label>
+            <div class="relative">
+              <span class="absolute left-4 top-1/2 -translate-y-1/2 text-outline" id="rollCurrencyPrefix">$</span>
+              <input class="w-full bg-surface rounded-2xl border-2 border-outline-variant/50 p-4 pl-8 font-bold text-lg focus:ring-4 focus:ring-primary/20 focus:border-primary transition-all outline-none placeholder:text-on-surface-variant/40 placeholder:font-medium" id="rollPrice" placeholder="24.99" type="number">
+            </div>
+          </div>
+          <div class="space-y-2">
+            <label class="font-label-md text-label-md flex items-center gap-2 text-secondary" for="accessoryCost">
+              <span class="material-symbols-outlined text-lg">redeem</span>
+              Accessory Cost <span class="text-on-surface-variant/60 normal-case font-medium">(optional)</span>
+            </label>
+            <div class="relative">
+              <span class="absolute left-4 top-1/2 -translate-y-1/2 text-outline" id="accessoryCurrencyPrefix">$</span>
+              <input class="w-full bg-surface rounded-2xl border-2 border-outline-variant/50 p-4 pl-8 font-bold text-lg focus:ring-4 focus:ring-primary/20 focus:border-primary transition-all outline-none placeholder:text-on-surface-variant/40 placeholder:font-medium" id="accessoryCost" placeholder="0.10" type="number" step="any" min="0">
+            </div>
+            <p class="text-xs text-on-surface-variant/70 mt-1 leading-snug">e.g. keychain ring, magnet, packaging</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Business Settings -->
+      <section class="bg-surface-container rounded-3xl p-8 border-b-8 border-r-4 border-surface-dim/40 nook-shadow">
+        <div class="flex items-center gap-3 mb-6">
+          <div class="bg-tertiary-container p-2 rounded-xl text-on-tertiary-container shadow-sm">
+            <span class="material-symbols-outlined">storefront</span>
+          </div>
+          <h2 class="font-headline-md text-headline-md text-on-surface">Business Settings</h2>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div class="space-y-2">
+            <label class="font-label-md text-label-md flex items-center gap-2 text-secondary" for="profitMargin">
+              <span class="material-symbols-outlined text-lg">trending_up</span>
+              Profit Margin (x)
+            </label>
+            <input class="w-full bg-surface rounded-2xl border-2 border-outline-variant/50 p-4 font-bold text-lg focus:ring-4 focus:ring-primary/20 focus:border-primary transition-all outline-none placeholder:text-on-surface-variant/40 placeholder:font-medium" id="profitMargin" placeholder="2.5" step="0.1" type="number">
+          </div>
+          <div class="space-y-2">
+            <label class="font-label-md text-label-md flex items-center gap-2 text-secondary" for="includeTax">
+              <span class="material-symbols-outlined text-lg">receipt_long</span>
+              Include VAT (21%)
+            </label>
+            <div class="flex items-center h-[60px]">
+              <label class="relative inline-flex items-center cursor-pointer">
+                <input checked class="sr-only peer" id="includeTax" type="checkbox">
+                <div class="w-14 h-8 bg-surface-variant peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[4px] after:start-[4px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-6 after:w-6 after:transition-all peer-checked:bg-primary"></div>
+              </label>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Pro Tip -->
+      <section class="bg-tertiary-fixed/30 rounded-2xl p-5 border-2 border-tertiary-container/20 flex items-start gap-4 nook-shadow">
+        <div class="bg-tertiary-container/40 shrink-0 w-12 h-12 rounded-full flex items-center justify-center text-tertiary">
+          <span class="material-symbols-outlined" style="font-size: 24px; font-variation-settings: 'FILL' 1;">lightbulb</span>
+        </div>
+        <div class="flex-1">
+          <h3 class="font-headline-md text-lg font-extrabold text-tertiary mb-1 leading-tight">Pro Tip!</h3>
+          <p class="text-on-surface-variant leading-relaxed text-[15px]">
+            Decreasing your infill density can decrease printing costs but can also reduce solidity of your prints. Also don't forget to add your labour costs and maintenance costs!
+          </p>
+        </div>
+      </section>
+
+      <!-- Calculate button -->
+      <button class="clicky-button w-full bg-primary-container hover:bg-primary text-on-primary-container hover:text-white py-6 rounded-full font-headline-md text-headline-md shadow-[0_6px_0_0_#2c5000] active:shadow-none transition-all flex items-center justify-center gap-4" onclick="calculate()">
+        <span class="material-symbols-outlined text-3xl">calculate</span>
+        Calculate Cost
+      </button>
+    </div>
+
+    <!-- Right column: Results + Save -->
+    <div class="lg:col-span-5 flex flex-col gap-8">
+
+      <!-- Cost Estimate Receipt -->
+      <div class="bg-white rounded-t-xl overflow-hidden flex flex-col nook-shadow transition-all transform hover:-rotate-1" id="costReceipt" style="transform: scale(0.98) rotate(0deg);">
+        <div class="px-8 py-6 flex justify-between items-center border-b-2 border-dashed border-tertiary/40 bg-tertiary-container/20">
+          <span class="font-headline-md opacity-60 text-tertiary">NookPrint</span>
+          <span class="text-label-sm text-secondary currentDate"></span>
+        </div>
+        <div class="p-8 space-y-6">
+          <h3 class="font-headline-md text-headline-md text-center text-on-surface">Cost Estimate</h3>
+          <div class="space-y-4 font-body-md text-secondary border-t-2 border-dashed border-outline-variant/30 pt-6">
+            <div class="flex justify-between">
+              <span>Filament Cost</span>
+              <span id="resFilament">—</span>
+            </div>
+            <div class="flex justify-between">
+              <span>Energy Usage</span>
+              <span id="resPower">—</span>
+            </div>
+            <div class="flex justify-between font-bold border-t border-dashed border-outline-variant/30 pt-2 text-on-surface">
+              <span>Base Subtotal</span>
+              <span id="resSubtotal">—</span>
+            </div>
+          </div>
+        </div>
+        <div class="receipt-edge rotate-180"></div>
+      </div>
+
+      <!-- Sell Price Receipt -->
+      <div class="bg-white rounded-t-xl overflow-hidden flex flex-col nook-shadow transition-all transform hover:rotate-1" id="sellReceipt" style="transform: scale(0.98) rotate(0deg);">
+        <div class="px-8 py-6 flex justify-between items-center border-b-2 border-dashed border-primary/40 bg-primary-container/20">
+          <span class="font-headline-md opacity-60 text-primary">Bill of Sale</span>
+          <span class="text-label-sm text-secondary currentDate"></span>
+        </div>
+        <div class="p-8 space-y-6">
+          <h3 class="font-headline-md text-headline-md text-center text-on-surface">Sell Price</h3>
+          <div class="space-y-4 font-body-md text-secondary border-t-2 border-dashed border-outline-variant/30 pt-6">
+            <div class="flex justify-between text-primary">
+              <span>Profit Margin</span>
+              <span id="resMargin">—</span>
+            </div>
+            <div class="flex justify-between text-secondary" id="taxRow">
+              <span id="taxRowLabel">VAT (21%)</span>
+              <span id="resTax">—</span>
+            </div>
+          </div>
+          <div class="pt-6 border-t-2 border-dashed border-outline-variant/60">
+            <div class="text-center text-label-md text-primary tracking-widest uppercase mb-1">Total Bells To Charge</div>
+            <div class="text-center font-headline-lg text-headline-lg text-on-surface flex items-center justify-center gap-2">
+              <span class="text-primary-container" id="resTotalCurrency">$</span>
+              <span id="resTotal">—</span>
+            </div>
+          </div>
+          <div class="flex justify-center pt-4">
+            <div class="w-16 h-16 rounded-full bg-surface-container-high flex items-center justify-center text-primary-container rotate-12">
+              <span class="material-symbols-outlined text-4xl" style="font-variation-settings: 'FILL' 1;">verified</span>
+            </div>
+          </div>
+        </div>
+        <div class="receipt-edge rotate-180"></div>
+      </div>
+
+      <!-- Save Print panel -->
+      <section class="bg-surface-container-low rounded-3xl p-6 stitched-card nook-shadow border-2 border-outline-variant/30">
+        <div class="flex items-center gap-3 mb-4">
+          <div class="bg-primary-container p-2 rounded-xl text-on-primary-container shadow-sm">
+            <span class="material-symbols-outlined">save</span>
+          </div>
+          <h2 class="font-headline-md text-headline-md text-on-surface">Save this Print</h2>
+        </div>
+        <input class="w-full bg-surface rounded-2xl border-2 border-outline-variant/50 p-4 font-bold text-lg focus:ring-4 focus:ring-primary/20 focus:border-primary transition-all outline-none mb-4" id="printName" placeholder="Enter Print Name…" type="text" maxlength="60">
+        <button class="clicky-button w-full bg-primary hover:brightness-110 text-on-primary py-4 rounded-full font-headline-md text-headline-md shadow-[0_4px_0_0_#2c5000] active:shadow-none transition-all flex items-center justify-center gap-3" onclick="savePrint()">
+          <span class="material-symbols-outlined">save</span>
+          Save Print
+        </button>
+      </section>
+    </div>
+  </div>
+</main>
+
+<!-- Bottom Nav (Mobile) -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 pb-6 pt-3 bg-surface-container-high shadow-lg rounded-t-xl md:hidden">
+  <a class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-full px-5 py-1" href="index.html">
+    <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">calculate</span>
+    <span class="font-label-sm text-label-sm">Calculator</span>
+  </a>
+  <a class="flex flex-col items-center justify-center text-on-surface-variant px-5 py-1" href="prints.html">
+    <span class="material-symbols-outlined">view_in_ar</span>
+    <span class="font-label-sm text-label-sm">Prints</span>
+  </a>
+  <button type="button" class="flex flex-col items-center justify-center text-on-surface-variant px-5 py-1 bg-transparent" onclick="NP.openSettingsModal()">
+    <span class="material-symbols-outlined">settings</span>
+    <span class="font-label-sm text-label-sm">Settings</span>
+  </button>
+</nav>
+
+<script src="app.js"></script>
+<script>
+  // ---------- State ----------
+  let lastCalc = null;
+
+  function refreshCurrencyLabels() {
+    const sym = NP.currencySymbol();
+    document.getElementById('rollCurrencyPrefix').textContent = sym;
+    document.getElementById('accessoryCurrencyPrefix').textContent = sym;
+    document.getElementById('resTotalCurrency').textContent = sym;
+  }
+
+  function readInputs() {
+    const settings = NP.getSettings();
+    const accessoryRaw = document.getElementById('accessoryCost').value;
+    return {
+      weightGrams: parseFloat(document.getElementById('weight').value),
+      printHours: parseFloat(document.getElementById('time').value),
+      rollPrice: parseFloat(document.getElementById('rollPrice').value),
+      electricityRate: settings.electricityRate,
+      accessoryCost: accessoryRaw === '' ? 0 : parseFloat(accessoryRaw),
+      margin: parseFloat(document.getElementById('profitMargin').value),
+      includeVat: document.getElementById('includeTax').checked,
+      vatRate: 0.21,
+      printerWatts: settings.printerWatts
+    };
+  }
+
+  function validate(inputs) {
+    const required = ['weightGrams','printHours','rollPrice','margin'];
+    for (const k of required) {
+      if (!Number.isFinite(inputs[k]) || inputs[k] < 0) return false;
+    }
+    // accessoryCost: optional but must be a non-negative number if provided
+    if (!Number.isFinite(inputs.accessoryCost) || inputs.accessoryCost < 0) return false;
+    if (inputs.margin < 1) return false;
+    return true;
+  }
+
+  function calculate() {
+    const inputs = readInputs();
+    if (!validate(inputs)) {
+      NP.toast('Fill in all fields to calculate 🌿');
+      return;
+    }
+    const r = NP.calculate(inputs);
+    lastCalc = { inputs, result: r };
+
+    const sym = NP.currencySymbol();
+    const fmt = (v) => `${sym}${(Number.isFinite(v) ? v : 0).toFixed(2)}`;
+
+    animateValue('resFilament', r.filamentCost, sym, true);
+    animateValue('resPower', r.energyCost, sym, true);
+    animateValue('resSubtotal', r.baseSubtotal, sym, true);
+    animateValue('resMargin', r.profitMargin, sym, true);
+    animateValue('resTax', r.vatAmount, sym, true);
+    animateValue('resTotal', r.sellPrice, sym, false);
+
+    const taxRow = document.getElementById('taxRow');
+    taxRow.style.opacity = inputs.includeVat ? '1' : '0.3';
+    document.getElementById('taxRowLabel').textContent = `VAT (${Math.round(inputs.vatRate * 100)}%)`;
+
+    // Receipt wiggle feedback
+    const costReceipt = document.getElementById('costReceipt');
+    const sellReceipt = document.getElementById('sellReceipt');
+    [costReceipt, sellReceipt].forEach((r, i) => {
+      r.style.transform = 'scale(0.98) rotate(0deg)';
+      setTimeout(() => {
+        r.style.transform = `scale(1) rotate(${i === 0 ? '-1deg' : '1deg'})`;
+      }, 100);
+    });
+  }
+
+  function animateValue(id, target, sym, isCurrency) {
+    const el = document.getElementById(id);
+    if (!el) return;
+    let start = 0;
+    const duration = 500;
+    const stepTime = 20;
+    const steps = duration / stepTime;
+    const increment = target / steps;
+    let timer = setInterval(() => {
+      start += increment;
+      if ((increment >= 0 && start >= target) || (increment < 0 && start <= target) || increment === 0) {
+        el.innerText = isCurrency ? `${sym}${target.toFixed(2)}` : target.toFixed(2);
+        clearInterval(timer);
+      } else {
+        el.innerText = isCurrency ? `${sym}${start.toFixed(2)}` : start.toFixed(2);
+      }
+    }, stepTime);
+  }
+
+  function savePrint() {
+    if (!lastCalc) {
+      NP.toast('Calculate first, then save 🌱');
+      return;
+    }
+    const nameInput = document.getElementById('printName');
+    const name = (nameInput.value || '').trim();
+    if (!name) {
+      NP.toast('Give your print a name ✏️');
+      nameInput.focus();
+      return;
+    }
+    NP.addPrint({
+      id: NP.uid(),
+      name,
+      createdAt: Date.now(),
+      currency: NP.currencyCode(),
+      inputs: lastCalc.inputs,
+      result: lastCalc.result
+    });
+    nameInput.value = '';
+    NP.toast(`"${name}" saved ✨`);
+  }
+
+  // Set dates on receipts
+  const options = { month: 'short', day: 'numeric', year: 'numeric' };
+  const formattedDate = new Date().toLocaleDateString('en-US', options).toUpperCase();
+  document.querySelectorAll('.currentDate').forEach(el => el.innerText = formattedDate);
+
+  // Initial setup: just load currency labels. Inputs start empty so the user
+  // can see example values via placeholders.
+  refreshCurrencyLabels();
+
+  // When settings are saved via the modal, refresh currency labels + recalc
+  // (only if a calculation has already been done)
+  document.addEventListener('np:settings-updated', () => {
+    refreshCurrencyLabels();
+    if (lastCalc) calculate();
+  });
+</script>
+
+<!-- =========== Settings Modal (compact) =========== -->
+<div id="np-settings-modal" class="hidden modal-overlay fixed inset-0 z-[100] flex items-center justify-center p-2 overflow-y-auto">
+  <div class="bg-surface w-full max-w-sm rounded-[2rem] nook-card-shadow overflow-hidden flex flex-col relative modal-card-anim my-2">
+    <button id="np-settings-close" type="button" aria-label="Close"
+            class="absolute top-2.5 right-2.5 w-8 h-8 rounded-full bg-surface-container-high hover:bg-error-container z-10 flex items-center justify-center text-on-surface-variant hover:text-error transition-colors">
+      <span class="material-symbols-outlined" style="font-size: 18px;">close</span>
+    </button>
+    <div class="m-1.5 dashed-border p-4 flex flex-col gap-3">
+
+      <div class="text-center">
+        <h2 class="font-headline-md text-2xl font-extrabold text-on-surface leading-tight">Settings</h2>
+        <div class="h-1 w-10 bg-primary-container mx-auto mt-1 rounded-full"></div>
+      </div>
+
+      <div class="space-y-2.5">
+        <div class="flex items-center gap-2">
+          <span class="material-symbols-outlined text-secondary" style="font-size: 16px;">settings_applications</span>
+          <h3 class="font-label-md text-[11px] text-secondary uppercase tracking-widest">Global Configuration</h3>
+        </div>
+
+        <!-- Currency -->
+        <div class="bg-surface-container-low rounded-2xl p-3 flex flex-col gap-2">
+          <div class="flex justify-between items-center">
+            <span class="font-label-md text-label-md">Currency Preference</span>
+            <span class="material-symbols-outlined text-primary" style="font-size: 18px;">payments</span>
+          </div>
+          <div class="bg-surface-variant rounded-full p-1 flex relative">
+            <button type="button" data-value="USD" class="np-currency-btn flex-1 py-1.5 text-sm font-bold rounded-full z-10 transition-all duration-300 squishy-button flex items-center justify-center gap-1.5">
+              <span class="material-symbols-outlined" style="font-size: 14px;">attach_money</span>
+              $ USD
+            </button>
+            <button type="button" data-value="EUR" class="np-currency-btn flex-1 py-1.5 text-sm font-bold rounded-full transition-all duration-300 squishy-button flex items-center justify-center gap-1.5">
+              <span class="material-symbols-outlined" style="font-size: 14px;">euro</span>
+              € EUR
+            </button>
+          </div>
+        </div>
+
+        <!-- Printer Wattage -->
+        <div class="bg-surface-container-low rounded-2xl p-3 flex flex-col gap-2">
+          <div class="flex justify-between items-center">
+            <span class="font-label-md text-label-md">Printer Wattage</span>
+            <span class="material-symbols-outlined text-primary" style="font-size: 18px;">bolt</span>
+          </div>
+          <div class="relative">
+            <input id="np-settings-watts" type="number" inputmode="numeric" min="1" step="1" placeholder="150"
+                   class="w-full bg-surface rounded-full border-2 border-outline-variant/40 px-4 py-2 pr-10 font-bold text-base focus:ring-4 focus:ring-primary/20 focus:border-primary transition-all outline-none">
+            <span class="absolute right-4 top-1/2 -translate-y-1/2 text-on-surface-variant font-bold text-sm">W</span>
+          </div>
+          <p class="text-[10px] text-on-surface-variant leading-snug">Typical 3D printer ≈ <strong>150 W</strong>. Adjust to your printer.</p>
+        </div>
+
+        <!-- Electricity Rate -->
+        <div class="bg-surface-container-low rounded-2xl p-3 flex flex-col gap-2">
+          <div class="flex justify-between items-center">
+            <span class="font-label-md text-label-md">Electricity Rate</span>
+            <span class="material-symbols-outlined text-primary" style="font-size: 18px;">flash_on</span>
+          </div>
+          <div class="relative">
+            <span id="np-settings-rate-prefix" class="absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant font-bold text-sm">€</span>
+            <input id="np-settings-rate" type="number" inputmode="decimal" min="0" step="any" placeholder="0.28"
+                   class="w-full bg-surface rounded-full border-2 border-outline-variant/40 px-4 py-2 pr-14 pl-8 font-bold text-base focus:ring-4 focus:ring-primary/20 focus:border-primary transition-all outline-none">
+            <span class="absolute right-4 top-1/2 -translate-y-1/2 text-on-surface-variant font-bold text-sm">/kWh</span>
+          </div>
+          <p class="text-[10px] text-on-surface-variant leading-snug">Cost per kWh from your energy provider.</p>
+        </div>
+      </div>
+
+      <button id="np-settings-ok" type="button"
+              class="w-full bg-primary text-on-primary py-2.5 rounded-full font-bold text-lg squishy-button shadow-[0_3px_0_0_#2c5000] transition-all hover:brightness-110 flex items-center justify-center gap-2">
+        <span class="material-symbols-outlined" style="font-size: 20px;">check_circle</span>
+        OK
+      </button>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

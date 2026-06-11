@@ -3,7 +3,7 @@
   PROJECT CASE STUDY TEMPLATE
   ============================================================
   Dupliceer dit bestand voor elk project (bv. project-cyber-nexus.html).
-  Pas dan in portfolio.html het `url` veld van het project aan zodat
+  Pas dan in index.html het `url` veld van het project aan zodat
   het naar de juiste pagina linkt.
 
   Wat je per project aanpast:
@@ -18,7 +18,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Cyber Nexus | JDesign Studio</title>
+<title>Internship RoffaReefs | JDesign Studio</title>
+<link rel="icon" type="image/svg+xml" href="../../assets/earth-icon.svg">
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -186,13 +187,51 @@
     grid-template-columns: 1fr 1fr;
     gap: 24px;
   }
+  .gallery-link {
+    display: block;
+    position: relative;
+    overflow: hidden;
+    border-radius: 14px;
+    border: 1px solid #1f1f2e;
+    cursor: pointer;
+    transition: transform 0.3s, box-shadow 0.3s, border-color 0.3s;
+    text-decoration: none;
+    background: #15151f;
+    color: inherit;
+  }
+  .gallery-link:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 20px 50px rgba(139, 127, 255, 0.2);
+    border-color: #2f2f4e;
+  }
+  .gallery-img-wrap {
+    overflow: hidden;
+    background: linear-gradient(135deg, #1a1a2e, #0f0f1a);
+  }
   .gallery-img {
     width: 100%;
     aspect-ratio: 16 / 10;
     object-fit: cover;
-    border-radius: 14px;
-    border: 1px solid #1f1f2e;
-    background: linear-gradient(135deg, #1a1a2e, #0f0f1a);
+    display: block;
+    transition: transform 0.5s;
+  }
+  .gallery-link:hover .gallery-img {
+    transform: scale(1.05);
+  }
+  .gallery-caption {
+    padding: 16px 20px 18px;
+  }
+  .gallery-caption h4 {
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 6px;
+    color: #fff;
+  }
+  .gallery-caption p {
+    color: #8a8a9a;
+    font-size: 13px;
+    line-height: 1.45;
+    margin: 0;
   }
 
   /* TAKEAWAYS */
@@ -379,7 +418,18 @@
     border-left-color: #8b7fff; color: #4a4a5a;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
   }
-  body.light .gallery-img { border-color: #e2e2eb; }
+  body.light .gallery-link {
+    border-color: #e2e2eb;
+    background: #ffffff;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  }
+  body.light .gallery-link:hover {
+    border-color: #c0c0d8;
+    box-shadow: 0 20px 50px rgba(139, 127, 255, 0.18);
+  }
+  body.light .gallery-img-wrap { background: linear-gradient(135deg, #e8e8f0, #d8d8e4); }
+  body.light .gallery-caption h4 { color: #1a1a2a; }
+  body.light .gallery-caption p { color: #6a6a7a; }
   body.light .takeaways-title { color: #1a1a2a; }
   body.light .takeaway-card {
     background: #ffffff; border-color: #e2e2eb;
@@ -461,7 +511,7 @@
 <div class="bg-glow" id="bgGlow"></div>
 
 <nav class="top-nav">
-  <a href="../../portfolio.html" class="back-link">← Back to projects</a>
+  <a href="../../index.html" class="back-link">← Back to projects</a>
   <span class="brand">JDESIGN STUDIO</span>
 </nav>
 
@@ -470,27 +520,27 @@
   <div class="project-meta-top">
     <span>CASE STUDY</span>
     <span class="divider"></span>
-    <span>2024</span>
+    <span>2025</span>
   </div>
-  <h1>Cyber Nexus</h1>
-  <p class="project-lead">A deep-dive into the design and development of an immersive cyberpunk RPG environment, bridging high-fidelity aesthetics with seamless player interaction models.</p>
+  <h1>RoffaReefs Internship</h1>
+  <p class="project-lead">A research and development internship on Bonaire, combining hands-on marine field work for coral restoration with bioinformatics tools, machine learning image recognition, and workflow automation for fish population studies.</p>
 
   <div class="project-meta-grid">
     <div>
       <div class="meta-label">ROLE</div>
-      <div class="meta-value">Lead UI/UX Designer</div>
+      <div class="meta-value">Research &amp; Dev Intern</div>
     </div>
     <div>
       <div class="meta-label">TIMELINE</div>
-      <div class="meta-value">6 Months</div>
+      <div class="meta-value">5 Months</div>
     </div>
     <div>
-      <div class="meta-label">PLATFORM</div>
-      <div class="meta-value">Desktop / VR</div>
+      <div class="meta-label">LOCATION</div>
+      <div class="meta-value">Bonaire</div>
     </div>
     <div>
       <div class="meta-label">FOCUS</div>
-      <div class="meta-value">Immersive UI</div>
+      <div class="meta-value">Bioinformatics &amp; ML</div>
     </div>
   </div>
 </header>
@@ -499,55 +549,82 @@
 <section class="project-content">
   <div class="content-grid">
     <aside class="content-side">
-      <h2>The Challenge &amp; Process</h2>
+      <h2>The Work &amp; Process</h2>
       <div class="side-bar"></div>
     </aside>
     <div class="content-body">
-      <h3>Establishing the Core Identity</h3>
-      <p>The primary goal was to create a user interface that didn't just sit on top of the world, but felt integrated within the 'Cyber Nexus' lore. We began with extensive user research into the mental models of RPG players, specifically focusing on how information density affects immersion during high-stakes combat and exploration.</p>
-      <p>Our iterative process involved over 50 prototype variants, testing everything from diegetic menus that appear as holographic projections from the player's wrist to minimal HUDs that respond to eye-tracking movements.</p>
+      <h3>About RoffaReefs</h3>
+      <p>RoffaReefs is an organisation based on Bonaire dedicated to coral reef restoration and the study of local fish populations and their eggs. My internship combined two worlds: rigorous biological field work and the development of digital tools to make that research faster, more accurate, and easier to share with the people funding it.</p>
+
+      <h3>Field Work &amp; Data Collection</h3>
+      <p>A large part of the internship was spent in and around the water. I collected fish eggs from different reef sites, took DNA samples, and recorded the biotic and abiotic factors that shape the local fish populations. Using genetic analysis I then matched each captured egg to the correct fish species, building up a reference dataset that didn't exist for the region before.</p>
 
       <blockquote class="pull-quote">
-        "The interface shouldn't feel like a layer. It should feel like the nervous system of the world itself."
-        <cite>Project Vision Statement</cite>
+        "Every egg you can identify is one more data point telling us how the reef is recovering."
+        <cite>RoffaReefs research focus</cite>
       </blockquote>
 
-      <h3>Iterative Design &amp; Testing</h3>
-      <p>Using Figma and Unity, we developed a living design system. Every button press, window transition, and data visualization was stress-tested against different environmental lighting conditions to ensure accessibility remained a priority without sacrificing the neon-soaked cyberpunk aesthetic.</p>
+      <h3>Building the Identification Catalogue</h3>
+      <p>The matched data became the foundation for an interactive fish (egg) identification catalogue: a tool that lets researchers and divers look up a species, see reference images, and quickly cross-check observations in the field. It replaces handwritten notebooks with a clean, searchable interface that anyone on the team can use.</p>
+
+      <h3>Machine Learning Image Recognition</h3>
+      <p>Using the same dataset, I trained a machine learning model that automatically links a photo of a fish egg to the most likely species. What used to take a trained eye and a lot of cross-referencing now happens in seconds, drastically lowering the barrier to identification work in the field.</p>
+
+      <h3>Automation &amp; Investor Dashboard</h3>
+      <p>On top of the research tools I built small automations to streamline daily operations: scripts that fetch external data and drop it into the right files, and an informative dashboard visualising RoffaReefs' progress so the team can clearly show impact to investors and partners.</p>
     </div>
   </div>
 </section>
 
-<!-- ============== GALLERY ============== -->
+<!-- ============== GALLERY ==============
+     Klikbare previews van de twee project-tools. Hover-effect matcht de cards op de
+     homepage (lift + purple glow + lichte zoom op de afbeelding). -->
 <section class="project-gallery">
-  <img class="gallery-img" src="https://images.unsplash.com/photo-1614680376573-df3480f0c6ff?w=1000&q=80" alt="Project visual 1">
-  <img class="gallery-img" src="https://images.unsplash.com/photo-1542751371-adc38448a05e?w=1000&q=80" alt="Project visual 2">
+  <a href="Fish%20Egg%20Catalogue/fish.html" class="gallery-link" aria-label="Open Fish Catalogue">
+    <div class="gallery-img-wrap">
+      <img class="gallery-img" src="Fish%20Egg%20Catalogue/Fish%20Catalogue.png" alt="Fish Catalogue tool preview">
+    </div>
+    <div class="gallery-caption">
+      <h4>Fish Catalogue</h4>
+      <p>A clear overview of all collected fish (egg) data, with filters that make identifying new eggs in the field a matter of seconds.</p>
+    </div>
+  </a>
+  <a href="Data%20Fetcher/datafetcher.html" class="gallery-link" aria-label="Open Automatic Data Fetcher">
+    <div class="gallery-img-wrap">
+      <img class="gallery-img" src="Data%20Fetcher/datafetcher.png" alt="Automatic Data Fetcher tool preview">
+    </div>
+    <div class="gallery-caption">
+      <h4>Automatic Data Fetcher</h4>
+      <p>Pulls data from multiple sources automatically so repetitive tasks fall away and more time can be spent on the actual research.</p>
+    </div>
+  </a>
 </section>
+
 
 <!-- ============== TAKEAWAYS ============== -->
 <section class="takeaways-section">
-  <h2 class="takeaways-title">Technical &amp; Creative Takeaways</h2>
+  <h2 class="takeaways-title">Research &amp; Technical Takeaways</h2>
   <div class="takeaways-grid">
     <div class="takeaway-card">
       <div class="takeaway-icon icon-purple">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.5 5 5 1.5-5 1.5L12 16l-1.5-5L5.5 9.5 10.5 8z"/><path d="M19 3v4M21 5h-4M5 17v4M7 19H3"/></svg>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-3.6-7.2"/><polyline points="21 4 21 10 15 10"/><circle cx="12" cy="12" r="2.5"/></svg>
       </div>
-      <h4>Spatial Design</h4>
-      <p>Mastered the transition from 2D screen-based layouts to 3D spatial UI that respects player depth perception.</p>
+      <h4>Bioinformatics &amp; Automation</h4>
+      <p>Turned manual research workflows into automated pipelines that fetch, structure and visualise biological data for the team.</p>
     </div>
     <div class="takeaway-card">
       <div class="takeaway-icon icon-blue">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><line x1="9" y1="2" x2="9" y2="4"/><line x1="15" y1="2" x2="15" y2="4"/><line x1="9" y1="20" x2="9" y2="22"/><line x1="15" y1="20" x2="15" y2="22"/><line x1="20" y1="9" x2="22" y2="9"/><line x1="20" y1="15" x2="22" y2="15"/><line x1="2" y1="9" x2="4" y2="9"/><line x1="2" y1="15" x2="4" y2="15"/></svg>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/><path d="M19 5l2-2M5 19l-2 2"/></svg>
       </div>
-      <h4>Optimization</h4>
-      <p>Developed custom shader workflows in Unity to render complex UI glows without impacting frame rates.</p>
+      <h4>Machine Learning Vision</h4>
+      <p>Trained an image recognition model that automatically links a photo of a fish egg to the correct species.</p>
     </div>
     <div class="takeaway-card">
       <div class="takeaway-icon icon-orange">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="5" r="2"/><path d="M12 7v4M5 11h14M9 11l-1 10M15 11l1 10"/></svg>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 2v6l-3 7a4 4 0 0 0 4 5h4a4 4 0 0 0 4-5l-3-7V2"/><line x1="8" y1="2" x2="16" y2="2"/><line x1="8" y1="14" x2="16" y2="14"/><circle cx="11" cy="17" r="0.8"/><circle cx="14" cy="18.5" r="0.8"/></svg>
       </div>
-      <h4>Accessibility</h4>
-      <p>Implemented a high-contrast mode that preserves the cyberpunk vibe while ensuring readability for all users.</p>
+      <h4>Field Work &amp; DNA Sampling</h4>
+      <p>Hands-on marine field work: collecting fish eggs, taking DNA samples, and matching genetic data back to species.</p>
     </div>
   </div>
 </section>
@@ -557,9 +634,16 @@
   <div class="doc-inner">
     <div class="doc-text">
       <h2>Project Results</h2>
-      <p>Explore the live tools and outputs built during this internship. These are interactive prototypes you can open directly in your browser.</p>
+      <p>Explore the live tools built during this internship. Both run directly in your browser, no install required.</p>
     </div>
     <div class="doc-buttons">
+      <a href="Fish%20Egg%20Catalogue/fish.html" class="doc-btn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/></svg>
+        <div>
+          <div class="doc-btn-title">Fish Catalogue</div>
+          <div class="doc-btn-size">Open catalogue →</div>
+        </div>
+      </a>
       <a href="Data%20Fetcher/datafetcher.html" class="doc-btn">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v14c0 1.66 4.03 3 9 3s9-1.34 9-3V5"/><path d="M3 12c0 1.66 4.03 3 9 3s9-1.34 9-3"/></svg>
         <div>
@@ -567,37 +651,11 @@
           <div class="doc-btn-size">Open tool →</div>
         </div>
       </a>
-      <a href="Fish%20Egg%20Catalogue/fish.html" class="doc-btn">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/></svg>
-        <div>
-          <div class="doc-btn-title">Fish Egg Catalogue</div>
-          <div class="doc-btn-size">Open catalogue →</div>
-        </div>
-      </a>
-    </div>
-  </div>
-</section>
-
-<!-- ============== DOCUMENTATION ============== -->
-<section class="documentation-section">
-  <div class="doc-inner">
-    <div class="doc-text">
-      <h2>Project Documentation</h2>
-      <p>Detailed technical specifications and design systems are available for peer review and professional inquiries.</p>
-    </div>
-    <div class="doc-buttons">
       <a href="#" class="doc-btn">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="9" y1="13" x2="15" y2="13"/><line x1="9" y1="17" x2="15" y2="17"/></svg>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="9" y1="13" x2="15" y2="13"/><line x1="9" y1="17" x2="15" y2="17"/><line x1="9" y1="9" x2="11" y2="9"/></svg>
         <div>
-          <div class="doc-btn-title">Case Study PDF</div>
-          <div class="doc-btn-size">4.2 MB</div>
-        </div>
-      </a>
-      <a href="#" class="doc-btn">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-        <div>
-          <div class="doc-btn-title">Design Specs</div>
-          <div class="doc-btn-size">12.8 MB</div>
+          <div class="doc-btn-title">Research Paper</div>
+          <div class="doc-btn-size">Coming soon →</div>
         </div>
       </a>
     </div>
