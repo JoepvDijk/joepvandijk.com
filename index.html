@@ -574,6 +574,117 @@
     50% { opacity: 0.5; }
   }
 
+  /* ====== SCUBA PINNED + PARALLAX SECTION ======
+     De wrapper is veel hoger dan de zichtbare sectie zodat we tijdens scroll
+     binnen die ruimte het beeld kunnen "pinnen" en tekstpanelen kunnen swappen.
+     De sticky child blijft 100vh hoog en plakt aan de bovenkant van de viewport,
+     en centreert het parallax-beeld verticaal zodat het mooi in het midden zit. */
+  .scuba-pinned-wrap {
+    position: relative;
+    width: 100%;
+    /* 180vh = entry + 1 tekstpaneel met fade in/out + exit */
+    height: 180vh;
+  }
+  .scuba-sticky {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    width: 100%;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* Tekst-overlay; absolute binnen sticky. Iets meer naar het midden geschoven
+     (right: 18% i.p.v. 6%), zonder donkere achtergrond. Een lichte text-shadow
+     houdt de leesbaarheid in stand over wisselende delen van de scene. */
+  .scuba-text-overlay {
+    position: absolute;
+    top: 50%;
+    right: 18%;
+    width: clamp(260px, 28%, 380px);
+    transform: translateY(-50%);
+    z-index: 5;
+    pointer-events: none;
+  }
+  .scuba-text {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+    color: #fff;
+    text-shadow: 0 2px 12px rgba(0, 0, 0, 0.55);
+  }
+  .scuba-text.active {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+  }
+  .scuba-text h3 {
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 12px;
+    color: #fff;
+    letter-spacing: -0.3px;
+  }
+  .scuba-text p {
+    font-size: 15px;
+    line-height: 1.6;
+    color: rgba(255, 255, 255, 0.86);
+  }
+
+  /* 3 lagen die met verschillende snelheden scrollen voor diepte-effect.
+     Back = traagst (verste laag), front = snelst (dichtstbij). */
+  .scuba-parallax {
+    position: relative;
+    width: 100%;
+    height: 70vh;
+    min-height: 480px;
+    overflow: hidden;
+    background: #06324d;
+    margin: 20px 0;
+  }
+  .scuba-layer {
+    position: absolute;
+    pointer-events: none;
+    will-change: transform;
+  }
+  .scuba-layer.back {
+    left: 0; top: -8%;
+    width: 100%; height: 116%;
+    background: url('assets/Scuba%20Paralax%20images/Scuba%20Background.png') center/cover no-repeat;
+    z-index: 1;
+  }
+  .scuba-layer.middle {
+    /* Duiker zit gecentreerd; translateX(-50%) blijft in JS staan voor centering.
+       Bottom: 17% i.p.v. 12% trekt de duiker 5% omhoog. */
+    left: 50%;
+    bottom: 17%;
+    width: 32%;
+    max-width: 420px;
+    min-width: 220px;
+    z-index: 2;
+    transform: translate3d(-50%, 0, 0);
+  }
+  .scuba-layer.middle img {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+  .scuba-layer.front {
+    /* Layer hoger getrokken (top -26% i.p.v. -10% origineel) zodat de
+       cave-silhouette als startpositie verder naar boven zit, terwijl
+       background-position op center blijft staan voor een gelijkmatige
+       parallax. Hoogte meegegroeid naar 136% zodat de bottom slack (110%)
+       gelijk blijft en parallax-beweging niet de sectierand exposed. */
+    left: 0; top: -26%;
+    width: 100%; height: 136%;
+    background: url('assets/Scuba%20Paralax%20images/Scuba%20foreground.png') center/cover no-repeat;
+    z-index: 3;
+  }
+
   @media (max-width: 1024px) {
     .card { flex: 0 0 calc((100% - 24px) / 2); }
     .hero h1 { font-size: 52px; }
@@ -585,6 +696,20 @@
     .hero h1 { font-size: 40px; }
     .section { padding: 40px 20px 60px; }
     .section-header { flex-direction: column; align-items: flex-start; gap: 20px; }
+    .scuba-parallax { height: 55vh; min-height: 380px; }
+    .scuba-layer.middle { width: 50%; }
+    /* Op mobiel past een tekstpaneel rechts niet meer naast de duiker;
+       dus zetten we 'm onderaan, vol-breed. */
+    .scuba-text-overlay {
+      top: auto;
+      bottom: 8%;
+      right: 5%;
+      left: 5%;
+      width: auto;
+      transform: none;
+    }
+    .scuba-text h3 { font-size: 18px; }
+    .scuba-text p { font-size: 13px; }
     .contact { padding: 50px 20px 60px; }
     .contact h2 { font-size: 24px; }
     .footer { padding: 30px 20px; }
@@ -859,6 +984,47 @@
   </div>
 </section>
 
+<!-- ====== SCUBA PARALLAX SECTION ======
+     3-laagse parallax tussen Gaming Projects en Contact. De pinned scroll
+     variant met tekstpaneel "Certified Scuba Diver" staat hieronder in een
+     HTML-comment. Om die weer te activeren:
+       1. Comment dit actieve <section class="scuba-parallax"> blok uit
+       2. Uncomment het "PINNED SCROLL VARIANT" blok daaronder
+     De bijbehorende CSS (.scuba-pinned-wrap, .scuba-sticky, .scuba-text-overlay,
+     .scuba-text) en JS (text-swap IIFE) staan al in de stylesheet/script en
+     hoeven niet aangepast te worden. De parallax-JS heeft een fallback van
+     .scuba-pinned-wrap → .scuba-parallax, dus die werkt in beide modi. -->
+<section class="scuba-parallax" aria-hidden="true">
+  <div class="scuba-layer back"></div>
+  <div class="scuba-layer middle">
+    <img src="assets/Scuba%20Paralax%20images/Scuba%20Middelground.png" alt="">
+  </div>
+  <div class="scuba-layer front"></div>
+</section>
+
+<!-- ====== SCUBA PINNED SCROLL VARIANT (uitgezet) ======
+     Tijdelijk uitgezet. Om weer aan te zetten: comment de "scuba-parallax"
+     sectie hierboven uit en uncomment het blok hieronder.
+<section class="scuba-pinned-wrap">
+  <div class="scuba-sticky">
+    <section class="scuba-parallax" aria-hidden="true">
+      <div class="scuba-layer back"></div>
+      <div class="scuba-layer middle">
+        <img src="assets/Scuba%20Paralax%20images/Scuba%20Middelground.png" alt="">
+      </div>
+      <div class="scuba-layer front"></div>
+    </section>
+    <div class="scuba-text-overlay">
+      <div class="scuba-text" data-stage="0">
+        <h3>Certified Scuba Diver</h3>
+        <p>PADI certified with dives across Bonaire's reefs. Spending time underwater is where curiosity meets calm — and where most of my best ideas seem to surface.</p>
+      </div>
+    </div>
+  </div>
+</section>
+-->
+
+
 <section class="contact" id="contact">
   <h2>Ready to start your next project?</h2>
   <a href="https://wa.me/31628284949" target="_blank" rel="noopener" class="btn btn-primary" style="display:inline-block; text-decoration:none;">Let's Talk</a>
@@ -1130,6 +1296,77 @@
     window.addEventListener('scroll', () => {
       if (!ticking) { requestAnimationFrame(update); ticking = true; }
     }, { passive: true });
+    update();
+  })();
+
+  // === SCUBA PARALLAX (3 lagen) ===
+  // Gebruikt de pinned-WRAPPER als referentie i.p.v. de inner sectie. De
+  // wrapper-positie blijft veranderen tijdens de sticky-pin, dus de parallax
+  // loopt netjes door terwijl je door de tekstpanelen scrollt. Fallback naar
+  // de inner sectie als de wrap er om wat voor reden niet is.
+  (function() {
+    const reference = document.querySelector('.scuba-pinned-wrap')
+                   || document.querySelector('.scuba-parallax');
+    const section = document.querySelector('.scuba-parallax');
+    if (!reference || !section) return;
+    const back = section.querySelector('.scuba-layer.back');
+    const middle = section.querySelector('.scuba-layer.middle');
+    const front = section.querySelector('.scuba-layer.front');
+    if (!back || !middle || !front) return;
+
+    let ticking = false;
+    function update() {
+      const rect = reference.getBoundingClientRect();
+      const vh = window.innerHeight;
+      const totalScroll = vh + rect.height;
+      const scrolled = vh - rect.top;
+      const raw = scrolled / totalScroll;
+      const progress = Math.max(0, Math.min(1, raw)) - 0.5; // -0.5 .. +0.5
+
+      back.style.transform   = `translate3d(0, ${progress * -30}px, 0)`;
+      middle.style.transform = `translate3d(-50%, ${progress * -90}px, 0)`;
+      front.style.transform  = `translate3d(0, ${progress * -160}px, 0)`;
+      ticking = false;
+    }
+    window.addEventListener('scroll', () => {
+      if (!ticking) { requestAnimationFrame(update); ticking = true; }
+    }, { passive: true });
+    window.addEventListener('resize', update, { passive: true });
+    update();
+  })();
+
+  // === SCUBA PINNED TEKST SWAP ===
+  // Berekent hoe ver we door de pinned-wrapper heen gescrold zijn (0 → 1) en
+  // toggelt de tekst aan/uit. Met 180vh wrap en 100vh sticky is het pin
+  // scroll-budget 80vh.
+  //   0.00 .. 0.15  → niets (entry)
+  //   0.15 .. 0.85  → tekst 1
+  //   0.85 .. 1.00  → niets (exit)
+  (function() {
+    const wrap = document.querySelector('.scuba-pinned-wrap');
+    if (!wrap) return;
+    const sticky = wrap.querySelector('.scuba-sticky');
+    const texts = Array.from(wrap.querySelectorAll('.scuba-text'));
+    if (!sticky || texts.length === 0) return;
+
+    let ticking = false;
+    function update() {
+      const wrapRect = wrap.getBoundingClientRect();
+      const pinBudget = wrap.offsetHeight - sticky.offsetHeight;
+      const scrolledIntoWrap = -wrapRect.top;
+      const progress = Math.max(0, Math.min(1, scrolledIntoWrap / pinBudget));
+
+      const activeIdx = (progress > 0.15 && progress < 0.85) ? 0 : -1;
+
+      texts.forEach((t, i) => {
+        t.classList.toggle('active', i === activeIdx);
+      });
+      ticking = false;
+    }
+    window.addEventListener('scroll', () => {
+      if (!ticking) { requestAnimationFrame(update); ticking = true; }
+    }, { passive: true });
+    window.addEventListener('resize', update, { passive: true });
     update();
   })();
 
