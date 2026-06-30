@@ -689,6 +689,15 @@
     .card { flex: 0 0 calc((100% - 24px) / 2); }
     .hero h1 { font-size: 52px; }
     .contact h2 { font-size: 28px; }
+    /* Op tablet/portrait viewports zou 70vh de sectie bijna vierkant maken,
+       waardoor `cover` de zijkanten van de cave-silhouette wegsnijdt.
+       Aspect-ratio 16:9 matcht de bron-afbeeldingen exact, dus de compositie
+       blijft hetzelfde als op desktop. */
+    .scuba-parallax {
+      height: auto;
+      aspect-ratio: 16 / 9;
+      min-height: 320px;
+    }
   }
 
   @media (max-width: 640px) {
@@ -696,8 +705,12 @@
     .hero h1 { font-size: 40px; }
     .section { padding: 40px 20px 60px; }
     .section-header { flex-direction: column; align-items: flex-start; gap: 20px; }
-    .scuba-parallax { height: 55vh; min-height: 380px; }
-    .scuba-layer.middle { width: 50%; }
+    /* Aspect-ratio wordt overgeerfd van de 1024px breakpoint; alleen de
+       min-height verder verlagen voor kleine telefoons. */
+    .scuba-parallax { min-height: 220px; }
+    /* Duiker iets compacter zodat zijn verhouding tot de (kortere) sectie
+       ongeveer hetzelfde voelt als op desktop. */
+    .scuba-layer.middle { width: 40%; }
     /* Op mobiel past een tekstpaneel rechts niet meer naast de duiker;
        dus zetten we 'm onderaan, vol-breed. */
     .scuba-text-overlay {
