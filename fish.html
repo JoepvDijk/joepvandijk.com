@@ -1,0 +1,1017 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Fish &amp; Egg Catalogue — Bonaire</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html, body {
+    font-family: 'Inter', sans-serif;
+    background: linear-gradient(170deg, #0b1d3a 0%, #0d2f5e 30%, #134a7c 60%, #1a6fa0 100%);
+    min-height: 100vh;
+    color: #e0eaf5;
+  }
+
+  /* subtle bubble overlay */
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background-image:
+      radial-gradient(circle 3px at 10% 20%, rgba(255,255,255,0.07) 0%, transparent 100%),
+      radial-gradient(circle 2px at 30% 60%, rgba(255,255,255,0.05) 0%, transparent 100%),
+      radial-gradient(circle 4px at 70% 30%, rgba(255,255,255,0.06) 0%, transparent 100%),
+      radial-gradient(circle 2px at 85% 75%, rgba(255,255,255,0.04) 0%, transparent 100%);
+    pointer-events: none; z-index: 0;
+    animation: drift 20s ease-in-out infinite alternate;
+  }
+  @keyframes drift { 0% { transform: translateY(0); } 100% { transform: translateY(-25px); } }
+
+  /* ── HEADER ── */
+  header {
+    text-align: center;
+    padding: 40px 20px 20px;
+    position: relative; z-index: 1;
+  }
+  header h1 {
+    font-size: 2.4rem; font-weight: 700;
+    background: linear-gradient(135deg, #7ec8f0, #b8e4ff);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  header p { font-size: 1rem; color: #8bb8d9; margin-top: 6px; }
+
+  /* ── TWO-COLUMN LAYOUT ── */
+  .layout {
+    display: flex;
+    gap: 24px;
+    max-width: 1500px;
+    margin: 20px auto 0;
+    padding: 0 24px 60px;
+    position: relative; z-index: 1;
+    align-items: flex-start;
+  }
+
+  /* Left: scrollable fish cards — 2-column grid */
+  .fish-list {
+    flex: 1 1 0;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+    min-width: 0;
+  }
+
+  /* Right: sticky sidebar — narrower */
+  .sidebar {
+    flex: 0 0 380px;
+    position: sticky;
+    top: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  /* ── MAP ── */
+  .map-container {
+    border-radius: 16px;
+    overflow: hidden;
+    border: 1px solid rgba(255,255,255,0.1);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.35);
+  }
+  #map {
+    width: 100%;
+    height: 340px;
+    background: #0a1e38;
+  }
+  .map-title {
+    background: linear-gradient(180deg, #0f2b4d, #122c4e);
+    padding: 12px 18px;
+    font-weight: 600;
+    font-size: 1rem;
+    color: #a8d4f0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .map-title span { font-size: 1.2rem; }
+
+  /* ── CALENDAR ── */
+  .calendar-container {
+    background: linear-gradient(180deg, #0f2b4d, #0d2440);
+    border-radius: 16px;
+    border: 1px solid rgba(255,255,255,0.08);
+    box-shadow: 0 6px 24px rgba(0,0,0,0.3);
+    padding: 16px 18px;
+  }
+  .cal-header {
+    font-weight: 600;
+    font-size: 0.92rem;
+    color: #a8d4f0;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .cal-header span { font-size: 1.1rem; }
+  .cal-selected-name {
+    color: #5fb8e0;
+    font-weight: 400;
+    margin-left: auto;
+    font-size: 0.85rem;
+  }
+  .cal-grid {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    gap: 4px;
+  }
+  .cal-cell {
+    aspect-ratio: 1;
+    border-radius: 8px;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.06);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.35s ease, border-color 0.35s ease, transform 0.25s ease;
+  }
+  .cal-cell.active {
+    background: #1a8c4e;
+    border-color: #27b862;
+    transform: scale(1.05);
+    box-shadow: 0 0 12px rgba(39, 184, 98, 0.35);
+  }
+  .cal-abbr {
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: #5a7a9a;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    transition: color 0.3s ease;
+  }
+  .cal-cell.active .cal-abbr {
+    color: #ffffff;
+  }
+
+  /* ── FISH CARDS ── */
+  .card-wrapper {
+    cursor: pointer;
+    perspective: 900px;
+    transition: outline 0.2s ease;
+    border-radius: 16px;
+  }
+  .card-wrapper.selected {
+    outline: 3px solid #4db8e8;
+    outline-offset: 4px;
+    border-radius: 16px;
+  }
+
+  .card {
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    position: relative;
+    transform-style: preserve-3d;
+    transition: transform 0.6s cubic-bezier(.4,.0,.2,1);
+    border-radius: 16px;
+  }
+  .card.flipped { transform: rotateY(180deg); }
+
+  .card-front, .card-back {
+    position: absolute; inset: 0;
+    backface-visibility: hidden;
+    border-radius: 16px;
+    overflow: hidden;
+    background: linear-gradient(180deg, #0f2b4d 0%, #163d6b 100%);
+    border: 1px solid rgba(255,255,255,0.08);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.35);
+    display: flex; flex-direction: column;
+  }
+  .card-back { transform: rotateY(180deg); }
+
+  .card-img {
+    flex: 1; overflow: hidden;
+    display: flex; align-items: center; justify-content: center;
+    background: #0a1e38;
+  }
+  .card-img img {
+    width: 100%; height: 100%; object-fit: cover;
+    transition: transform 0.4s ease;
+  }
+  .card-wrapper:hover .card-img img { transform: scale(1.05); }
+
+  .card-label { padding: 12px 16px 8px; }
+  .card-label h2 { font-size: 1.1rem; font-weight: 600; color: #d4ebff; }
+  .card-label .latin {
+    font-style: italic; font-size: 0.85rem; color: #7aadcf; margin-top: 2px;
+  }
+  .flip-hint {
+    font-size: 0.75rem; color: #5a92b8; text-align: right; padding: 0 14px 8px;
+  }
+  .no-egg { color: #5a7a9a; font-style: italic; }
+
+  /* Info panel */
+  .info-panel {
+    max-height: 0; overflow: hidden;
+    transition: max-height 0.5s cubic-bezier(.4,.0,.2,1), padding 0.4s ease;
+    background: linear-gradient(180deg, #122c4e, #0f2440);
+    border-radius: 0 0 16px 16px;
+    margin-top: -12px;
+    border: 1px solid rgba(255,255,255,0.06); border-top: none;
+    padding: 0 16px;
+  }
+  .info-panel.open { max-height: 600px; padding: 18px 16px; }
+
+  .info-description {
+    margin-top: 14px;
+    padding-top: 12px;
+    border-top: 1px solid rgba(255,255,255,0.08);
+    font-size: 0.85rem;
+    line-height: 1.55;
+    color: #b0cde0;
+  }
+
+  .info-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 12px;
+  }
+  .info-item {
+    display: flex; align-items: flex-start; gap: 8px;
+    font-size: 0.85rem; line-height: 1.4;
+  }
+  .info-icon { font-size: 1.2rem; flex-shrink: 0; margin-top: 1px; }
+  .info-item strong {
+    color: #8ec8eb; font-weight: 600; font-size: 0.75rem;
+    text-transform: uppercase; letter-spacing: 0.03em;
+  }
+
+  /* ── FILTER BAR ── */
+  .filter-bar {
+    max-width: 1500px;
+    margin: 0 auto 20px;
+    padding: 0 24px;
+    position: relative; z-index: 2;
+  }
+  .filter-inner {
+    display: flex;
+    gap: 12px;
+    align-items: flex-end;
+    flex-wrap: wrap;
+    background: linear-gradient(180deg, #0f2b4d, #0d2440);
+    border-radius: 14px;
+    border: 1px solid rgba(255,255,255,0.08);
+    padding: 14px 18px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.25);
+  }
+  .filter-group {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .filter-group label {
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    color: #7aadcf;
+  }
+  .filter-group select,
+  .filter-group input {
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 8px;
+    color: #d4ebff;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.85rem;
+    padding: 7px 10px;
+    outline: none;
+    transition: border-color 0.2s ease;
+    min-width: 0;
+    width: 150px;
+  }
+  .filter-group select { width: 170px; cursor: pointer; }
+  .filter-group select option {
+    background: #0f2b4d;
+    color: #d4ebff;
+  }
+  .filter-group input::placeholder { color: #5a7a9a; }
+  .filter-group select:focus,
+  .filter-group input:focus {
+    border-color: #4db8e8;
+  }
+  .filter-reset {
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 8px;
+    color: #7aadcf;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.8rem;
+    padding: 7px 14px;
+    cursor: pointer;
+    transition: background 0.2s ease, color 0.2s ease;
+    align-self: flex-end;
+  }
+  .filter-reset:hover {
+    background: rgba(255,255,255,0.1);
+    color: #b8d8f0;
+  }
+  .filter-count {
+    font-size: 0.8rem;
+    color: #5fb8e0;
+    align-self: flex-end;
+    padding-bottom: 7px;
+    margin-left: auto;
+    white-space: nowrap;
+  }
+
+  .card-wrapper.filtered-out {
+    display: none;
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    text-align: center; padding: 20px; color: #4a7a9a;
+    font-size: 0.8rem; position: relative; z-index: 1;
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 1100px) {
+    .layout { flex-direction: column-reverse; }
+    .fish-list { flex: none; width: 100%; grid-template-columns: repeat(2, 1fr); }
+    .sidebar { position: static; width: 100%; flex: none; }
+    #map { height: 300px; }
+  }
+  @media (max-width: 600px) {
+    .fish-list { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Fish &amp; Egg Catalogue</h1>
+  <p>Bonaire, Dutch Caribbean &mdash; 8 species</p>
+</header>
+
+<div class="filter-bar">
+  <div class="filter-inner">
+    <div class="filter-group">
+      <label>Month</label>
+      <select id="filter-month" onchange="applyFilters()">
+        <option value="">All months</option>
+        <option value="0">January</option>
+        <option value="1">February</option>
+        <option value="2">March</option>
+        <option value="3">April</option>
+        <option value="4">May</option>
+        <option value="5">June</option>
+        <option value="6">July</option>
+        <option value="7">August</option>
+        <option value="8">September</option>
+        <option value="9">October</option>
+        <option value="10">November</option>
+        <option value="11">December</option>
+      </select>
+    </div>
+    <div class="filter-group">
+      <label>Location</label>
+      <select id="filter-location" onchange="applyFilters()">
+        <option value="">All locations</option>
+        <option value="Karpata">Karpata</option><option value="Pink Beach">Pink Beach</option><option value="Red slave">Red slave</option><option value="Sand Dollar">Sand Dollar</option><option value="South West Corner">South West Corner</option><option value="Thousand steps">Thousand steps</option>
+      </select>
+    </div>
+    <div class="filter-group">
+      <label>Egg size (&micro;m)</label>
+      <input type="number" id="filter-egg" placeholder="e.g. 300" step="any" oninput="applyFilters()" />
+    </div>
+    <div class="filter-group">
+      <label>Oil-globule (&micro;m)</label>
+      <input type="number" id="filter-oil" placeholder="e.g. 120" step="any" oninput="applyFilters()" />
+    </div>
+    <button class="filter-reset" onclick="resetFilters()">Reset</button>
+    <span class="filter-count" id="filter-count">8 / 8 species</span>
+  </div>
+</div>
+
+<div class="layout">
+  <!-- LEFT: Fish cards -->
+  <div class="fish-list">
+    
+    <div class="card-wrapper" id="wrapper-0" onclick="selectFish(0)">
+      <div class="card" id="card-0">
+        <div class="card-front">
+          <div class="card-img">
+            <img src="images/blue-tang-main.png" alt="Blue Tang" />
+          </div>
+          <div class="card-label">
+            <h2>Blue Tang</h2>
+            <p class="latin">Acanthurus coeruleus</p>
+          </div>
+          <div class="flip-hint">Click to see egg &#x21bb;</div>
+        </div>
+        <div class="card-back">
+          <div class="card-img">
+            <img src="images/blue-tang-egg.jpg" alt="Blue Tang egg" />
+          </div>
+          <div class="card-label">
+            <h2>Blue Tang — Egg</h2>
+          </div>
+          <div class="flip-hint">&#x21bb; Click to flip back</div>
+        </div>
+      </div>
+      <div class="info-panel" id="info-0">
+        <div class="info-grid">
+          <div class="info-item">
+            <span class="info-icon">&#x1F95A;</span>
+            <div><strong>Egg size</strong><br/>633,34-671,40  µm</div>
+          </div>
+          <div class="info-item">
+            <span class="info-icon">&#x1F4A7;</span>
+            <div><strong>Oil-globule</strong><br/>148,28-161,38  µm</div>
+          </div>
+          <div class="info-item">
+            <span class="info-icon">&#x1F4CD;</span>
+            <div><strong>Locations</strong><br/>Karpata, Red slave, South West Corner, Sand Dollar</div>
+          </div>
+          <div class="info-item">
+            <span class="info-icon">&#x1F4C5;</span>
+            <div><strong>Months</strong><br/>January, February, March, April</div>
+          </div>
+        </div>
+        <div class="info-description"><strong>Description</strong><br/>The eggs are very similar with the ocean surgeon fish (same genus) but are distinguishable in the hatchling fase. Where the ocean surgeon fish has 2 pigment spots on the back of the larva, the blue tang has only 1 spot. Before the hatchling fase, the larva has no pigmentation.</div>
+      </div>
+    </div>
+
+    <div class="card-wrapper" id="wrapper-1" onclick="selectFish(1)">
+      <div class="card" id="card-1">
+        <div class="card-front">
+          <div class="card-img">
+            <img src="images/bluehead-wrasse-main.jpg" alt="Bluehead Wrasse" />
+          </div>
+          <div class="card-label">
+            <h2>Bluehead Wrasse</h2>
+            <p class="latin">Thalassoma bifasciatum</p>
+          </div>
+          <div class="flip-hint">Click to see egg &#x21bb;</div>
+        </div>
+        <div class="card-back">
+          <div class="card-img">
+            <img src="images/bluehead-wrasse-egg.jpg" alt="Bluehead Wrasse egg" />
+          </div>
+          <div class="card-label">
+            <h2>Bluehead Wrasse — Egg</h2>
+          </div>
+          <div class="flip-hint">&#x21bb; Click to flip back</div>
+        </div>
+      </div>
+      <div class="info-panel" id="info-1">
+        <div class="info-grid">
+          <div class="info-item">
+            <span class="info-icon">&#x1F95A;</span>
+            <div><strong>Egg size</strong><br/>534,34-562,40  µm</div>
+          </div>
+          <div class="info-item">
+            <span class="info-icon">&#x1F4A7;</span>
+            <div><strong>Oil-globule</strong><br/>101,28-111,38  µm</div>
+          </div>
+          <div class="info-item">
+            <span class="info-icon">&#x1F4CD;</span>
+            <div><strong>Locations</strong><br/>Karpata, Thousand steps, Pink Beach</div>
+          </div>
+          <div class="info-item">
+            <span class="info-icon">&#x1F4C5;</span>
+            <div><strong>Months</strong><br/>February, March, April, May</div>
+          </div>
+        </div>
+        <div class="info-description"><strong>Description</strong><br/>The egg larvae of this fish are easily recognizable by their 7 to 10 medium-sized pigment spots distributed across the body of the larva.</div>
+      </div>
+    </div>
+
+    <div class="card-wrapper" id="wrapper-2" onclick="selectFish(2)">
+      <div class="card" id="card-2">
+        <div class="card-front">
+          <div class="card-img">
+            <img src="images/creole-wrasse-main.jpg" alt="Creole Wrasse" />
+          </div>
+          <div class="card-label">
+            <h2>Creole Wrasse</h2>
+            <p class="latin">Clepticus parrae</p>
+          </div>
+          <div class="flip-hint">Click to see egg &#x21bb;</div>
+        </div>
+        <div class="card-back">
+          <div class="card-img">
+            <img src="images/creole-wrasse-egg.png" alt="Creole Wrasse egg" />
+          </div>
+          <div class="card-label">
+            <h2>Creole Wrasse — Egg</h2>
+          </div>
+          <div class="flip-hint">&#x21bb; Click to flip back</div>
+        </div>
+      </div>
+      <div class="info-panel" id="info-2">
+        <div class="info-grid">
+          <div class="info-item">
+            <span class="info-icon">&#x1F95A;</span>
+            <div><strong>Egg size</strong><br/>683,34-724,40  µm</div>
+          </div>
+          <div class="info-item">
+            <span class="info-icon">&#x1F4A7;</span>
+            <div><strong>Oil-globule</strong><br/>149,28-155,38  µm</div>
+          </div>
+          <div class="info-item">
+            <span class="info-icon">&#x1F4CD;</span>
+            <div><strong>Locations</strong><br/>Karpata, Thousand steps, Pink Beach</div>
+          </div>
+          <div class="info-item">
+            <span class="info-icon">&#x1F4C5;</span>
+            <div><strong>Months</strong><br/>February, March, April, May</div>
+          </div>
+        </div>
+        <div class="info-description"><strong>Description</strong><br/>The egg larvae of this fish are easily recognizable by their dark spiky pigmentation spots distributed across the body of the larva and oil globule, they also have a relatively big egg size.</div>
+      </div>
+    </div>
+
+    <div class="card-wrapper" id="wrapper-3" onclick="selectFish(3)">
+      <div class="card" id="card-3">
+        <div class="card-front">
+          <div class="card-img">
+            <img src="images/ocean-surgeonfish-main.jpeg" alt="Ocean Surgeonfish" />
+          </div>
+          <div class="card-label">
+            <h2>Ocean Surgeonfish</h2>
+            <p class="latin">Acanthurus tractus</p>
+          </div>
+          <div class="flip-hint">Click to see egg &#x21bb;</div>
+        </div>
+        <div class="card-back">
+          <div class="card-img">
+            <img src="images/ocean-surgeonfish-egg.jpg" alt="Ocean Surgeonfish egg" />
+          </div>
+          <div class="card-label">
+            <h2>Ocean Surgeonfish — Egg</h2>
+          </div>
+          <div class="flip-hint">&#x21bb; Click to flip back</div>
+        </div>
+      </div>
+      <div class="info-panel" id="info-3">
+        <div class="info-grid">
+          <div class="info-item">
+            <span class="info-icon">&#x1F95A;</span>
+            <div><strong>Egg size</strong><br/>638,34-675,40  µm</div>
+          </div>
+          <div class="info-item">
+            <span class="info-icon">&#x1F4A7;</span>
+            <div><strong>Oil-globule</strong><br/>122,34-136,40  µm</div>
+          </div>
+          <div class="info-item">
+            <span class="info-icon">&#x1F4CD;</span>
+            <div><strong>Locations</strong><br/>Karpata, Red slave, South West Corner, Sand Dollar</div>
+          </div>
+          <div class="info-item">
+            <span class="info-icon">&#x1F4C5;</span>
+            <div><strong>Months</strong><br/>January, February, March, April</div>
+          </div>
+        </div>
+        <div class="info-description"><strong>Description</strong><br/>The eggs are very similar with the Blue Tang (same genus) but are distinguishable in the hatchling fase. Where the ocean surgeon fish has 2 pigment spots on the back of the larva, the blue tang has only 1 spot. Before the hatchling fase, the larva has no pigmentation.</div>
+      </div>
+    </div>
+
+    <div class="card-wrapper" id="wrapper-4" onclick="selectFish(4)">
+      <div class="card" id="card-4">
+        <div class="card-front">
+          <div class="card-img">
+            <img src="images/princess-parrotfish-main.jpg" alt="Princess Parrotfish" />
+          </div>
+          <div class="card-label">
+            <h2>Princess Parrotfish</h2>
+            <p class="latin">Scarus taeniopterus</p>
+          </div>
+          <div class="flip-hint">Click to see egg &#x21bb;</div>
+        </div>
+        <div class="card-back">
+          <div class="card-img">
+            <img src="images/princess-parrotfish-egg.jpg" alt="Princess Parrotfish egg" />
+          </div>
+          <div class="card-label">
+            <h2>Princess Parrotfish — Egg</h2>
+          </div>
+          <div class="flip-hint">&#x21bb; Click to flip back</div>
+        </div>
+      </div>
+      <div class="info-panel" id="info-4">
+        <div class="info-grid">
+          <div class="info-item">
+            <span class="info-icon">&#x1F95A;</span>
+            <div><strong>Egg size</strong><br/>1203,34-1293,40  µm</div>
+          </div>
+          <div class="info-item">
+            <span class="info-icon">&#x1F4A7;</span>
+            <div><strong>Oil-globule</strong><br/>118,28-123,38  µm</div>
+          </div>
+          <div class="info-item">
+            <span class="info-icon">&#x1F4CD;</span>
+            <div><strong>Locations</strong><br/>Karpata, Red slave, South West Corner</div>
+          </div>
+          <div class="info-item">
+            <span class="info-icon">&#x1F4C5;</span>
+            <div><strong>Months</strong><br/>February, March, April, October, November, December</div>
+          </div>
+        </div>
+        <div class="info-description"><strong>Description</strong><br/>Only the princess parrotfish and the striped parrotfish produce elliptically shaped eggs. However, the striped parrotfish spawns in the evening, whereas the princess parrotfish spawns in the morning. Therefore, a parrotfish egg containing a larva observed in the afternoon is likely from the striped parrotfish. In contrast, an elliptical egg without a larva observed in the afternoon is likely from the princess parrotfish.</div>
+      </div>
+    </div>
+
+    <div class="card-wrapper" id="wrapper-5" onclick="selectFish(5)">
+      <div class="card" id="card-5">
+        <div class="card-front">
+          <div class="card-img">
+            <img src="images/stoplight-parrotfish-main.png" alt="Stoplight Parrotfish" />
+          </div>
+          <div class="card-label">
+            <h2>Stoplight Parrotfish</h2>
+            <p class="latin">Sparisoma viride</p>
+          </div>
+          <div class="flip-hint">Click to see egg &#x21bb;</div>
+        </div>
+        <div class="card-back">
+          <div class="card-img">
+            <img src="images/stoplight-parrotfish-egg.png" alt="Stoplight Parrotfish egg" />
+          </div>
+          <div class="card-label">
+            <h2>Stoplight Parrotfish — Egg</h2>
+          </div>
+          <div class="flip-hint">&#x21bb; Click to flip back</div>
+        </div>
+      </div>
+      <div class="info-panel" id="info-5">
+        <div class="info-grid">
+          <div class="info-item">
+            <span class="info-icon">&#x1F95A;</span>
+            <div><strong>Egg size</strong><br/>640,34-665,40  µm</div>
+          </div>
+          <div class="info-item">
+            <span class="info-icon">&#x1F4A7;</span>
+            <div><strong>Oil-globule</strong><br/>103,28-106,38  µm</div>
+          </div>
+          <div class="info-item">
+            <span class="info-icon">&#x1F4CD;</span>
+            <div><strong>Locations</strong><br/>Thousand steps, Pink Beach</div>
+          </div>
+          <div class="info-item">
+            <span class="info-icon">&#x1F4C5;</span>
+            <div><strong>Months</strong><br/>February, March, April, October, November, December</div>
+          </div>
+        </div>
+        <div class="info-description"><strong>Description</strong><br/>Pelagic spawner commonly found on coral reefs. Eggs of different parrotfish species have similar light pigmentation spots across the larva.</div>
+      </div>
+    </div>
+
+    <div class="card-wrapper" id="wrapper-6" onclick="selectFish(6)">
+      <div class="card" id="card-6">
+        <div class="card-front">
+          <div class="card-img">
+            <img src="images/striped-parrotfish-main.jpg" alt="Striped Parrotfish" />
+          </div>
+          <div class="card-label">
+            <h2>Striped Parrotfish</h2>
+            <p class="latin">Scarus iseri</p>
+          </div>
+          <div class="flip-hint">Click to see egg &#x21bb;</div>
+        </div>
+        <div class="card-back">
+          <div class="card-img">
+            <img src="images/striped-parrotfish-egg.jpg" alt="Striped Parrotfish egg" />
+          </div>
+          <div class="card-label">
+            <h2>Striped Parrotfish — Egg</h2>
+          </div>
+          <div class="flip-hint">&#x21bb; Click to flip back</div>
+        </div>
+      </div>
+      <div class="info-panel" id="info-6">
+        <div class="info-grid">
+          <div class="info-item">
+            <span class="info-icon">&#x1F95A;</span>
+            <div><strong>Egg size</strong><br/>1203,34-1293,40  µm</div>
+          </div>
+          <div class="info-item">
+            <span class="info-icon">&#x1F4A7;</span>
+            <div><strong>Oil-globule</strong><br/>108,28-113,38  µm</div>
+          </div>
+          <div class="info-item">
+            <span class="info-icon">&#x1F4CD;</span>
+            <div><strong>Locations</strong><br/>Sand Dollar, Thousand steps, Red slave</div>
+          </div>
+          <div class="info-item">
+            <span class="info-icon">&#x1F4C5;</span>
+            <div><strong>Months</strong><br/>February, March, April, October, November, December</div>
+          </div>
+        </div>
+        <div class="info-description"><strong>Description</strong><br/>Only the princess parrotfish and the striped parrotfish produce elliptically shaped eggs. However, the striped parrotfish spawns in the evening, whereas the princess parrotfish spawns in the morning. Therefore, a parrotfish egg containing a larva observed in the afternoon is likely from the striped parrotfish. In contrast, an elliptical egg without a larva observed in the afternoon is likely from the princess parrotfish.</div>
+      </div>
+    </div>
+
+    <div class="card-wrapper" id="wrapper-7" onclick="selectFish(7)">
+      <div class="card" id="card-7">
+        <div class="card-front">
+          <div class="card-img">
+            <img src="images/yellowtail-parrotfish-main.png" alt="Yellowtail Parrotfish" />
+          </div>
+          <div class="card-label">
+            <h2>Yellowtail Parrotfish</h2>
+            <p class="latin">Sparisoma rubripinne</p>
+          </div>
+          <div class="flip-hint">Click to see egg &#x21bb;</div>
+        </div>
+        <div class="card-back">
+          <div class="card-img">
+            <img src="images/yellowtail-parrotfish-egg.png" alt="Yellowtail Parrotfish egg" />
+          </div>
+          <div class="card-label">
+            <h2>Yellowtail Parrotfish — Egg</h2>
+          </div>
+          <div class="flip-hint">&#x21bb; Click to flip back</div>
+        </div>
+      </div>
+      <div class="info-panel" id="info-7">
+        <div class="info-grid">
+          <div class="info-item">
+            <span class="info-icon">&#x1F95A;</span>
+            <div><strong>Egg size</strong><br/>651,76-668,90  µm</div>
+          </div>
+          <div class="info-item">
+            <span class="info-icon">&#x1F4A7;</span>
+            <div><strong>Oil-globule</strong><br/>115,08-125,83  µm</div>
+          </div>
+          <div class="info-item">
+            <span class="info-icon">&#x1F4CD;</span>
+            <div><strong>Locations</strong><br/>Karpata, Pink Beach</div>
+          </div>
+          <div class="info-item">
+            <span class="info-icon">&#x1F4C5;</span>
+            <div><strong>Months</strong><br/>February, March, April, October, November, December</div>
+          </div>
+        </div>
+        <div class="info-description"><strong>Description</strong><br/>Pelagic spawner commonly found on coral reefs. Eggs of different parrotfish species have similar light pigmentation spots across the larva.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RIGHT: Sticky map + calendar -->
+  <div class="sidebar">
+    <div class="map-container">
+      <div class="map-title"><span>&#x1F30A;</span> Spawning Locations Bonaire</div>
+      <div id="map"></div>
+    </div>
+    <div class="calendar-container">
+      <div class="cal-header">
+        <span>&#x1F4C5;</span> Confirmed Spawning
+        <span class="cal-selected-name" id="cal-fish-name">Select a fish</span>
+      </div>
+      <div class="cal-grid">
+        <div class="cal-cell" id="cal-0"><span class="cal-abbr">Jan</span></div><div class="cal-cell" id="cal-1"><span class="cal-abbr">Feb</span></div><div class="cal-cell" id="cal-2"><span class="cal-abbr">Mar</span></div><div class="cal-cell" id="cal-3"><span class="cal-abbr">Apr</span></div><div class="cal-cell" id="cal-4"><span class="cal-abbr">May</span></div><div class="cal-cell" id="cal-5"><span class="cal-abbr">Jun</span></div><div class="cal-cell" id="cal-6"><span class="cal-abbr">Jul</span></div><div class="cal-cell" id="cal-7"><span class="cal-abbr">Aug</span></div><div class="cal-cell" id="cal-8"><span class="cal-abbr">Sep</span></div><div class="cal-cell" id="cal-9"><span class="cal-abbr">Oct</span></div><div class="cal-cell" id="cal-10"><span class="cal-abbr">Nov</span></div><div class="cal-cell" id="cal-11"><span class="cal-abbr">Dec</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<script>
+// ── DATA ──
+const fishData = [{"name": "Blue Tang", "months": [0, 1, 2, 3], "locations": [{"lat": 12.21939, "lng": -68.35199, "label": "Karpata", "dir": "left"}, {"lat": 12.0262907, "lng": -68.2509826, "label": "Red slave", "dir": "right"}, {"lat": 12.1514722, "lng": -68.3286125, "label": "South West Corner", "dir": "left"}, {"lat": 12.1688579, "lng": -68.2876082, "label": "Sand Dollar", "dir": "right"}], "locationLabels": ["Karpata", "Red slave", "South West Corner", "Sand Dollar"], "eggMin": 633.34, "eggMax": 671.4, "oilMin": 148.28, "oilMax": 161.38}, {"name": "Bluehead Wrasse", "months": [1, 2, 3, 4], "locations": [{"lat": 12.21939, "lng": -68.35199, "label": "Karpata", "dir": "left"}, {"lat": 12.21063, "lng": -68.32168, "label": "Thousand steps", "dir": "right"}, {"lat": 12.066373, "lng": -68.281402, "label": "Pink Beach", "dir": "right"}], "locationLabels": ["Karpata", "Thousand steps", "Pink Beach"], "eggMin": 534.34, "eggMax": 562.4, "oilMin": 101.28, "oilMax": 111.38}, {"name": "Creole Wrasse", "months": [1, 2, 3, 4], "locations": [{"lat": 12.21939, "lng": -68.35199, "label": "Karpata", "dir": "left"}, {"lat": 12.21063, "lng": -68.32168, "label": "Thousand steps", "dir": "right"}, {"lat": 12.066373, "lng": -68.281402, "label": "Pink Beach", "dir": "right"}], "locationLabels": ["Karpata", "Thousand steps", "Pink Beach"], "eggMin": 683.34, "eggMax": 724.4, "oilMin": 149.28, "oilMax": 155.38}, {"name": "Ocean Surgeonfish", "months": [0, 1, 2, 3], "locations": [{"lat": 12.21939, "lng": -68.35199, "label": "Karpata", "dir": "left"}, {"lat": 12.0262907, "lng": -68.2509826, "label": "Red slave", "dir": "right"}, {"lat": 12.1514722, "lng": -68.3286125, "label": "South West Corner", "dir": "left"}, {"lat": 12.1688579, "lng": -68.2876082, "label": "Sand Dollar", "dir": "right"}], "locationLabels": ["Karpata", "Red slave", "South West Corner", "Sand Dollar"], "eggMin": 638.34, "eggMax": 675.4, "oilMin": 122.34, "oilMax": 136.4}, {"name": "Princess Parrotfish", "months": [1, 2, 3, 9, 10, 11], "locations": [{"lat": 12.21939, "lng": -68.35199, "label": "Karpata", "dir": "left"}, {"lat": 12.0262907, "lng": -68.2509826, "label": "Red slave", "dir": "right"}, {"lat": 12.1514722, "lng": -68.3286125, "label": "South West Corner", "dir": "left"}], "locationLabels": ["Karpata", "Red slave", "South West Corner"], "eggMin": 1203.34, "eggMax": 1293.4, "oilMin": 118.28, "oilMax": 123.38}, {"name": "Stoplight Parrotfish", "months": [1, 2, 3, 9, 10, 11], "locations": [{"lat": 12.21063, "lng": -68.32168, "label": "Thousand steps", "dir": "right"}, {"lat": 12.066373, "lng": -68.281402, "label": "Pink Beach", "dir": "right"}], "locationLabels": ["Thousand steps", "Pink Beach"], "eggMin": 640.34, "eggMax": 665.4, "oilMin": 103.28, "oilMax": 106.38}, {"name": "Striped Parrotfish", "months": [1, 2, 3, 9, 10, 11], "locations": [{"lat": 12.1688579, "lng": -68.2876082, "label": "Sand Dollar", "dir": "right"}, {"lat": 12.21063, "lng": -68.32168, "label": "Thousand steps", "dir": "right"}, {"lat": 12.0262907, "lng": -68.2509826, "label": "Red slave", "dir": "right"}], "locationLabels": ["Sand Dollar", "Thousand steps", "Red slave"], "eggMin": 1203.34, "eggMax": 1293.4, "oilMin": 108.28, "oilMax": 113.38}, {"name": "Yellowtail Parrotfish", "months": [1, 2, 3, 9, 10, 11], "locations": [{"lat": 12.21939, "lng": -68.35199, "label": "Karpata", "dir": "left"}, {"lat": 12.066373, "lng": -68.281402, "label": "Pink Beach", "dir": "right"}], "locationLabels": ["Karpata", "Pink Beach"], "eggMin": 651.76, "eggMax": 668.9, "oilMin": 115.08, "oilMax": 125.83}];
+const allLocations = [{"lat": 12.21939, "lng": -68.35199, "label": "Karpata", "dir": "left"}, {"lat": 12.0262907, "lng": -68.2509826, "label": "Red slave", "dir": "right"}, {"lat": 12.1514722, "lng": -68.3286125, "label": "South West Corner", "dir": "left"}, {"lat": 12.1688579, "lng": -68.2876082, "label": "Sand Dollar", "dir": "right"}, {"lat": 12.21063, "lng": -68.32168, "label": "Thousand steps", "dir": "right"}, {"lat": 12.066373, "lng": -68.281402, "label": "Pink Beach", "dir": "right"}];
+
+// ── STATE ──
+let selectedFish = -1;
+let map, markersLayer;
+
+// ── MAP SETUP ──
+function initMap() {
+  map = L.map('map', {
+    center: [12.15, -68.28],
+    zoom: 12,
+    zoomControl: true,
+    attributionControl: true,
+  });
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; OpenStreetMap contributors',
+    maxZoom: 18,
+  }).addTo(map);
+
+  markersLayer = L.layerGroup().addTo(map);
+  showAllLocations();
+}
+
+function tooltipOffset(dir) {
+  return dir === 'left' ? [-10, 0] : [10, 0];
+}
+
+function showAllLocations() {
+  markersLayer.clearLayers();
+  allLocations.forEach(loc => {
+    L.circleMarker([loc.lat, loc.lng], {
+      radius: 7,
+      fillColor: '#3388ff',
+      color: '#fff',
+      weight: 2,
+      opacity: 0.9,
+      fillOpacity: 0.7,
+    }).bindTooltip(loc.label, {
+      permanent: true,
+      direction: loc.dir || 'right',
+      offset: tooltipOffset(loc.dir),
+      className: 'loc-label',
+    }).addTo(markersLayer);
+  });
+  // Fit all locations in view
+  if (allLocations.length > 0) {
+    const bounds = L.latLngBounds(allLocations.map(l => [l.lat, l.lng]));
+    map.fitBounds(bounds.pad(0.3), { maxZoom: 13, animate: true });
+  }
+}
+
+function highlightLocations(locations) {
+  markersLayer.clearLayers();
+  // Only show the active locations for the selected fish
+  locations.forEach(loc => {
+    L.circleMarker([loc.lat, loc.lng], {
+      radius: 9,
+      fillColor: '#e63946',
+      color: '#fff',
+      weight: 3,
+      opacity: 1,
+      fillOpacity: 0.9,
+    }).bindTooltip(loc.label, {
+      permanent: true,
+      direction: loc.dir || 'right',
+      offset: tooltipOffset(loc.dir),
+      className: 'loc-label loc-active',
+    }).addTo(markersLayer);
+  });
+
+  // Fit bounds to active locations
+  if (locations.length > 0) {
+    const bounds = L.latLngBounds(locations.map(l => [l.lat, l.lng]));
+    map.fitBounds(bounds.pad(0.5), { maxZoom: 14, animate: true });
+  }
+}
+
+// ── CALENDAR ──
+function updateCalendar(monthIndices, fishName) {
+  for (let i = 0; i < 12; i++) {
+    const cell = document.getElementById('cal-' + i);
+    if (monthIndices.includes(i)) {
+      cell.classList.add('active');
+    } else {
+      cell.classList.remove('active');
+    }
+  }
+  document.getElementById('cal-fish-name').textContent = fishName || 'Select a fish';
+}
+
+function clearCalendar() {
+  for (let i = 0; i < 12; i++) {
+    document.getElementById('cal-' + i).classList.remove('active');
+  }
+  document.getElementById('cal-fish-name').textContent = 'Select a fish';
+}
+
+// ── FISH SELECTION ──
+function selectFish(idx) {
+  const card = document.getElementById('card-' + idx);
+  const info = document.getElementById('info-' + idx);
+  const wrapper = document.getElementById('wrapper-' + idx);
+
+  if (selectedFish === idx) {
+    // Deselect: flip back, close info, reset map & calendar
+    card.classList.remove('flipped');
+    info.classList.remove('open');
+    wrapper.classList.remove('selected');
+    selectedFish = -1;
+    showAllLocations();
+    clearCalendar();
+    return;
+  }
+
+  // Deselect previous
+  if (selectedFish >= 0) {
+    document.getElementById('card-' + selectedFish).classList.remove('flipped');
+    document.getElementById('info-' + selectedFish).classList.remove('open');
+    document.getElementById('wrapper-' + selectedFish).classList.remove('selected');
+  }
+
+  // Select new
+  card.classList.add('flipped');
+  info.classList.add('open');
+  wrapper.classList.add('selected');
+  selectedFish = idx;
+
+  const fish = fishData[idx];
+  highlightLocations(fish.locations);
+  updateCalendar(fish.months, fish.name);
+}
+
+// ── FILTERS ──
+const totalFish = fishData.length;
+
+function applyFilters() {
+  const monthVal = document.getElementById('filter-month').value;
+  const locVal   = document.getElementById('filter-location').value;
+  const eggVal   = document.getElementById('filter-egg').value;
+  const oilVal   = document.getElementById('filter-oil').value;
+
+  const filterMonth = monthVal !== '' ? parseInt(monthVal) : null;
+  const filterLoc   = locVal || null;
+  const filterEgg   = eggVal !== '' ? parseFloat(eggVal) : null;
+  const filterOil   = oilVal !== '' ? parseFloat(oilVal) : null;
+
+  let visibleCount = 0;
+
+  fishData.forEach((fish, idx) => {
+    const wrapper = document.getElementById('wrapper-' + idx);
+    let show = true;
+
+    // Month filter
+    if (filterMonth !== null && !fish.months.includes(filterMonth)) {
+      show = false;
+    }
+
+    // Location filter
+    if (filterLoc && !fish.locationLabels.some(l => l.toLowerCase() === filterLoc.toLowerCase())) {
+      show = false;
+    }
+
+    // Egg size filter: check if value falls within range
+    if (filterEgg !== null) {
+      if (fish.eggMin === null || fish.eggMax === null) {
+        show = false;
+      } else if (filterEgg < fish.eggMin || filterEgg > fish.eggMax) {
+        show = false;
+      }
+    }
+
+    // Oil-globule filter: check if value falls within range
+    if (filterOil !== null) {
+      if (fish.oilMin === null || fish.oilMax === null) {
+        show = false;
+      } else if (filterOil < fish.oilMin || filterOil > fish.oilMax) {
+        show = false;
+      }
+    }
+
+    if (show) {
+      wrapper.classList.remove('filtered-out');
+      visibleCount++;
+    } else {
+      wrapper.classList.add('filtered-out');
+      // Deselect if currently selected and now hidden
+      if (selectedFish === idx) {
+        document.getElementById('card-' + idx).classList.remove('flipped');
+        document.getElementById('info-' + idx).classList.remove('open');
+        wrapper.classList.remove('selected');
+        selectedFish = -1;
+        showAllLocations();
+        clearCalendar();
+      }
+    }
+  });
+
+  document.getElementById('filter-count').textContent = visibleCount + ' / ' + totalFish + ' species';
+}
+
+function resetFilters() {
+  document.getElementById('filter-month').value = '';
+  document.getElementById('filter-location').value = '';
+  document.getElementById('filter-egg').value = '';
+  document.getElementById('filter-oil').value = '';
+  applyFilters();
+}
+
+// ── INIT ──
+document.addEventListener('DOMContentLoaded', initMap);
+</script>
+
+<style>
+  /* Leaflet tooltip overrides */
+  .loc-label {
+    background: rgba(15, 43, 77, 0.9) !important;
+    color: #b8d8f0 !important;
+    border: 1px solid rgba(255,255,255,0.15) !important;
+    border-radius: 6px !important;
+    padding: 3px 8px !important;
+    font-family: 'Inter', sans-serif !important;
+    font-size: 0.75rem !important;
+    font-weight: 600 !important;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.3) !important;
+  }
+  .loc-active {
+    background: rgba(230, 57, 70, 0.9) !important;
+    color: #fff !important;
+    border-color: rgba(255,255,255,0.3) !important;
+  }
+</style>
+
+</body>
+</html>
